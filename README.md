@@ -91,20 +91,21 @@ created:
    ```
 
 6. Download and checkout an appropriate version of LMDB, see below for and
-   explanation of the choice of 0.9.9:
+   explanation of the choice of version:
 
    ```sh
    cd /run/host/var/srv/lumosql &&
    git clone git@github.com:LMDB/lmdb.git &&
-   git -C lmdb checkout LMDB_0.9.9
+   git -C lmdb checkout LMDB_0.9.18
    ```
 
-7. Build sqlightning with a version number identifying the LMDB and sqlightning
-   versions:
+7. In a clean directory, build sqlightning with a version number identifying the
+   LMDB and sqlightning versions:
 
    ```sh
    cd /run/host/var/srv/lumosql &&
    git -C sqlightning checkout mdb &&
+   rm -rf bld-mdb &&
    mkdir bld-mdb &&
    cd bld-mdb &&
    ../sqlightning/configure CFLAGS="-I../lmdb/libraries/liblmdb" &&
@@ -133,8 +134,8 @@ Assumes:
 Initial outline of steps:
 
 ```sh
-git -C sqlightning checkout benchmarking &&
 ln -s /usr/bin/sqlite3 &&
+git -C sqlightning checkout benchmarking &&
 tclsh sqlightning/tool/speedtest.tcl | tee output.html &&
 rm sqlite3
 ```
@@ -168,3 +169,37 @@ Likely need
 [this commit](https://github.com/LMDB/lmdb/commit/01dfb2083dd690707a062cabb03801bfad1a6859),
 found through a
 [GitHub comparison](https://github.com/LMDB/lmdb/compare/LMDB_0.9.8...LMDB_0.9.9)
+
+| Tag         | Compiles | Speed test |
+| ----------- | -------- | ---------- |
+| LMDB_0.9.6  | ?        | ?          |
+| LMDB_0.9.7  | ?        | ?          |
+| LMDB_0.9.8  | ✗        | -          |
+| LMDB_0.9.9  | ✓        | ✓          |
+| LMDB_0.9.10 | ✓        | ?          |
+| LMDB_0.9.11 | ✓        | ?          |
+| LMDB_0.9.12 | ✓        | ?          |
+| LMDB_0.9.13 | ✓        | ?          |
+| LMDB_0.9.14 | ✓        | ?          |
+| LMDB_0.9.15 | ✓        | ?          |
+| LMDB_0.9.16 | ✓        | ?          |
+| LMDB_0.9.17 | ✓        | ?          |
+| LMDB_0.9.18 | ✓        | ?          |
+| LMDB_0.9.19 | ✗        | -          |
+| LMDB_0.9.21 | ✗        | -          |
+| LMDB_0.9.22 | ✗        | -          |
+| LMDB_0.9.23 | ✗        | -          |
+| LMDB_0.9.24 | ✗        | -          |
+
+The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
+a release `LMDB_0.9.20`
+
+<dl>
+<dt>Compiles</dt>
+<dd>✓ means the process documented above completes successfully.</dd>
+<dt>Speed test<dt>
+<dd>✓ means the cut down version of speed test passes in benchmarking branch
+passes.</dd>
+</dl>
+
+A `?` means that this has not been tested.
