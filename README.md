@@ -182,24 +182,24 @@ Likely need
 found through a
 [GitHub comparison](https://github.com/LMDB/lmdb/compare/LMDB_0.9.8...LMDB_0.9.9).
 
-| Tag         | Date       | Compiles | Speed test |
-| ----------- | ---------- | -------- | ---------- |
-| LMDB_0.9.8  | 2013-09-09 | ✗        | -          |
-| LMDB_0.9.9  | 2013-10-24 | ✓        | ✓          |
-| LMDB_0.9.10 | 2013-11-12 | ✓        | ✓          |
-| LMDB_0.9.11 | 2014-01-15 | ✓        | ?          |
-| LMDB_0.9.12 | 2014-06-18 | ✓        | ?          |
-| LMDB_0.9.13 | 2014-06-18 | ✓        | ?          |
-| LMDB_0.9.14 | 2014-09-20 | ✓        | ?          |
-| LMDB_0.9.15 | 2015-06-19 | ✓        | ✓          |
-| LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |
-| LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |
-| LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |
-| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |
-| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |
-| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |
-| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |
-| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |
+| Tag         | Date       | Compiles | Speed test | Files | Ins. | De. |
+| ----------- | ---------- | -------- | ---------- | ----: | ---: | --: |
+| LMDB_0.9.8  | 2013-09-09 | ✗        | -          |     - |    - |   - |
+| LMDB_0.9.9  | 2013-10-24 | ✓        | ✓          |     6 |  577 | 540 |
+| LMDB_0.9.10 | 2013-11-12 | ✓        | ✓          |     5 |  216 | 121 |
+| LMDB_0.9.11 | 2014-01-15 | ✓        | ?          |     6 |  443 | 273 |
+| LMDB_0.9.12 | 2014-06-18 | ✓        | ?          |    12 |  516 | 333 |
+| LMDB_0.9.13 | 2014-06-18 | ✓        | ?          |     3 |   28 |  22 |
+| LMDB_0.9.14 | 2014-09-20 | ✓        | ?          |    23 | 2331 | 441 |
+| LMDB_0.9.15 | 2015-06-19 | ✓        | ✓          |    24 |  388 | 187 |
+| LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |     5 |   44 |  19 |
+| LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |    10 | 1072 | 565 |
+| LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |    24 |  303 |  57 |
+| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |     6 |  684 | 447 |
+| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |    23 |   81 |  50 |
+| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |    23 |   74 |  58 |
+| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |     4 |   52 |   9 |
+| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |     6 |   16 |  11 |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
 a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
@@ -210,6 +210,13 @@ a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
 <dt>Speed test<dt>
 <dd>✓ means the cut down version of speed test passes in benchmarking branch
 passes.</dd>
+<dt>Files</dt>
+<dd>The number of files changed between the previous release and this one, as
+reported by <code>git diff --shortstat</code>.</dd>
+<dt>Ins.</dt>
+<dd>The number of insertions as for the "Files" column.</dd>
+<dt>De.</dt>
+<dd>The number of deletions as for the "Files" column.</dd>
 </dl>
 
 A `?` means that this has not been tested.
