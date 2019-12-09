@@ -50,7 +50,7 @@ created:
 ├── bld-sqlite    Build artifacts for sqlite from sqlite.org mirror
 ├── lmdb          LMDB source code
 ├── sqlightning   sqlightning and sqlite source code (this repository)
-└── sqlite        sqlite.org git mirror
+└── src-sqlite    clone of sqlite.org git mirror
 ```
 
 ## Dependencies
@@ -139,25 +139,7 @@ created:
    ```
 
 8. Clone the repository and check out the latest version of upstream SQLite:
-
-   ```sh
-   cd /run/host/var/srv/lumosql &&
-   git clone git@github.com:sqlite/sqlite.git &&
-   git -C sqlite checkout version-3.30.1
-   ```
-
-9. Build SQLite:
-
-   ```sh
-   cd /run/host/var/srv/lumosql &&
-   rm -rf bld-sqlite
-   mkdir bld-sqlite &&
-   cd bld-sqlite &&
-   ../sqlite/configure &&
-   cd .. &&
-   make -C bld-sqlite &&
-   bld-sqlite/sqlite3 --version
-   ```
+   `make bld-sqlite/sqlite3`
 
 # Speed tests / benchmarking
 
@@ -165,14 +147,14 @@ Assumes:
 
 - sqlightning is compiled, and available at `./bld-mdb/sqlite3`
 - the reference SQLite is available at `./bld-orig/sqlite3`
-- `sqlite3` is installed as `/usr/bin/sqlite3`
+- the latest `sqlite3` from the https://sqlite.org git mirror is compiled and
+  installed as `./bld-sqlite/sqlite3`
 
 Initial outline of steps, which take approximately 4 minutes to complete:
 
 ```sh
-ln -s /usr/bin/sqlite3 &&
-git -C sqlightning checkout benchmarking &&
-tclsh sqlightning/tool/speedtest.tcl | tee output.html &&
+ln -s bld-sqlite/sqlite3 &&
+tclsh tool/speedtest.tcl | tee output.html &&
 rm sqlite3
 ```
 
