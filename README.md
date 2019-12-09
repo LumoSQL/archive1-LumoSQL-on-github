@@ -144,7 +144,7 @@ Assumes:
 - the reference SQLite is available at `./bld-orig/sqlite3`
 - `sqlite3` is installed as `/usr/bin/sqlite3`
 
-Initial outline of steps:
+Initial outline of steps, which take approximately 4 minutes to complete:
 
 ```sh
 ln -s /usr/bin/sqlite3 &&
@@ -167,7 +167,7 @@ Then repeat for the other versions.
 - Benchmarking
   <https://github.com/google/leveldb/blob/master/benchmarks/db_bench_sqlite3.cc>
 
-# Why 0.9.9?
+# Which LMDB version?
 
 `mc_orig` was removed and `mc_backup` added to `mdb.c` in
 <https://github.com/LMDB/lmdb/commit/be47ca766713f55e5b3abd18120514fdad7d90f2>
@@ -183,24 +183,24 @@ Likely need
 found through a
 [GitHub comparison](https://github.com/LMDB/lmdb/compare/LMDB_0.9.8...LMDB_0.9.9)
 
-| Tag         | Compiles | Speed test |
-| ----------- | -------- | ---------- |
-| LMDB_0.9.8  | ✗        | -          |
-| LMDB_0.9.9  | ✓        | ✓          |
-| LMDB_0.9.10 | ✓        | ✓          |
-| LMDB_0.9.11 | ✓        | ?          |
-| LMDB_0.9.12 | ✓        | ?          |
-| LMDB_0.9.13 | ✓        | ?          |
-| LMDB_0.9.14 | ✓        | ?          |
-| LMDB_0.9.15 | ✓        | ✓          |
-| LMDB_0.9.16 | ✓        | ?          |
-| LMDB_0.9.17 | ✓        | ?          |
-| LMDB_0.9.18 | ✓        | ✗          |
-| LMDB_0.9.19 | ✗        | -          |
-| LMDB_0.9.21 | ✗        | -          |
-| LMDB_0.9.22 | ✗        | -          |
-| LMDB_0.9.23 | ✗        | -          |
-| LMDB_0.9.24 | ✗        | -          |
+| Tag         | Date       | Compiles | Speed test |
+| ----------- | ---------- | -------- | ---------- |
+| LMDB_0.9.8  | 2013-09-09 | ✗        | -          |
+| LMDB_0.9.9  | 2013-10-24 | ✓        | ✓          |
+| LMDB_0.9.10 | 2013-11-12 | ✓        | ✓          |
+| LMDB_0.9.11 | 2014-01-15 | ✓        | ?          |
+| LMDB_0.9.12 | 2014-06-18 | ✓        | ?          |
+| LMDB_0.9.13 | 2014-06-18 | ✓        | ?          |
+| LMDB_0.9.14 | 2014-09-20 | ✓        | ?          |
+| LMDB_0.9.15 | 2015-06-19 | ✓        | ✓          |
+| LMDB_0.9.16 | 2015-08-14 | ✓        | ?          |
+| LMDB_0.9.17 | 2015-11-30 | ✓        | ?          |
+| LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |
+| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |
+| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |
+| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |
+| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |
+| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
 a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
