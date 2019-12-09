@@ -219,4 +219,5 @@ reported by <code>git diff --shortstat</code>.</dd>
 <dd>The number of deletions as for the "Files" column.</dd>
 </dl>
 
-A `?` means that this has not been tested.
+A **?** means that this has not been tested, and a **-** means that it is not
+applicable at present.
