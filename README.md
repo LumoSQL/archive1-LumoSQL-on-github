@@ -1,19 +1,32 @@
-# Index
+# Introduction
 
 - Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/maxwell-k/201912-sqlightning/issues)
 - Short term planning and progress reporting is tracked on a
   [project board](https://github.com/maxwell-k/201912-sqlightning/projects/1)
-- Branches:
 
-  <dl>
-  <dt>`benchmarking`</dt>
-  <dd>this README and simplified benchmarking code (default)</dd>
-  <dt>[`mdb`](https://github.com/maxwell-k/201912-sqlightning/tree/mdb)</dt>
-  <dd>the sqlightning code base</dd>
-  <dt>[`orig`](https://github.com/maxwell-k/201912-sqlightning/tree/orig)</dt>
-  <dd>for tracking SQLite versions</dd>
-  </dl>
+## Branches
+
+<dl>
+<dt>
+
+`benchmarking`
+
+</dt>
+<dd>this README and simplified benchmarking code (default)</dd>
+<dt>
+
+[`mdb`](https://github.com/maxwell-k/201912-sqlightning/tree/mdb)
+
+</dt>
+<dd>the sqlightning code base</dd>
+<dt>
+
+[`orig`](https://github.com/maxwell-k/201912-sqlightning/tree/orig)
+
+</dt>
+<dd>for tracking SQLite versions</dd>
+</dl>
 
 The default branch includes a cut down `tools/speedtest.tcl` that can be used
 for comparisons across LMDB backed and other SQLite versions, to view the
