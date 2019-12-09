@@ -1,7 +1,5 @@
-.PHONY:
 bin: bld-sqlite-3.30.1 bld-LMDB_0.9.16
 
-.PHONY:
 clean:
 	rm -rf bld-* version.txt
 
@@ -29,7 +27,7 @@ bld-LMDB_%: src-lmdb src-mdb
 		CFLAGS="-I../src-lmdb/libraries/liblmdb" && cd ..
 	make -C $@ sqlite3.h
 	printf '#undef SQLITE_SOURCE_ID\n' > version.txt
-	printf '#define SQLITE_SOURCE_ID "%s %-12s %s"\n' \
+	printf '#define SQLITE_SOURCE_ID "%s %-11s %s"\n' \
 		"$$(git -C src-mdb rev-parse --short HEAD)" \
 		"$$(git -C src-lmdb describe --tags)" \
 		"$$(git -C src-lmdb rev-parse --short HEAD)" \
@@ -38,3 +36,11 @@ bld-LMDB_%: src-lmdb src-mdb
 	rm -f version.txt
 	make -C $@
 	$@/sqlite3 --version
+
+%.html: bld-%
+	ln -s $</sqlite3
+	tclsh tool/speedtest.tcl | tee $@
+	rm -f sqlite3 test*.sql clear.sql 2kinit.sql s2k.db s2k.db-lock
+
+.PRECIOUS: bld-LMDB_% bld-sqlite-%
+.PHONY: clean bin

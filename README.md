@@ -110,12 +110,10 @@ make bld-sqlite-3.7.17 bld-sqlite-3.30.1 bld-LMDB_0.9.9 bld-LMDB_0.9.16 &&
 for i in bld-* ; do printf '%-25s ' "$i" && "$i/sqlite3" --version ; done
 ```
 
-Initial outline of steps, which takes approximately 4 minutes to complete:
+To benchmark a single binary takes approximately 4 minutes to complete:
 
 ```sh
-ln -s bld-sqlite/sqlite3 &&
-tclsh tool/speedtest.tcl | tee output.html &&
-rm sqlite3
+make LMDB_0.9.9.html
 ```
 
 Then repeat for the other versions.
@@ -152,10 +150,10 @@ found through a
 | LMDB_0.9.8  | 2013-09-09 | ✗        | -          |     - |    - |   - |
 | LMDB_0.9.9  | 2013-10-24 | ✓        | ✓          |     6 |  577 | 540 |
 | LMDB_0.9.10 | 2013-11-12 | ✓        | ✓          |     5 |  216 | 121 |
-| LMDB_0.9.11 | 2014-01-15 | ✓        | ?          |     6 |  443 | 273 |
-| LMDB_0.9.12 | 2014-06-18 | ✓        | ?          |    12 |  516 | 333 |
-| LMDB_0.9.13 | 2014-06-18 | ✓        | ?          |     3 |   28 |  22 |
-| LMDB_0.9.14 | 2014-09-20 | ✓        | ?          |    23 | 2331 | 441 |
+| LMDB_0.9.11 | 2014-01-15 | ✓        | ✓          |     6 |  443 | 273 |
+| LMDB_0.9.12 | 2014-06-18 | ✓        | ✓          |    12 |  516 | 333 |
+| LMDB_0.9.13 | 2014-06-18 | ✓        | ✓          |     3 |   28 |  22 |
+| LMDB_0.9.14 | 2014-09-20 | ✓        | ✓          |    23 | 2331 | 441 |
 | LMDB_0.9.15 | 2015-06-19 | ✓        | ✓          |    24 |  388 | 187 |
 | LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |     5 |   44 |  19 |
 | LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |    10 | 1072 | 565 |
