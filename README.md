@@ -109,7 +109,7 @@ created:
    ```sh
    cd /run/host/var/srv/lumosql &&
    git clone git@github.com:LMDB/lmdb.git &&
-   git -C lmdb checkout LMDB_0.9.10
+   git -C lmdb checkout LMDB_0.9.15
    ```
 
 7. In a clean directory, build sqlightning with a version number identifying the
@@ -187,12 +187,12 @@ found through a
 | ----------- | -------- | ---------- |
 | LMDB_0.9.8  | ✗        | -          |
 | LMDB_0.9.9  | ✓        | ✓          |
-| LMDB_0.9.10 | ✓        | ?          |
+| LMDB_0.9.10 | ✓        | ✓          |
 | LMDB_0.9.11 | ✓        | ?          |
 | LMDB_0.9.12 | ✓        | ?          |
 | LMDB_0.9.13 | ✓        | ?          |
 | LMDB_0.9.14 | ✓        | ?          |
-| LMDB_0.9.15 | ✓        | ?          |
+| LMDB_0.9.15 | ✓        | ✓          |
 | LMDB_0.9.16 | ✓        | ?          |
 | LMDB_0.9.17 | ✓        | ?          |
 | LMDB_0.9.18 | ✓        | ✗          |
