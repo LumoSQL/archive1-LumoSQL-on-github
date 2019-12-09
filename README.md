@@ -83,43 +83,35 @@ created:
      make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
    ```
 
-4. Clone this repository, checkout the `orig` branch and build SQLite:
+4. To build either (a) specific versions of SQLite or (b) sqlightning using
+   different versions of LMDB, use commands like those below:
 
    ```sh
-   make bld-orig/sqlite3
-   ```
-
-5. Download and checkout an appropriate version of LMDB, see below for and
-   explanation of the choice of version:
-
-   ```sh
-   make LMDB_TAG=LMDB_0.9.16 src-lmdb
-   ```
-
-6. In a clean directory, build sqlightning with a version number identifying the
-   LMDB and sqlightning versions:
-
-   ```sh
-   make bld-mdb/sqlite3
-   ```
-
-7. Clone the repository, check out and build the latest release of upstream
-   SQLite:
-
-   ```sh
-   make bld-sqlite/sqlite3
+   make bld-sqlite-3.7.17/sqlite3
+   make bld-LMDB_0.9.9/sqlite3
    ```
 
 # Speed tests / benchmarking
 
-Assumes:
+Assumes steps above all complete successfully.
 
-- sqlightning is compiled, and available at `./bld-mdb/sqlite3`
-- the reference SQLite is available at `./bld-orig/sqlite3`
-- the latest `sqlite3` from the https://sqlite.org git mirror is compiled and
-  installed as `./bld-sqlite/sqlite3`
+| V.  | SQLite |   LMDB | Repository  |
+| --- | -----: | -----: | ----------- |
+| A.  | 3.7.17 |      - | SQLite      |
+| B.  | 3.30.1 |      - | SQLite      |
+| C.  | 3.7.17 |  0.9.9 | sqlightning |
+| D.  | 3.7.17 | 0.9.16 | sqlightning |
 
-Initial outline of steps, which take approximately 4 minutes to complete:
+```sh
+make \
+  bld-sqlite-3.7.17/sqlite3 \
+  bld-sqlite-3.30.1/sqlite3 \
+  bld-LMDB_0.9.9/sqlite3 \
+  bld-LMDB_0.9.16/sqlite3 &&
+for i in bld-* ; do printf '%-25s ' "$i" && "$i/sqlite3" --version ; done
+```
+
+Initial outline of steps, which takes approximately 4 minutes to complete:
 
 ```sh
 ln -s bld-sqlite/sqlite3 &&

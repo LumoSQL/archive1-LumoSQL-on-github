@@ -1,6 +1,5 @@
-/bld-mdb/
-/bld-orig/
-/bld-sqlite/
+/bld-LMDB_*/
+/bld-sqlite-*/
 /sqlite3
 /src-lmdb/
 /src-mdb/
