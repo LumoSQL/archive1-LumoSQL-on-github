@@ -62,7 +62,7 @@ created:
 1. Create a suitable directory:
 
    ```sh
-   sudo mkdir /var/srv/lumosql  &&
+   sudo mkdir /var/srv/lumosql &&
    sudo chown "$LOGNAME:$LOGNAME" /var/srv/lumosql
    ```
 
@@ -109,7 +109,7 @@ created:
    ```sh
    cd /run/host/var/srv/lumosql &&
    git clone git@github.com:LMDB/lmdb.git &&
-   git -C lmdb checkout LMDB_0.9.15
+   git -C lmdb checkout LMDB_0.9.16
    ```
 
 7. In a clean directory, build sqlightning with a version number identifying the
@@ -193,8 +193,8 @@ found through a
 | LMDB_0.9.13 | 2014-06-18 | ✓        | ?          |
 | LMDB_0.9.14 | 2014-09-20 | ✓        | ?          |
 | LMDB_0.9.15 | 2015-06-19 | ✓        | ✓          |
-| LMDB_0.9.16 | 2015-08-14 | ✓        | ?          |
-| LMDB_0.9.17 | 2015-11-30 | ✓        | ?          |
+| LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |
+| LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |
 | LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |
 | LMDB_0.9.19 | 2016-12-28 | ✗        | -          |
 | LMDB_0.9.21 | 2017-06-01 | ✗        | -          |
