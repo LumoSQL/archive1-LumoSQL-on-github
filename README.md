@@ -161,7 +161,7 @@ Then repeat for the other versions.
   [Fedora Spec file for "sqlite3"](https://apps.fedoraproject.org/packages/sqlite/sources/)
   lists dependencies.
 - The [documentation](https://sqlite.org/whynotgit.html#getthecode) linking to
-  the [Official git mirror](https://github.com/sqlite/sqlite)
+  the [official SQLite GitHub mirror](https://github.com/sqlite/sqlite)
 - ["sqlightning" repository](https://github.com/LMDB/sqlightning)
 - Early benchmarking <https://pastebin.com/B5SfEieL> of 3.7.17
 - Benchmarking
@@ -175,13 +175,12 @@ first released in `LMDB_0.9.7` on 14 August 2013. `LMDB_0.9.8` was 9 September
 2013 and `LMDB_0.9.9` was 24 October 2013.
 `58b473f3d5570fca94b88398e0e4314208a077cd` made adapted `sqlightning` to this
 change on 12 September 2013. So first try `LMDB_0.9.8`, but this fails with:
-
-`sqlite3.c:38156:2: error: unknown type name ‘mdb_hash_t’`
+`sqlite3.c:38156:2: error: unknown type name ‘mdb_hash_t’`.
 
 Likely need
 [this commit](https://github.com/LMDB/lmdb/commit/01dfb2083dd690707a062cabb03801bfad1a6859),
 found through a
-[GitHub comparison](https://github.com/LMDB/lmdb/compare/LMDB_0.9.8...LMDB_0.9.9)
+[GitHub comparison](https://github.com/LMDB/lmdb/compare/LMDB_0.9.8...LMDB_0.9.9).
 
 | Tag         | Date       | Compiles | Speed test |
 | ----------- | ---------- | -------- | ---------- |
