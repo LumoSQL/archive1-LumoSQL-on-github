@@ -96,7 +96,7 @@ created:
    ```sh
    cd /run/host/var/srv/lumosql &&
    git clone git@github.com:LMDB/lmdb.git &&
-   git -C lmdb checkout LMDB_0.9.18
+   git -C lmdb checkout LMDB_0.9.10
    ```
 
 7. In a clean directory, build sqlightning with a version number identifying the
@@ -172,8 +172,6 @@ found through a
 
 | Tag         | Compiles | Speed test |
 | ----------- | -------- | ---------- |
-| LMDB_0.9.6  | ?        | ?          |
-| LMDB_0.9.7  | ?        | ?          |
 | LMDB_0.9.8  | ✗        | -          |
 | LMDB_0.9.9  | ✓        | ✓          |
 | LMDB_0.9.10 | ✓        | ?          |
@@ -184,7 +182,7 @@ found through a
 | LMDB_0.9.15 | ✓        | ?          |
 | LMDB_0.9.16 | ✓        | ?          |
 | LMDB_0.9.17 | ✓        | ?          |
-| LMDB_0.9.18 | ✓        | ?          |
+| LMDB_0.9.18 | ✓        | ✗          |
 | LMDB_0.9.19 | ✗        | -          |
 | LMDB_0.9.21 | ✗        | -          |
 | LMDB_0.9.22 | ✗        | -          |
@@ -192,7 +190,7 @@ found through a
 | LMDB_0.9.24 | ✗        | -          |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
-a release `LMDB_0.9.20`
+a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
 
 <dl>
 <dt>Compiles</dt>
