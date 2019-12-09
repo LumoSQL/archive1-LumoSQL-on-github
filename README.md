@@ -46,9 +46,11 @@ created:
 ```
 .
 ├── bld-mdb       Build artifacts for sqlightning
-├── bld-orig      Build artifacts for sqlite
+├── bld-orig      Build artifacts for sqlite from sqlightning repository
+├── bld-sqlite    Build artifacts for sqlite from sqlite.org mirror
 ├── lmdb          LMDB source code
-└── sqlightning   sqlightning and sqlite source code (this repository)
+├── sqlightning   sqlightning and sqlite source code (this repository)
+└── sqlite        sqlite.org git mirror
 ```
 
 ## Dependencies
@@ -134,6 +136,27 @@ created:
    rm -f version.txt &&
    make -C bld-mdb &&
    bld-mdb/sqlite3 --version
+   ```
+
+8. Clone the repository and check out the latest version of upstream SQLite:
+
+   ```sh
+   cd /run/host/var/srv/lumosql &&
+   git clone git@github.com:sqlite/sqlite.git &&
+   git -C sqlite checkout version-3.30.1
+   ```
+
+9. Build SQLite:
+
+   ```sh
+   cd /run/host/var/srv/lumosql &&
+   rm -rf bld-sqlite
+   mkdir bld-sqlite &&
+   cd bld-sqlite &&
+   ../sqlite/configure &&
+   cd .. &&
+   make -C bld-sqlite &&
+   bld-sqlite/sqlite3 --version
    ```
 
 # Speed tests / benchmarking
