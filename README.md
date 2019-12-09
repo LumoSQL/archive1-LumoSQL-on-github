@@ -48,9 +48,10 @@ created:
 ├── bld-mdb       Build artifacts for sqlightning
 ├── bld-orig      Build artifacts for sqlite from sqlightning repository
 ├── bld-sqlite    Build artifacts for sqlite from sqlite.org mirror
-├── lmdb          LMDB source code
-├── sqlightning   sqlightning and sqlite source code (this repository)
-└── src-sqlite    clone of sqlite.org git mirror
+├── src-lmdb      Clone of LMDB source code
+├── src-mdb       Checkout of the mdb branch of this repository
+├── src-orig      Checkout of the orig branch of this repository
+└── src-sqlite    Clone of sqlite.org git mirror
 ```
 
 ## Dependencies
@@ -82,64 +83,32 @@ created:
      make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
    ```
 
-4. Clone this repository:
+4. Clone this repository, checkout the `orig` branch and build SQLite:
 
    ```sh
-   cd /run/host/var/srv/lumosql &&
-   git clone git@github.com:maxwell-k/201912-sqlightning.git sqlightning`
+   make bld-orig/sqlite3
    ```
 
-   Or use the upstream sqlightning repository instead:
-   `git@github.com:LMDB/sqlightning.git`.
-
-5. Build `sqlite3` from the `orig` branch of the sqlightning repository:
-
-   ```sh
-   cd /run/host/var/srv/lumosql &&
-   git -C sqlightning checkout orig &&
-   mkdir bld-orig &&
-   cd bld-orig &&
-   ../sqlightning/configure &&
-   cd .. &&
-   make -C bld-orig &&
-   bld-orig/sqlite3 --version
-   ```
-
-6. Download and checkout an appropriate version of LMDB, see below for and
+5. Download and checkout an appropriate version of LMDB, see below for and
    explanation of the choice of version:
 
    ```sh
-   cd /run/host/var/srv/lumosql &&
-   git clone git@github.com:LMDB/lmdb.git &&
-   git -C lmdb checkout LMDB_0.9.16
+   make LMDB_TAG=LMDB_0.9.16 src-lmdb
    ```
 
-7. In a clean directory, build sqlightning with a version number identifying the
+6. In a clean directory, build sqlightning with a version number identifying the
    LMDB and sqlightning versions:
 
    ```sh
-   cd /run/host/var/srv/lumosql &&
-   git -C sqlightning checkout mdb &&
-   rm -rf bld-mdb &&
-   mkdir bld-mdb &&
-   cd bld-mdb &&
-   ../sqlightning/configure CFLAGS="-I../lmdb/libraries/liblmdb" &&
-   cd .. &&
-   make -C bld-mdb sqlite3.h &&
-   printf '#undef SQLITE_SOURCE_ID\n' > version.txt &&
-   printf '#define SQLITE_SOURCE_ID "%s %s %s"\n' \
-     "$(git -C sqlightning rev-parse --short HEAD)" \
-     "$(git -C lmdb describe --tags)" \
-     "$(git -C lmdb rev-parse --short HEAD)" \
-     >> version.txt &&
-   sed -i '/^#define SQLITE_SOURCE_ID/rversion.txt' bld-mdb/sqlite3.h &&
-   rm -f version.txt &&
-   make -C bld-mdb &&
-   bld-mdb/sqlite3 --version
+   make bld-mdb/sqlite3
    ```
 
-8. Clone the repository and check out the latest version of upstream SQLite:
-   `make bld-sqlite/sqlite3`
+7. Clone the repository, check out and build the latest release of upstream
+   SQLite:
+
+   ```sh
+   make bld-sqlite/sqlite3
+   ```
 
 # Speed tests / benchmarking
 

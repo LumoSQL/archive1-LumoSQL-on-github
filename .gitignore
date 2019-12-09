@@ -1,7 +1,8 @@
 /bld-mdb/
 /bld-orig/
 /bld-sqlite/
-/lmdb/
-/sqlightning/
-/src-sqlite/
 /sqlite3
+/src-lmdb/
+/src-mdb/
+/src-orig/
+/src-sqlite/
