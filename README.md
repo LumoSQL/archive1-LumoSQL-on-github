@@ -87,27 +87,26 @@ created:
    different versions of LMDB, use commands like those below:
 
    ```sh
-   make bld-sqlite-3.7.17/sqlite3
-   make bld-LMDB_0.9.9/sqlite3
+   make bld-sqlite-3.7.17
+   make bld-LMDB_0.9.9
    ```
 
 # Speed tests / benchmarking
 
-Assumes steps above all complete successfully.
+Prerequisites: steps above all complete successfully.
 
-| V.  | SQLite |   LMDB | Repository  |
-| --- | -----: | -----: | ----------- |
-| A.  | 3.7.17 |      - | SQLite      |
-| B.  | 3.30.1 |      - | SQLite      |
-| C.  | 3.7.17 |  0.9.9 | sqlightning |
+The instructions in this section explain how to benchmark four different
+versions:
+
+| V.  | SQLite | LMDB   | Repository  |
+| --- | ------ | ------ | ----------- |
+| A.  | 3.7.17 | -      | SQLite      |
+| B.  | 3.30.1 | -      | SQLite      |
+| C.  | 3.7.17 | 0.9.9  | sqlightning |
 | D.  | 3.7.17 | 0.9.16 | sqlightning |
 
 ```sh
-make \
-  bld-sqlite-3.7.17/sqlite3 \
-  bld-sqlite-3.30.1/sqlite3 \
-  bld-LMDB_0.9.9/sqlite3 \
-  bld-LMDB_0.9.16/sqlite3 &&
+make bld-sqlite-3.7.17 bld-sqlite-3.30.1 bld-LMDB_0.9.9 bld-LMDB_0.9.16 &&
 for i in bld-* ; do printf '%-25s ' "$i" && "$i/sqlite3" --version ; done
 ```
 
