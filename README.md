@@ -99,7 +99,8 @@ created:
    git -C lmdb checkout LMDB_0.9.9
    ```
 
-7. Build sqlightning:
+7. Build sqlightning with a version number identifying the LMDB and sqlightning
+   versions:
 
    ```sh
    cd /run/host/var/srv/lumosql &&
@@ -108,6 +109,15 @@ created:
    cd bld-mdb &&
    ../sqlightning/configure CFLAGS="-I../lmdb/libraries/liblmdb" &&
    cd .. &&
+   make -C bld-mdb sqlite3.h &&
+   printf '#undef SQLITE_SOURCE_ID\n' > version.txt &&
+   printf '#define SQLITE_SOURCE_ID "%s %s %s"\n' \
+     "$(git -C sqlightning rev-parse --short HEAD)" \
+     "$(git -C lmdb describe --tags)" \
+     "$(git -C lmdb rev-parse --short HEAD)" \
+     >> version.txt &&
+   sed -i '/^#define SQLITE_SOURCE_ID/rversion.txt' bld-mdb/sqlite3.h &&
+   rm -f version.txt &&
    make -C bld-mdb &&
    bld-mdb/sqlite3 --version
    ```
