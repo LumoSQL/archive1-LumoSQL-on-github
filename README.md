@@ -67,12 +67,8 @@ containers or a Fedora 30 installation
 
 ## Manual steps
 
-1. Create a suitable directory:
-
-   ```sh
-   sudo mkdir /var/srv/lumosql &&
-   sudo chown "$LOGNAME:$LOGNAME" /var/srv/lumosql
-   ```
+1. Start with a clone of this repository as the current directory; the
+   `Makefile` uses this branch and `mdb`
 
 2. Create and enter a pet container, if using toolbox:
 
@@ -92,13 +88,15 @@ containers or a Fedora 30 installation
    different versions of LMDB, use commands like those below:
 
    ```sh
-   make bld-sqlite-3.7.17
+   make bld-SQLite-3.7.17
    make bld-LMDB_0.9.9
    ```
 
 # Speed tests / benchmarking
 
 Prerequisites: steps above all complete successfully.
+
+To benchmark a single binary takes approximately 4 minutes to complete.
 
 The instructions in this section explain how to benchmark four different
 versions:
@@ -110,12 +108,14 @@ versions:
 | C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
 | D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
 
-To benchmark a single binary takes approximately 4 minutes to complete:
+To benchmark the four versions above _[Work in Progress]_:
 
 ```sh
 for name in SQLite-3.30.1 SQLite-3.7.17 ; do
   seq 3 | while read i ; do
-    make $name.html && mv $name.html $name-$i.html ;
+    if ! make -q $name.html ; then
+      make $name.html && mv $name.html $name-$i.html ;
+    fi
   done ;
 done
 ```
