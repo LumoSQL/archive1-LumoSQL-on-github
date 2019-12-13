@@ -62,9 +62,8 @@ created:
 
 ## Dependencies
 
-- Either [toolbox](https://github.com/containers/toolbox) to develop in pet
-  containers or a Fedora 30 installation
-- SSH key for GitHub access
+Either [toolbox](https://github.com/containers/toolbox) to develop in pet
+containers or a Fedora 30 installation
 
 ## Manual steps
 

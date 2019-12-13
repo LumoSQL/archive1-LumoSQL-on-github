@@ -11,7 +11,7 @@ src-%:
 	git clone --branch $* . $@
 
 src-lmdb:
-	git clone git@github.com:LMDB/lmdb.git src-lmdb
+	git clone https://github.com/LMDB/lmdb.git src-lmdb
 
 bld-SQLite-%: src-sqlite
 	git -C src-sqlite checkout version-$*
