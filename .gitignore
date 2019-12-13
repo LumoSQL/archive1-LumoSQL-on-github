@@ -1,6 +1,6 @@
 /*.html
 /bld-LMDB_*/
-/bld-sqlite-*/
+/bld-SQLite-*/
 /sqlite3
 /src-lmdb/
 /src-mdb/

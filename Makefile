@@ -13,7 +13,7 @@ src-%:
 src-lmdb:
 	git clone git@github.com:LMDB/lmdb.git src-lmdb
 
-bld-sqlite-%: src-sqlite
+bld-SQLite-%: src-sqlite
 	git -C src-sqlite checkout version-$*
 	rm -rf $@ && mkdir $@
 	cd $@ && ../src-sqlite/configure && cd ..
@@ -42,5 +42,5 @@ bld-LMDB_%: src-lmdb src-mdb
 	tclsh tool/speedtest.tcl | tee $@
 	rm -f sqlite3 test*.sql clear.sql 2kinit.sql s2k.db s2k.db-lock
 
-.PRECIOUS: bld-LMDB_% bld-sqlite-%
+.PRECIOUS: bld-LMDB_% bld-SQLite-%
 .PHONY: clean bin

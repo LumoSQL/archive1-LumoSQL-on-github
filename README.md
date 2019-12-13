@@ -16,6 +16,12 @@
 <dd>this README and simplified benchmarking code (default)</dd>
 <dt>
 
+`results`
+
+</dt>
+<dd>benchmarking results</dd>
+<dt>
+
 [`mdb`](https://github.com/maxwell-k/201912-sqlightning/tree/mdb)
 
 </dt>
@@ -98,25 +104,22 @@ Prerequisites: steps above all complete successfully.
 The instructions in this section explain how to benchmark four different
 versions:
 
-| V.  | SQLite | LMDB   | Repository  |
-| --- | ------ | ------ | ----------- |
-| A.  | 3.7.17 | -      | SQLite      |
-| B.  | 3.30.1 | -      | SQLite      |
-| C.  | 3.7.17 | 0.9.9  | sqlightning |
-| D.  | 3.7.17 | 0.9.16 | sqlightning |
-
-```sh
-make bld-sqlite-3.7.17 bld-sqlite-3.30.1 bld-LMDB_0.9.9 bld-LMDB_0.9.16 &&
-for i in bld-* ; do printf '%-25s ' "$i" && "$i/sqlite3" --version ; done
-```
+| V.  | SQLite | LMDB   | Repository  | Name          |
+| --- | ------ | ------ | ----------- | ------------- |
+| A.  | 3.7.17 | -      | SQLite      | SQLite-3.7.17 |
+| B.  | 3.30.1 | -      | SQLite      | SQLite-3.30.1 |
+| C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
+| D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
 
 To benchmark a single binary takes approximately 4 minutes to complete:
 
 ```sh
-make LMDB_0.9.9.html
+for name in SQLite-3.30.1 SQLite-3.7.17 ; do
+  seq 3 | while read i ; do
+    make $name.html && mv $name.html $name-$i.html ;
+  done ;
+done
 ```
-
-Then repeat for the other versions.
 
 # References
 
