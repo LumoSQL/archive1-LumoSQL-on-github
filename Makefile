@@ -8,7 +8,9 @@ src-sqlite:
 
 src-%:
 	# git@github.com:LMDB/sqlightning.git is an alternative to .
-	git clone --branch $* . $@
+	git clone . $@
+	git -C $@ checkout --quiet "$$(git rev-parse --verify $* 2>/dev/null \
+		|| git rev-parse origin/$* )"
 
 src-lmdb:
 	git clone https://github.com/LMDB/lmdb.git src-lmdb
