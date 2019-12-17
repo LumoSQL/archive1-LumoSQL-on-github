@@ -34,7 +34,7 @@ In the process, we noticed things that need to be fixed:
 * Test suite. Even the speedtest portion of the SQLite test suite only partly works. 
 * Close coupling in SQLite. Higher levels of SQLite makes assumptions about how the btree code is implemented, eg knowledge about page sizes.
 * Close coupling in the port. eg the 2013 btree.c #includes LMDB's mdb.c (not mdb.h) and directly modifies the internal LMDB struct  MDB_page.
-* Bitrot. The upstream trees stopped working in 2015.
+* Bitrot. The upstream trees stopped working together in 2015.
 
 - Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
@@ -58,21 +58,20 @@ In the process, we noticed things that need to be fixed:
 <dd>benchmarking results</dd>
 <dt>
 
-[`mdb`](https://github.com/maxwell-k/201912-sqlightning/tree/mdb)
+[`mdb`](https://github.com/LumoSQL/LumoSQL/tree/mdb)
 
 </dt>
-<dd>the sqlightning code base</dd>
+<dd>the 2013 sqlightning code base, last modified August 2015</dd>
 <dt>
 
-[`orig`](https://github.com/maxwell-k/201912-sqlightning/tree/orig)
+[`orig`](https://github.com/LumoSQL/LumoSQL/tree/orig)
 
 </dt>
-<dd>for tracking SQLite versions</dd>
+<dd>unmodified SQLite 3.7.17, against which the 2013 changes were made. </dd>
 </dl>
 
-The default branch includes a cut down `tools/speedtest.tcl` that can be used
-for comparisons across LMDB backed and other SQLite versions, to view the
-differences:
+The benchmarking branch includes the 2013 sqlightning's cut down version of SQLite's `tools/speedtest.tcl` . 
+It has been cut down to remove tests that did not pass with the new code but is nevertheless useful and valid:
 
 ```sh
 git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
@@ -96,46 +95,43 @@ created:
 └── src-sqlite    Clone of sqlite.org git mirror
 ```
 
-## Dependencies
+## Build environment
 
-Either [toolbox](https://github.com/containers/toolbox) to develop in pet
-containers or a Fedora 30 installation
-
-## Manual steps
-
-1. Start with a clone of this repository as the current directory; the
-   `Makefile` uses this branch and `mdb`
-
-2. Create and enter a pet container, if using toolbox:
+On Ubuntu 18.0.4 LTS, and on any reasonably recent Debian or Ubuntu-derived distribution, you need only:
 
    ```sh
-   toolbox create --container lumosql --image fedora-toolbox:30 &&
-   toolbox enter --container lumosql
-   ```
+    sudo apt install build-essential
+    sudo apt build-dep sqlite3
+    ```
 
-3. Install necessary tools to compile `sqlite` based on the Fedora spec file:
+( build-dep requires deb-src lines uncommented in /etc/apt/sources.list .)
+
+On Fedora 30, and on any reasonably recent Fedora-derived distribution:
 
    ```sh
    sudo dnf install --assumeyes \
      make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
    ```
 
-4. To build either (a) specific versions of SQLite or (b) sqlightning using
-   different versions of LMDB, use commands like those below:
+## Using the Makefile tool
+
+To build either (a) specific versions of SQLite or (b) sqlightning using
+different versions of LMDB, use commands like those below:
 
    ```sh
    make bld-SQLite-3.7.17
    make bld-LMDB_0.9.9
    ```
 
+changing the version numbers to suit. A list of tested version numbers is in the table
+below. 
+
+
 # Speed tests / benchmarking
 
-Prerequisites: steps above all complete successfully.
+To benchmark a single binary takes approximately 4 minutes to complete depending on hardware.
 
-To benchmark a single binary takes approximately 4 minutes to complete.
-
-The instructions in this section explain how to benchmark four different
-versions:
+The instructions in this section explain how to benchmark four different versions:
 
 | V.  | SQLite | LMDB   | Repository  | Name          |
 | --- | ------ | ------ | ----------- | ------------- |
@@ -164,7 +160,7 @@ done
 - The [documentation](https://sqlite.org/whynotgit.html#getthecode) linking to
   the [official SQLite GitHub mirror](https://github.com/sqlite/sqlite)
 - ["sqlightning" repository](https://github.com/LMDB/sqlightning)
-- Early benchmarking <https://pastebin.com/B5SfEieL> of 3.7.17
+- Early benchmarking by Howard Chu of <https://pastebin.com/B5SfEieL> of 3.7.17
 - Benchmarking
   <https://github.com/google/leveldb/blob/master/benchmarks/db_bench_sqlite3.cc>
 
