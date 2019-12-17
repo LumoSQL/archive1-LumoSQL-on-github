@@ -44,5 +44,37 @@ bld-LMDB_%: src-lmdb src-mdb
 	tclsh tool/speedtest.tcl | tee $@
 	rm -f sqlite3 test*.sql clear.sql 2kinit.sql s2k.db s2k.db-lock
 
-.PRECIOUS: bld-LMDB_% bld-SQLite-%
-.PHONY: clean bin
+# discovered with apt-get build-dep
+BUILD_DEPENDENCIES := $(BUILD_DEPENDENCIES) \
+	build-essential \
+	debhelper \
+	autoconf \
+	libtool \
+	automake \
+	chrpath \
+	libreadline-dev \
+	tcl8.6-dev \
+# for cloning over https with git
+BUILD_DEPENDENCIES := $(BUILD_DEPENDENCIES) git ca-certificates
+# for /usr/bin/tclsh, tcl8.6-dev brings in tcl8.6 which only includes tclsh8.6
+BUILD_DEPENDENCIES := $(BUILD_DEPENDENCIES) tcl
+
+container:
+	container1="$$(buildah from ubuntu:18.04)" && \
+	buildah run "$$container1" -- /bin/sh -c "apt-get update \
+		&& DEBIAN_FRONTEND=noninteractive apt-get install \
+			--no-install-recommends --yes $(BUILD_DEPENDENCIES) \
+		&& rm -rf /var/lib/apt/lists/*" && \
+	buildah config \
+		--entrypoint '[ "make", "-C", "/usr/src" ]' \
+		--cmd bin \
+		"$$container1" && \
+	buildah commit --rm "$$container1" make
+# To build and run withint a container:
+#   make container
+#   podman run -v .:/usr/src:Z make
+#   podman run -v .:/usr/src:Z make bld-LMDB_0.9.9
+#   podman run -v .:/usr/src:Z --interactive --tty --entrypoint=/bin/bash make
+
+.PRECIOUS: bld-LMDB_% bld-SQLite-% src-mdb src-lmdb
+.PHONY: clean bin container
