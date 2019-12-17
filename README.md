@@ -84,9 +84,10 @@ In the process, we noticed things that need to be fixed:
 <dd>unmodified SQLite 3.7.17, against which the 2013 changes were made. </dd>
 </dl>
 
-The benchmarking branch includes the 2013 sqlightning's cut down version of
-SQLite's `tools/speedtest.tcl` . It has been cut down to remove tests that did
-not pass with the new code but is nevertheless useful and valid:
+The benchmarking branch includes a cut down version of SQLite's
+`tools/speedtest.tcl` that passes for the 2013 sqlightning proof of concept. It
+has been cut down to remove tests that did not pass with that code but is
+nevertheless useful and valid:
 
 ```sh
 git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
