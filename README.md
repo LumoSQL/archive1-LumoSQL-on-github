@@ -2,43 +2,57 @@
 
 ## About LumoSQL
 
-LumoSQL is a combination of two embedded data storage C language libraries: [SQLite](https://sqlite.org) and [LMDB](https://github.com/LMDB/lmdb).
-LumoSQL is an updated version of Howard Chu's 2013 [proof of concept](https://github.com/LMDB/sqlightning) combining the codebases. Howard's LMDB
-library has become ubiquitous on the basis of performance and reliability, so the 2013 claims of it greatly increasing the performance of SQLite 
-seem credible. D Richard Hipp's SQLite is relied on by many millions of people on a daily basis (every Android and Firefox user, as just two projects
-of the thousands that use SQLite) so an improved version of SQLite would benefit billions of people.
+LumoSQL is a combination of two embedded data storage C language libraries:
+[SQLite](https://sqlite.org) and [LMDB](https://github.com/LMDB/lmdb). LumoSQL
+is an updated version of Howard Chu's 2013
+[proof of concept](https://github.com/LMDB/sqlightning) combining the codebases.
+Howard's LMDB library has become ubiquitous on the basis of performance and
+reliability, so the 2013 claims of it greatly increasing the performance of
+SQLite seem credible. D Richard Hipp's SQLite is relied on by many millions of
+people on a daily basis (every Android and Firefox user, as just two projects of
+the thousands that use SQLite) so an improved version of SQLite would benefit
+billions of people.
 
-The original code changes btree.c in SQLite 3.7.17 to use LMDB 0.9.9 . It takes some work to replicate the original results because 
-not only has much changed since, but as a proof of concept there was no project established to package code or make it accessible. 
-LumoSQL revives the original code and shows how it is still relevant in 2019. The premise seems sound.
+The original code changes btree.c in SQLite 3.7.17 to use LMDB 0.9.9 . It takes
+some work to replicate the original results because not only has much changed
+since, but as a proof of concept there was no project established to package
+code or make it accessible. LumoSQL revives the original code and shows how it
+is still relevant in 2019. The premise seems sound.
 
 ## About the LumoSQL Project
 
-LumoSQL was started in December 2019 by Dan Shearer, who did the original source tree archeology. Keith Maxwell did the detailed initial work of
-integration, test and verification to produce the Makefile tool. 
+LumoSQL was started in December 2019 by Dan Shearer, who did the original source
+tree archeology. Keith Maxwell did the detailed initial work of integration,
+test and verification to produce the Makefile tool.
 
-The goal of the LumoSQL Project is to create and maintain an improved version of SQLite.
+The goal of the LumoSQL Project is to create and maintain an improved version of
+SQLite.
 
 ## The LumoSQL Makefile tool
 
 LumoSQL provides a Makefile which:
 
-* Re-creates the 2013 proof of concept tree
-* Creates new trees using updated code until the 2013 work starts breaking
-* Allows the 2013 speedtests to be easily replicated on the original and new combined codebases
-* Allows a testing matrix of versions and results
+- Re-creates the 2013 proof of concept tree
+- Creates new trees using updated code until the 2013 work starts breaking
+- Allows the 2013 speedtests to be easily replicated on the original and new
+  combined codebases
+- Allows a testing matrix of versions and results
 
 In the process, we noticed things that need to be fixed:
 
-* Regressions. Some SQLite functionality doesn't work out of the box with the 2013 code, even some basic things like ".schema"
-* Test suite. Even the speedtest portion of the SQLite test suite only partly works. 
-* Close coupling in SQLite. Higher levels of SQLite makes assumptions about how the btree code is implemented, eg knowledge about page sizes.
-* Close coupling in the port. eg the 2013 btree.c #includes LMDB's mdb.c (not mdb.h) and directly modifies the internal LMDB struct  MDB_page.
-* Bitrot. The upstream trees stopped working together in 2015.
+- Regressions. Some SQLite functionality doesn't work out of the box with the
+  2013 code, even some basic things like ".schema"
+- Test suite. Even the speedtest portion of the SQLite test suite only partly
+  works.
+- Close coupling in SQLite. Higher levels of SQLite makes assumptions about how
+  the btree code is implemented, eg knowledge about page sizes.
+- Close coupling in the port. eg the 2013 btree.c #includes LMDB's mdb.c (not
+  mdb.h) and directly modifies the internal LMDB struct MDB_page.
+- Bitrot. The upstream trees stopped working together in 2015.
 
-- Regressions, test failures, opportunities and more are tracked as
+* Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
-- Short term planning and progress reporting is tracked on a
+* Short term planning and progress reporting is tracked on a
   [project board](https://github.com/LumoSQL/LumoSQL/projects)
 
 ## Branches
@@ -70,8 +84,9 @@ In the process, we noticed things that need to be fixed:
 <dd>unmodified SQLite 3.7.17, against which the 2013 changes were made. </dd>
 </dl>
 
-The benchmarking branch includes the 2013 sqlightning's cut down version of SQLite's `tools/speedtest.tcl` . 
-It has been cut down to remove tests that did not pass with the new code but is nevertheless useful and valid:
+The benchmarking branch includes the 2013 sqlightning's cut down version of
+SQLite's `tools/speedtest.tcl` . It has been cut down to remove tests that did
+not pass with the new code but is nevertheless useful and valid:
 
 ```sh
 git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
@@ -97,41 +112,43 @@ created:
 
 ## Build environment
 
-On Ubuntu 18.0.4 LTS, and on any reasonably recent Debian or Ubuntu-derived distribution, you need only:
+On Ubuntu 18.0.4 LTS, and on any reasonably recent Debian or Ubuntu-derived
+distribution, you need only:
 
-   ```sh
-   sudo apt install build-essential
-   sudo apt build-dep sqlite3
-   ```
+```sh
+sudo apt install build-essential
+sudo apt build-dep sqlite3
+```
 
 ( build-dep requires deb-src lines uncommented in /etc/apt/sources.list .)
 
 On Fedora 30, and on any reasonably recent Fedora-derived distribution:
 
-   ```sh
-   sudo dnf install --assumeyes \
-   make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
-   ```
+```sh
+sudo dnf install --assumeyes \
+make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
+```
 
 ## Using the Makefile tool
 
 To build either (a) specific versions of SQLite or (b) sqlightning using
 different versions of LMDB, use commands like those below:
 
-   ```sh
-   make bld-SQLite-3.7.17
-   make bld-LMDB_0.9.9
-   ```
+```sh
+make bld-SQLite-3.7.17
+make bld-LMDB_0.9.9
+```
 
-changing the version numbers to suit. A list of tested version numbers is in the table
-below. 
-
+changing the version numbers to suit. A list of tested version numbers is in the
+table below.
 
 # Speed tests / benchmarking
 
-To benchmark a single binary takes approximately 4 minutes to complete depending on hardware.
+To benchmark a single binary takes approximately 4 minutes to complete depending
+on hardware.
 
-The instructions in this section explain how to benchmark four different versions:
+The instructions in this section explain how to benchmark four different
+versions:
 
 | V.  | SQLite | LMDB   | Repository  | Name          |
 | --- | ------ | ------ | ----------- | ------------- |
