@@ -50,6 +50,7 @@ bld-SQLite-%: src-sqlite
 bld-LMDB_%: src-lmdb src-mdb
 	git -C src-lmdb checkout LMDB_$*
 	rm -rf $@ && mkdir $@
+	cp LICENSES/Apache-2.0.txt $@/LICENSE
 	cd $@ && ../src-mdb/configure \
 		CFLAGS="-I../src-lmdb/libraries/liblmdb" && cd ..
 	make -C $@ sqlite3.h
