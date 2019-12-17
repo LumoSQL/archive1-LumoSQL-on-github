@@ -93,6 +93,9 @@ nevertheless useful and valid:
 git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
 ```
 
+Other branches typically begin with `feat/` and represent work in progress for
+the above.
+
 # Compiling SQLite and sqlightning
 
 ## Overview
