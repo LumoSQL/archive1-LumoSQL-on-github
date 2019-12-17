@@ -1,4 +1,4 @@
-bin: bld-sqlite-3.30.1 bld-LMDB_0.9.16
+bin: bld-SQLite-3.30.1 bld-LMDB_0.9.16
 
 clean:
 	rm -rf bld-* version.txt
