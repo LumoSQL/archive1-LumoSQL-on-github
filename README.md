@@ -100,9 +100,9 @@ created:
 On Ubuntu 18.0.4 LTS, and on any reasonably recent Debian or Ubuntu-derived distribution, you need only:
 
    ```sh
-    sudo apt install build-essential
-    sudo apt build-dep sqlite3
-    ```
+   sudo apt install build-essential
+   sudo apt build-dep sqlite3
+   ```
 
 ( build-dep requires deb-src lines uncommented in /etc/apt/sources.list .)
 
@@ -110,7 +110,7 @@ On Fedora 30, and on any reasonably recent Fedora-derived distribution:
 
    ```sh
    sudo dnf install --assumeyes \
-     make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
+   make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
    ```
 
 ## Using the Makefile tool
