@@ -133,7 +133,8 @@ sudo dnf install --assumeyes \
 
 To build either (a) specific versions of SQLite or (b) sqlightning using
 different versions of LMDB, use commands like those below changing the version
-numbers to suit. A list of tested version numbers is in the table below.
+numbers to suit. A list of tested version numbers is in the table
+[below](#which-lmdb-version).
 
 
 ```sh
