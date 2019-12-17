@@ -3,8 +3,14 @@ bin: bld-SQLite-3.30.1 bld-LMDB_0.9.16
 clean:
 	rm -rf bld-* version.txt
 
+# Without constraints the clone below will result in 20K commits and a .git
+# directory of 112M; restricting to a single branch and history from the day
+# before first relevant release results in <10K commits and half the disk
+# space. We use the release branch as it may not currently be merged into
+# master.
 src-sqlite:
-	git clone https://github.com/sqlite/sqlite.git src-sqlite
+	git clone --shallow-since 2013-05-19 --branch release \
+		https://github.com/sqlite/sqlite.git src-sqlite
 
 src-%:
 	# git@github.com:LMDB/sqlightning.git is an alternative to .
