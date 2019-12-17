@@ -136,7 +136,6 @@ different versions of LMDB, use commands like those below changing the version
 numbers to suit. A list of tested version numbers is in the table
 [below](#which-lmdb-version).
 
-
 ```sh
 make bld-SQLite-3.7.17
 make bld-LMDB_0.9.9
@@ -168,18 +167,6 @@ for name in SQLite-3.30.1 SQLite-3.7.17 ; do
   done ;
 done
 ```
-
-# References
-
-- The
-  [Fedora Spec file for "sqlite3"](https://apps.fedoraproject.org/packages/sqlite/sources/)
-  lists dependencies.
-- The [documentation](https://sqlite.org/whynotgit.html#getthecode) linking to
-  the [official SQLite GitHub mirror](https://github.com/sqlite/sqlite)
-- ["sqlightning" repository](https://github.com/LMDB/sqlightning)
-- Early benchmarking by Howard Chu of <https://pastebin.com/B5SfEieL> of 3.7.17
-- Benchmarking
-  <https://github.com/google/leveldb/blob/master/benchmarks/db_bench_sqlite3.cc>
 
 # Which LMDB version?
 
@@ -235,3 +222,15 @@ reported by <code>git diff --shortstat</code>.</dd>
 
 A **?** means that this has not been tested, and a **-** means that it is not
 applicable at present.
+
+# References
+
+- The
+  [Fedora Spec file for "sqlite3"](https://apps.fedoraproject.org/packages/sqlite/sources/)
+  lists dependencies.
+- The [documentation](https://sqlite.org/whynotgit.html#getthecode) linking to
+  the [official SQLite GitHub mirror](https://github.com/sqlite/sqlite)
+- ["sqlightning" repository](https://github.com/LMDB/sqlightning)
+- Early benchmarking by Howard Chu of <https://pastebin.com/B5SfEieL> of 3.7.17
+- Benchmarking
+  <https://github.com/google/leveldb/blob/master/benchmarks/db_bench_sqlite3.cc>
