@@ -4,7 +4,7 @@ clean:
 	rm -rf bld-* version.txt
 
 src-sqlite:
-	git clone git@github.com:sqlite/sqlite.git sqlite.git
+	git clone https://github.com/sqlite/sqlite.git sqlite.git
 
 src-%:
 	# git@github.com:LMDB/sqlightning.git is an alternative to .
