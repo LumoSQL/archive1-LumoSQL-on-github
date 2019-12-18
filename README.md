@@ -87,7 +87,7 @@ has been cut down to remove tests that did not pass with that code but is
 nevertheless useful and valid:
 
 ```sh
-git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
+git diff tool/speedtest.tcl lmdb-backend/tool/speedtest.tcl
 ```
 
 Other branches typically begin with `feat/` and represent work in progress for
@@ -95,20 +95,20 @@ the above.
 
 # Compiling SQLite and sqlightning
 
-## Overview
+## Directory layout
 
-As a result of the steps below the following directory structure will be
-created:
+In order to build LumoSQL and SQLite and to used different versions of the LMDB
+library, we use the following directory layout:
 
 ```
 .
-├── bld-mdb       Build artifacts for sqlightning
-├── bld-orig      Build artifacts for sqlite from sqlightning repository
-├── bld-sqlite    Build artifacts for sqlite from sqlite.org mirror
-├── src-lmdb      Clone of LMDB source code
-├── src-mdb       Checkout of the mdb branch of this repository
-├── src-orig      Checkout of the orig branch of this repository
-└── src-sqlite    Clone of sqlite.org git mirror
+├── bld-LMDB_?.?.?    Build artifacts for LumoSQL (src and src-lmdb)
+├── bld-SQLite-?.?.?  Build artifacts for sqlite (src-sqlite)
+├── LICENSES          License files, in line with https://reuse.software/spec/
+├── lmdb-backend      C source code to use SQLite with an LMDB backend
+├── src-lmdb          Clone of LMDB source code
+├── src-sqlite        Clone of sqlite.org git mirror
+└── tool              Cut down version of speedtest.tcl
 ```
 
 ## Build environment
