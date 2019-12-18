@@ -60,22 +60,12 @@ In the process, we noticed things that need to be fixed:
 
 ## Branches
 
-<dl>
-<dt>
+- The `master` branch is the currently completed work, this should build on
+  supported systems and pass the relevant tests (see below). This branch was
+  previously called `benchmarking`.
+- Development typically happens in branches beginning with `feature/`
 
-`benchmarking`
-
-</dt>
-<dd>this README and simplified benchmarking code (default)</dd>
-<dt>
-
-[`mdb`](https://github.com/LumoSQL/LumoSQL/tree/mdb)
-
-</dt>
-<dd>the 2013 sqlightning code base, last modified August 2015</dd>
-</dl>
-
-The benchmarking branch includes a cut down version of SQLite's
+The `master` branch includes a cut down version of SQLite's
 `tools/speedtest.tcl` that passes for the 2013 sqlightning proof of concept. It
 has been cut down to remove tests that did not pass with that code but is
 nevertheless useful and valid:
@@ -83,9 +73,6 @@ nevertheless useful and valid:
 ```sh
 git diff tool/speedtest.tcl src/tool/speedtest.tcl
 ```
-
-Other branches typically begin with `feat/` and represent work in progress for
-the above.
 
 # Compiling SQLite and sqlightning
 
@@ -129,8 +116,7 @@ The following steps have been tested on Fedora 30 and Ubuntu 18.04 LTS (via the
 
 ## Using the Makefile tool
 
-Start with a clone of this repository as the current directory. The Makefile
-build tool uses this `benchmarking` branch and the `mdb` branch.
+Start with a clone of this repository as the current directory.
 
 To build either (a) specific versions of SQLite or (b) sqlightning using
 different versions of LMDB, use commands like those below changing the version
