@@ -51,11 +51,12 @@ In the process, we noticed things that need to be fixed:
   the btree code is implemented, e.g. knowledge about page sizes.
 - Close coupling in the port, e.g. the 2013 `btree.c` `#includes` LMDB's `mdb.c`
   (not `mdb.h`) and directly modifies the internal LMDB struct `MDB_page`.
-- Bit-rot. The upstream trees stopped working together in 2015.
 
-* Regressions, test failures, opportunities and more are tracked as
+---
+
+- Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
-* Short term planning and progress reporting is tracked on a
+- Short term planning and progress reporting is tracked on a
   [project board](https://github.com/LumoSQL/LumoSQL/projects)
 
 ## Branches
@@ -141,7 +142,7 @@ versions:
 | A.  | 3.7.17 | -      | SQLite      | SQLite-3.7.17 |
 | B.  | 3.30.1 | -      | SQLite      | SQLite-3.30.1 |
 | C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
-| D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
+| D.  | 3.7.17 | 0.9.24 | sqlightning | LMDB_0.9.16   |
 
 To benchmark the four versions above use:
 
@@ -177,11 +178,11 @@ found through a
 | LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |     5 |   44 |  19 |
 | LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |    10 | 1072 | 565 |
 | LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |    24 |  303 |  57 |
-| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |     6 |  684 | 447 |
-| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |    23 |   81 |  50 |
-| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |    23 |   74 |  58 |
-| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |     4 |   52 |   9 |
-| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |     6 |   16 |  11 |
+| LMDB_0.9.19 | 2016-12-28 | ✓        | ✗          |     6 |  684 | 447 |
+| LMDB_0.9.21 | 2017-06-01 | ✓        | ✗          |    23 |   81 |  50 |
+| LMDB_0.9.22 | 2018-03-22 | ✓        | ✗          |    23 |   74 |  58 |
+| LMDB_0.9.23 | 2018-12-19 | ✓        | ✗          |     4 |   52 |   9 |
+| LMDB_0.9.24 | 2019-07-19 | ✓        | ✗          |     6 |   16 |  11 |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
 a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.

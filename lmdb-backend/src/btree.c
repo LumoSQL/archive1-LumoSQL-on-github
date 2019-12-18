@@ -26,6 +26,16 @@
 #include "mdb.c"
 #include "midl.c"
 
+#ifndef LOCKSUFF
+#define LOCKSUFF (mdb_suffixes[1][1])
+#endif
+
+#if MDB_VERSION_FULL < MDB_VERINT(0,9,19)
+#define MC_READ(mc) (mc)->mc_txn
+#else
+#define MC_READ(mc) (mc)
+#endif
+
 #if 0
 #define LOG(fmt,...)   sqlite3DebugPrintf("%s:%d " fmt "\n", __func__, __LINE__, __VA_ARGS__)
 #else
@@ -232,7 +242,7 @@ int sqlite3BtreePutData(BtCursor *pCsr, u32 offset, u32 amt, void *z){
 	return errmap(rc);
 
   node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
-  mdb_node_read(mc->mc_txn, node, &data);
+  mdb_node_read(MC_READ(mc), node, &data);
   if (data.mv_size < offset+amt)
   	return SQLITE_CORRUPT_BKPT;
 
@@ -720,7 +730,7 @@ int sqlite3BtreeData(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
   MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
   int rc = SQLITE_OK;
   
-  mdb_node_read(mc->mc_txn, node, &data);
+  mdb_node_read(MC_READ(mc), node, &data);
   if (offset+amt <= data.mv_size) {
     memcpy(pBuf, (char *)data.mv_data+offset, amt);
   } else {
@@ -780,7 +790,7 @@ const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
   }
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
-    mdb_node_read(mc->mc_txn, node, &data);
+    mdb_node_read(MC_READ(mc), node, &data);
 	*pAmt = data.mv_size;
 	return data.mv_data;
   } else {
@@ -805,7 +815,7 @@ int sqlite3BtreeDataSize(BtCursor *pCur, u32 *pSize){
   MDB_val data;
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
-    mdb_node_read(mc->mc_txn, node, &data);
+    mdb_node_read(MC_READ(mc), node, &data);
 	*pSize = data.mv_size;
   }
   LOG("done",0);
@@ -1195,7 +1205,7 @@ int sqlite3BtreeInsert(
     sqlite3DbFree(pCur->pKeyInfo->db, pFree);
   else if (nZero && rc == 0) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
-	mdb_node_read(mc->mc_txn, node, &data);
+       mdb_node_read(MC_READ(mc), node, &data);
 	memset((char *)data.mv_data+nData, 0, nZero);
   }
   LOG("rc=%d",rc);
@@ -1585,7 +1595,7 @@ int sqlite3BtreeOpen(
 		rc = SQLITE_NOMEM;
 		goto done;
 	  }
-	  sprintf(pBt->lockname, "%s" LOCKSUFF, dirPathName);
+         sprintf(pBt->lockname, "%s%s", dirPathName,  LOCKSUFF);
 	}
 	pBt->db = db;
 	pBt->openFlags = flags;
