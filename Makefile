@@ -21,8 +21,10 @@ VERSIONS ?= SQLite-3.7.17 SQLite-3.30.1 LMDB_0.9.9 LMDB_0.9.16
 
 all: $(addprefix bld-,$(VERSIONS))
 
+benchmark: $(addsuffix .html,$(VERSIONS))
+
 clean:
-	rm -rf bld-* version.txt
+	rm -rf bld-* version.txt *.html
 
 bld-SQLite-%:
 	# Without constraints the clone below will result in 20K commits and a
