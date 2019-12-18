@@ -31,12 +31,6 @@ src-sqlite:
 	git clone --shallow-since 2013-05-19 --branch release \
 		https://github.com/sqlite/sqlite.git src-sqlite
 
-src-%:
-	# git@github.com:LMDB/sqlightning.git is an alternative to .
-	git clone . $@
-	git -C $@ checkout --quiet "$$(git rev-parse --verify $* 2>/dev/null \
-		|| git rev-parse origin/$* )"
-
 src-lmdb:
 	git clone https://github.com/LMDB/lmdb.git src-lmdb
 
@@ -47,16 +41,16 @@ bld-SQLite-%: src-sqlite
 	make -C $@
 	$@/sqlite3 --version
 
-bld-LMDB_%: src-lmdb src-mdb
+bld-LMDB_%: src-lmdb
 	git -C src-lmdb checkout LMDB_$*
 	rm -rf $@ && mkdir $@
 	cp LICENSES/Apache-2.0.txt $@/LICENSE
-	cd $@ && ../src-mdb/configure \
+	cd $@ && ../src/configure \
 		CFLAGS="-I../src-lmdb/libraries/liblmdb" && cd ..
 	make -C $@ sqlite3.h
 	printf '#undef SQLITE_SOURCE_ID\n' > version.txt
 	printf '#define SQLITE_SOURCE_ID "%s %-11s %s"\n' \
-		"$$(git -C src-mdb rev-parse --short HEAD)" \
+		"$$(git -C src rev-parse --short HEAD)" \
 		"$$(git -C src-lmdb describe --tags)" \
 		"$$(git -C src-lmdb rev-parse --short HEAD)" \
 		>> version.txt
@@ -102,5 +96,5 @@ container:
 #   podman run -v .:/usr/src:Z make bld-LMDB_0.9.9
 #   podman run -v .:/usr/src:Z --interactive --tty --entrypoint=/bin/bash make
 
-.PRECIOUS: bld-LMDB_% bld-SQLite-% src-mdb src-lmdb
+.PRECIOUS: bld-LMDB_% bld-SQLite-% src-lmdb
 .PHONY: clean bin container
