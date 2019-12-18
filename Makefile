@@ -29,17 +29,17 @@ clean:
 # before first relevant release results in <10K commits and half the disk
 # space. We use the release branch as it may not currently be merged into
 # master.
-src-sqlite:
+src-SQLite:
 	git clone --shallow-since 2013-05-19 --branch release \
-		https://github.com/sqlite/sqlite.git src-sqlite
+		https://github.com/sqlite/sqlite.git src-SQLite
 
 src-lmdb:
 	git clone https://github.com/LMDB/lmdb.git src-lmdb
 
-bld-SQLite-%: src-sqlite
-	git -C src-sqlite checkout version-$*
+bld-SQLite-%: src-SQLite
+	git -C src-SQLite checkout version-$*
 	rm -rf $@ && mkdir $@
-	cd $@ && ../src-sqlite/configure && cd ..
+	cd $@ && ../src-SQLite/configure && cd ..
 	make -C $@
 	$@/sqlite3 --version
 
