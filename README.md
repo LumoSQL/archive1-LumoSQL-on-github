@@ -130,6 +130,9 @@ sudo dnf install --assumeyes \
   git make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
 ```
 
+The following steps have been tested on Fedora 30 and Ubuntu 18.04 LTS (via the
+`container` target in the [Makefile](/Makefile)).
+
 ## Using the Makefile tool
 
 Start with a clone of this repository as the current directory. The Makefile
