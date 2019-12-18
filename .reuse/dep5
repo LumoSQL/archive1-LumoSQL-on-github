@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: LumoSQL
+Upstream-Contact: The LumoSQL Authors
+Source: https://github.com/LumoSQL/LumoSQL
+
+Files: .gitignore
+Copyright: 2019 The LumoSQL Authors
+License: Apache-2.0
+
+Files: AUTHORS
+Copyright: 2019 The LumoSQL Authors
+License: Apache-2.0
