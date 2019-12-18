@@ -73,12 +73,6 @@ In the process, we noticed things that need to be fixed:
 
 </dt>
 <dd>the 2013 sqlightning code base, last modified August 2015</dd>
-<dt>
-
-[`orig`](https://github.com/LumoSQL/LumoSQL/tree/orig)
-
-</dt>
-<dd>unmodified SQLite 3.7.17, against which the 2013 changes were made. </dd>
 </dl>
 
 The benchmarking branch includes a cut down version of SQLite's
