@@ -163,16 +163,10 @@ versions:
 | C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
 | D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
 
-To benchmark the four versions above _[Work in Progress]_:
+To benchmark the four versions above use:
 
 ```sh
-for name in SQLite-3.30.1 SQLite-3.7.17 ; do
-  seq 3 | while read i ; do
-    if ! make -q $name.html ; then
-      make $name.html && mv $name.html $name-$i.html ;
-    fi
-  done ;
-done
+make benchmark
 ```
 
 # Which LMDB version?
