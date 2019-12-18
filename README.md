@@ -69,12 +69,6 @@ In the process, we noticed things that need to be fixed:
 <dd>this README and simplified benchmarking code (default)</dd>
 <dt>
 
-`results`
-
-</dt>
-<dd>benchmarking results</dd>
-<dt>
-
 [`mdb`](https://github.com/LumoSQL/LumoSQL/tree/mdb)
 
 </dt>
