@@ -17,33 +17,37 @@
 #
 # /Makefile
 #
-BENCHMARK_VERSIONS := SQLite-3.30.1 LMDB_0.9.16
+VERSIONS ?= SQLite-3.7.17 SQLite-3.30.1 LMDB_0.9.9 LMDB_0.9.16
 
-all: $(addprefix bld-,$(BENCHMARK_VERSIONS))
+all: $(addprefix bld-,$(VERSIONS))
 
 clean:
 	rm -rf bld-* version.txt
 
-# Without constraints the clone below will result in 20K commits and a .git
-# directory of 112M; restricting to a single branch and history from the day
-# before first relevant release results in <10K commits and half the disk
-# space. We use the release branch as it may not currently be merged into
-# master.
-src-SQLite:
+bld-SQLite-%:
+	# Without constraints the clone below will result in 20K commits and a
+	# .git directory of 112M; restricting to a single branch and history
+	# from the day before first relevant release results in <10K commits
+	# and half the disk space. We use the release branch as it may not
+	# currently be merged into master.
+	#
+	# Cloning in a separate target results in unnecessary rebuilds if
+	# multiple versions of SQLite are required: checking out a specific
+	# versions of the SQLite source code results in a change to the
+	# modification time for the src-SQLite directory, which in turn results
+	# in a rebuild of another version.
+	test -d src-SQLite || \
 	git clone --shallow-since 2013-05-19 --branch release \
 		https://github.com/sqlite/sqlite.git src-SQLite
-
-src-lmdb:
-	git clone https://github.com/LMDB/lmdb.git src-lmdb
-
-bld-SQLite-%: src-SQLite
 	git -C src-SQLite checkout version-$*
 	rm -rf $@ && mkdir $@
 	cd $@ && ../src-SQLite/configure && cd ..
 	make -C $@
 	$@/sqlite3 --version
 
-bld-LMDB_%: src-lmdb
+bld-LMDB_%:
+	test -d src-lmdb || \
+	git clone https://github.com/LMDB/lmdb.git src-lmdb
 	git -C src-lmdb checkout LMDB_$*
 	rm -rf $@ && mkdir $@
 	cp LICENSES/Apache-2.0.txt $@/LICENSE
