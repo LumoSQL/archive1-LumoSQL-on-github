@@ -17,7 +17,9 @@
 #
 # /Makefile
 #
-bin: bld-SQLite-3.30.1 bld-LMDB_0.9.16
+BENCHMARK_VERSIONS := SQLite-3.30.1 LMDB_0.9.16
+
+all: $(addprefix bld-,$(BENCHMARK_VERSIONS))
 
 clean:
 	rm -rf bld-* version.txt
