@@ -1,0 +1,12 @@
+This directory contains the source code to LumoSQL, an embeddable SQL database engine
+based on SQLite. The LumoSQL project is maintained at https://github.com/LumoSQL/LumoSQL .
+SQLite is an upstream for LumoSQL, which aims to retain compatibility with SQLite 
+while extending it with new features.
+
+This means that some parts of this tree will be regularly overwritten by
+changes the SQLite project has made, while others will be unique to LumoSQL. Still
+others will be subject to careful hand merging after an SQLite release.
+
+A potentially confusing example file is README, which will be synched with the SQLite 
+project but which has no knowledge of the LumoSQL parts of the tree. README makes statements
+about the source code which may not be correct.
