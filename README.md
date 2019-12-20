@@ -60,61 +60,36 @@ In the process, we noticed things that need to be fixed:
 
 ## Branches
 
-<dl>
-<dt>
+- The `master` branch is the currently completed work, this should build on
+  supported systems and pass the relevant tests (see below). This branch was
+  previously called `benchmarking`.
+- Development typically happens in branches beginning with `feature/`
 
-`benchmarking`
-
-</dt>
-<dd>this README and simplified benchmarking code (default)</dd>
-<dt>
-
-`results`
-
-</dt>
-<dd>benchmarking results</dd>
-<dt>
-
-[`mdb`](https://github.com/LumoSQL/LumoSQL/tree/mdb)
-
-</dt>
-<dd>the 2013 sqlightning code base, last modified August 2015</dd>
-<dt>
-
-[`orig`](https://github.com/LumoSQL/LumoSQL/tree/orig)
-
-</dt>
-<dd>unmodified SQLite 3.7.17, against which the 2013 changes were made. </dd>
-</dl>
-
-The benchmarking branch includes a cut down version of SQLite's
+The `master` branch includes a cut down version of SQLite's
 `tools/speedtest.tcl` that passes for the 2013 sqlightning proof of concept. It
 has been cut down to remove tests that did not pass with that code but is
 nevertheless useful and valid:
 
 ```sh
-git diff orig:tool/speedtest.tcl benchmarking:tool/speedtest.tcl
+git diff tool/speedtest.tcl lmdb-backend/tool/speedtest.tcl
 ```
-
-Other branches typically begin with `feat/` and represent work in progress for
-the above.
 
 # Compiling SQLite and sqlightning
 
-## Overview
+## Directory layout
 
-As a result of the steps below the following directory structure will be
-created:
+In order to build LumoSQL and SQLite and to used different versions of the LMDB
+library, we use the following directory layout:
 
 ```
 .
-├── bld-mdb       Build artifacts for sqlightning
-├── bld-orig      Build artifacts for sqlite from sqlightning repository
-├── bld-sqlite    Build artifacts for sqlite from sqlite.org mirror
-├── src-lmdb      Clone of LMDB source code
-├── src-mdb       Checkout of the mdb branch of this repository
-├── src-orig      Checkout of the orig branch of this repository
-└── src-sqlite    Clone of sqlite.org git mirror
+├── bld-LMDB_?.?.?    Build artifacts for LumoSQL (src and src-lmdb)
+├── bld-SQLite-?.?.?  Build artifacts for sqlite (src-sqlite)
+├── LICENSES          License files, in line with https://reuse.software/spec/
+├── lmdb-backend      C source code to use SQLite with an LMDB backend
+├── src-lmdb          Clone of LMDB source code
+├── src-sqlite        Clone of sqlite.org git mirror
+└── tool              Cut down version of speedtest.tcl
 ```
 
 ## Build environment
@@ -136,10 +111,12 @@ sudo dnf install --assumeyes \
   git make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
 ```
 
+The following steps have been tested on Fedora 30 and Ubuntu 18.04 LTS (via the
+`container` target in the [Makefile](/Makefile)).
+
 ## Using the Makefile tool
 
-Start with a clone of this repository as the current directory. The Makefile
-build tool uses this `benchmarking` branch and the `mdb` branch.
+Start with a clone of this repository as the current directory.
 
 To build either (a) specific versions of SQLite or (b) sqlightning using
 different versions of LMDB, use commands like those below changing the version
@@ -166,16 +143,10 @@ versions:
 | C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
 | D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
 
-To benchmark the four versions above _[Work in Progress]_:
+To benchmark the four versions above use:
 
 ```sh
-for name in SQLite-3.30.1 SQLite-3.7.17 ; do
-  seq 3 | while read i ; do
-    if ! make -q $name.html ; then
-      make $name.html && mv $name.html $name-$i.html ;
-    fi
-  done ;
-done
+make benchmark
 ```
 
 # Which LMDB version?

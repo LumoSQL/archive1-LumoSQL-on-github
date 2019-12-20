@@ -1,8 +1,7 @@
 /*.html
 /bld-LMDB_*/
 /bld-SQLite-*/
+/gh-pages/
 /sqlite3
+/src-SQLite/
 /src-lmdb/
-/src-mdb/
-/src-orig/
-/src-sqlite/
