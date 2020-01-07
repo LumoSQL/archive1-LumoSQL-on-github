@@ -1,0 +1,7 @@
+/__sapper__/
+/coverage/
+/cypress/screenshots/
+/gh-pages/
+/node_modules/
+/out/
+/src/node_modules/@sapper/
