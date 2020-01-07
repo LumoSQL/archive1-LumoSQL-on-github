@@ -1,0 +1,9 @@
+{
+  "source": {
+    "include": ["src/utils"],
+    "includePattern": ".+\\.(js(doc|x)?|mjs)$"
+  },
+  "opts": {
+    "readme": "README.md"
+  }
+}
