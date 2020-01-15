@@ -61,8 +61,7 @@ In the process, we noticed things that need to be fixed:
 ## Branches
 
 - The `master` branch is the currently completed work, this should build on
-  supported systems and pass the relevant tests (see below). This branch was
-  previously called `benchmarking`.
+  supported systems and pass the relevant tests (see below).
 - Development typically happens in branches beginning with `feature/`
 
 The `master` branch includes a cut down version of SQLite's
@@ -190,7 +189,7 @@ a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
 <dt>Compiles</dt>
 <dd>✓ means the process documented above completes successfully.</dd>
 <dt>Speed test<dt>
-<dd>✓ means the cut down version of speed test passes in benchmarking branch
+<dd>✓ means the cut down version of speed test passes in `./tool/speedtest.tcl`
 passes.</dd>
 <dt>Files</dt>
 <dd>The number of files changed between the previous release and this one, as
