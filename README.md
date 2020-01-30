@@ -110,11 +110,11 @@ library, we use the following directory layout:
 
 ## Build environment
 
-On Ubuntu 18.0.4 LTS, and on any reasonably recent Debian or Ubuntu-derived
-distribution, you need only:
+On Ubuntu 18.0.4 LTS, Debian Stable (buster), and on any reasonably recent
+Debian or Ubuntu-derived distribution, you need only:
 
 ```sh
-sudo apt install git build-essential
+sudo apt install git build-essential tcl
 sudo apt build-dep sqlite3
 ```
 
