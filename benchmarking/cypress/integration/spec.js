@@ -7,7 +7,7 @@ describe("/", () => {
     cy.visit("/");
   });
   it("has the correct <h1>", () => {
-    cy.contains("h1", "LumoSQL benchmarking");
+    cy.contains("h1", "LumoSQL Benchmarking");
   });
   it("links to /data.json", () => {
     cy.contains("data extracted")
