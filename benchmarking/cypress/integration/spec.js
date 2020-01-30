@@ -10,7 +10,7 @@ describe("/", () => {
     cy.contains("h1", "LumoSQL benchmarking");
   });
   it("links to /data.json", () => {
-    cy.contains("Data extracted")
+    cy.contains("data extracted")
       .get("a")
       .should("have.attr", "href", "/data.json");
   });
