@@ -168,9 +168,8 @@
 </details>
 
 <p>
-  Data extracted from the HTML reports is available as
   <a href="/data.json">data.json</a>
-  .
+  includes the data extracted from the HTML reports.
 </p>
 
 <details>
