@@ -73,9 +73,11 @@ In the process, we noticed things that need to be fixed:
 - Bit-rot. The upstream trees stopped working together in 2015. This was fixed
   by using LMDB as a separate library.
 
-* Regressions, test failures, opportunities and more are tracked as
+---
+
+- Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
-* Short term planning and progress reporting is tracked on a
+- Short term planning and progress reporting is tracked on a
   [project board](https://github.com/LumoSQL/LumoSQL/projects)
 
 ## Branches
@@ -166,8 +168,9 @@ make benchmark
 <https://github.com/LMDB/lmdb/commit/be47ca766713f55e5b3abd18120514fdad7d90f2>
 first released in `LMDB_0.9.7` on 14 August 2013. `LMDB_0.9.8` was 9 September
 2013 and `LMDB_0.9.9` was 24 October 2013.
-`58b473f3d5570fca94b88398e0e4314208a077cd` made adapted `sqlightning` to this
-change on 12 September 2013. So first try `LMDB_0.9.8`, but this fails with:
+<https://github.com/LMDB/sqlightning/commit/58b473f3d5570fca94b88398e0e4314208a077cd>
+adapted `sqlightning` to this change on 12 September 2013. So first try
+`LMDB_0.9.8`, but this fails with:
 `sqlite3.c:38156:2: error: unknown type name ‘mdb_hash_t’`.
 
 Likely need
