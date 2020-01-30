@@ -9,49 +9,69 @@ LumoSQL is a combination of two embedded data storage C language libraries:
 [SQLite](https://sqlite.org) and [LMDB](https://github.com/LMDB/lmdb). LumoSQL
 is an updated version of Howard Chu's 2013
 [proof of concept](https://github.com/LMDB/sqlightning) combining the codebases.
-Howard's LMDB library has become ubiquitous on the basis of performance and
-reliability, so the 2013 claims of it greatly increasing the performance of
-SQLite seem credible. D Richard Hipp's SQLite is relied on by many millions of
-people on a daily basis (every Android and Firefox user, as just two projects of
-the thousands that use SQLite) so an improved version of SQLite would benefit
-billions of people.
+Howard's LMDB library has become an ubiquitous replacement for
+[bdb](https://sleepycat.com/) on the basis of performance, reliability, and
+license so the 2013 claims of it greatly increasing the performance of SQLite
+seemed credible. D Richard Hipp's SQLite is used in thousands of software
+projects, and since three of them are Google's Android, Mozilla's Firefox and
+Apple's iOS, an improved version of SQLite will benefit billions of people.
 
-The original code changes `btree.c` in SQLite 3.7.17 to use LMDB 0.9.9 . It
+The original 2013 code changes `btree.c` in SQLite 3.7.17 to use LMDB 0.9.9 . It
 takes some work to replicate the original results because not only has much
 changed since, but as a proof of concept there was no project established to
-package code or make it accessible. LumoSQL revives the original code and shows
-how it is still relevant in 2019. The premise seems sound.
+package code or make it accessible, and plenty of barriers to trying it out.
+
+In January 2020 we established:
+
+- Howard's 2013 performance work is reproducible
+- SQLite's key-value store improved in performance since 2013, getting close to
+  parity with LMDB by some measures
+- SQLite on-disk corruption seems to be reported by more users than LMDB on-disk
+  corruption, and there seem to be logical reasons for that
+- SQLite can be readily modified to have multiple storage backends and still
+  pass all of its own tests
+- SQLite has a lack of error handling since it doesn't expect there to be
+  multiple backends, and this is a bug
+
+In addition there are several disclaimers made by the SQLite project including
+not being intended for high concurrency. Since high concurrency is a design
+feature of LMDB and a common use case for SQLite, this is important for LumoSQL.
 
 ## About the LumoSQL Project
 
 LumoSQL was started in December 2019 by Dan Shearer, who did the original source
-tree archaeology. Keith Maxwell did the detailed initial work of integration,
-test and verification to produce the Makefile tool.
+tree archaeology, patching and test builds. Keith Maxwell joined shortly after
+and contributed version management to the Makefile and the benchmarking tools.
 
 The goal of the LumoSQL Project is to create and maintain an improved version of
 SQLite.
 
+LumoSQL is supported by the [NLNet Foundation](https://nlnet.nl).
+
 ## The LumoSQL Makefile tool
 
-LumoSQL provides a Makefile which:
+LumoSQL provides a Makefile and benchmarking subsystem which:
 
-- Re-creates the 2013 proof of concept tree
-- Creates new trees using updated code until the 2013 work starts breaking
-- Allows the 2013 speed tests to be easily replicated on the original and new
-  combined codebases
-- Allows a testing matrix of versions and results
+- Re-creates many combinations of SQLite and LMDB trees and versions, as
+  specified by the user
+- Creates a testing matrix of versions and results. These can be limited by the
+  user because a full suite takes hours to run.
 
 In the process, we noticed things that need to be fixed:
 
 - Regressions. Some SQLite functionality doesn't work out of the box with the
-  2013 code, even some basic things like ".schema"
-- Test suite. Even the speed test portion of the SQLite test suite only partly
-  works.
+  2013 code, even some basic things like ".schema" . This fails silently, which
+  is an SQLite bug.
 - Close coupling in SQLite. Higher levels of SQLite makes assumptions about how
   the btree code is implemented, e.g. knowledge about page sizes.
 - Close coupling in the port, e.g. the 2013 `btree.c` `#includes` LMDB's `mdb.c`
-  (not `mdb.h`) and directly modifies the internal LMDB struct `MDB_page`.
-- Bit-rot. The upstream trees stopped working together in 2015.
+  (not `mdb.h`) and directly modifies the internal LMDB struct `MDB_page`. This
+  was fixed by using LMDB as a separate library.
+- Test suite. Even the speed test portion of the SQLite test suite only partly
+  works. This was fixed by using LMDB as a separate library. Anyone interested
+  can see this in git history, but basically this is completely gone.
+- Bit-rot. The upstream trees stopped working together in 2015. This was fixed
+  by using LMDB as a separate library.
 
 * Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
@@ -62,16 +82,8 @@ In the process, we noticed things that need to be fixed:
 
 - The `master` branch is the currently completed work, this should build on
   supported systems and pass the relevant tests (see below).
-- Development typically happens in branches beginning with `feature/`
-
-The `master` branch includes a cut down version of SQLite's
-`tools/speedtest.tcl` that passes for the 2013 sqlightning proof of concept. It
-has been cut down to remove tests that did not pass with that code but is
-nevertheless useful and valid:
-
-```sh
-git diff tool/speedtest.tcl lmdb-backend/tool/speedtest.tcl
-```
+- Development typically happens in branches beginning with `feature/` .
+  feature/benchmarking is very active in January 2020.
 
 # Compiling SQLite and sqlightning
 
