@@ -97,7 +97,7 @@
 <h1>Draft LumoSQL Benchmarking — Version 1</h1>
 
 <p class="intro">
-  Median across {runs.length} run{runs.length - 1 ? 's' : ''}.
+  Median across {runs.length} run{runs.length - 1 ? 's' : ''} in seconds.
 </p>
 
 <table class="medians">
@@ -178,7 +178,8 @@
     <h1>Underlying data in one table</h1>
 
     <p>
-      Median across {runs.length} run{runs.length - 1 ? 's' : ''}: {join(runs)}
+      {runs.length} run{runs.length - 1 ? 's' : ''}: {join(runs)}, measured in
+      seconds.
     </p>
 
     <dl>
