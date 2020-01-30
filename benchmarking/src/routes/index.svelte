@@ -97,7 +97,7 @@
 <h1>Draft LumoSQL benchmarking</h1>
 
 <p class="intro">
-  Median across {runs.length} run{runs.length - 1 ? 's' : ''}: {join(runs)}
+  Median across {runs.length} run{runs.length - 1 ? 's' : ''}.
 </p>
 
 <table class="medians">
@@ -177,6 +177,10 @@
   <summary>All data in one table</summary>
   <div>
     <h1>Underlying data in one table</h1>
+
+    <p>
+      Median across {runs.length} run{runs.length - 1 ? 's' : ''}: {join(runs)}
+    </p>
 
     <dl>
       {#each versions as version, index}
