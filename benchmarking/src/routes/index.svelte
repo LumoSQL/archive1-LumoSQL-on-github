@@ -71,9 +71,9 @@
   }
   td.rotate div {
     transform-origin: left top;
-    transform: rotate(-45deg);
+    transform: rotate(-30deg);
     position: absolute;
-    margin-left: 80%;
+    margin-left: 25%;
     bottom: 0rem;
     width: 30rem;
   }
