@@ -94,7 +94,7 @@
   <title>Draft LumoSQL benchmarking</title>
 </svelte:head>
 
-<h1>Draft LumoSQL benchmarking</h1>
+<h1>Draft LumoSQL Benchmarking — Version 1</h1>
 
 <p class="intro">
   Median across {runs.length} run{runs.length - 1 ? 's' : ''}.
