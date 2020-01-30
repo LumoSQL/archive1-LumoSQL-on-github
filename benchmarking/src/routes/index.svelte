@@ -23,6 +23,7 @@
   const versions = getVersions(dataset);
   const tests = getTests(dataset);
   const nested = unconvert(dataset);
+  const title = "Draft LumoSQL Benchmarking — Version 1";
 </script>
 
 <style>
@@ -91,10 +92,10 @@
 </style>
 
 <svelte:head>
-  <title>Draft LumoSQL benchmarking</title>
+  <title>{title}</title>
 </svelte:head>
 
-<h1>Draft LumoSQL Benchmarking — Version 1</h1>
+<h1>{title}</h1>
 
 <p class="intro">
   Median across {runs.length} run{runs.length - 1 ? 's' : ''} in seconds.
