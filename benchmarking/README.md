@@ -2,10 +2,40 @@
 
 ## Quick start
 
-The steps below publish the benchmarking results on GitHub pages:
+### Create the benchmarking data
+
+1. Start with the root of this repository as the current working directory
+2. Make sure you have successfully built the repository once e.g. with a simple
+   `make` command
+3. Set the `DATA` environment variable to where you want to store the
+   benchmarking data e.g. `export DATA=/var/srv/data`
+4. Start the benchmarking, the shell script below will produce three runs:
+
+   ```sh
+   test -d "$DATA" || echo '$DATA is not set properly'
+   path="$PWD"
+   cd "$DATA"
+   date &&
+   seq 1 5 | while read i ; do
+     test -d "$i" || git clone "$path" "$i" || break
+     test -d "$i/src-SQLite" || git -C "$i" clone "$path/src-SQLite" || break
+     test -d "$i/src-lmdb" || git -C "$i" clone "$path/src-lmdb" || break
+     make -C "$i" benchmark || break
+   done &&
+   date
+   ```
+
+### Summarise and publish the benchmarking data
+
+The steps below summarise and publish the benchmarking results on GitHub pages.
+
+First set the `DATA` environment variable to where you want to store the
+benchmarking data e.g. `export DATA=/var/srv/data`, as above.
+
+Then start with this directory, `benchmarking`, as the current directory:
 
 ```sh
-export DATA=../../../../data     # or wherever you keep it
+test -d "$DATA" || echo '$DATA is not set properly'
 npm run dev                      # check everything looks OK
 test -d gh-pages || git worktree add gh-pages gh-pages
 npm run gh-pages
@@ -13,8 +43,13 @@ cd gh-pages
 python3 -m http.server           # check it looks good or another http server
 git commit
 git push
-unset DATA                       # otherwise tests fail
 ```
+
+Exporting the `TITLE` environment variable changes the title and heading text in
+the HTML.
+
+Note that if data is left set then the tests on the JavaScript code will fail —
+`unset DATA`
 
 ## Terminology
 
