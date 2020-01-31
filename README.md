@@ -84,8 +84,11 @@ In the process, we noticed things that need to be fixed:
 
 - The `master` branch is the currently completed work, this should build on
   supported systems and pass the relevant tests (see below).
-- Development typically happens in branches beginning with `feature/`.
-  `feature/benchmarking` is very active in January 2020.
+
+- Development typically happens in branches beginning with `feature/` .
+  feature/benchmarking is very active in January 2020.
+  =======
+
 
 # Compiling SQLite and sqlightning
 
@@ -149,18 +152,35 @@ on hardware.
 The instructions in this section explain how to benchmark four different
 versions:
 
-| V.  | SQLite | LMDB   | Repository  | Name          |
-| --- | ------ | ------ | ----------- | ------------- |
-| A.  | 3.7.17 | -      | SQLite      | SQLite-3.7.17 |
-| B.  | 3.30.1 | -      | SQLite      | SQLite-3.30.1 |
-| C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
-| D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
+| V.  | SQLite | LMDB   | Repository | Report filename    |
+| --- | ------ | ------ | ---------- | ------------------ |
+| A.  | 3.7.17 | -      | SQLite     | SQLite-3.7.17.html |
+| B.  | 3.30.1 | -      | SQLite     | SQLite-3.30.1.html |
+| C.  | 3.7.17 | 0.9.9  | LumoSQL    | LMDB_0.9.9.html    |
+| D.  | 3.7.17 | 0.9.16 | LumoSQL    | LMDB_0.9.16.html   |
 
 To benchmark the four versions above use:
 
 ```sh
 make benchmark
 ```
+
+The "Repository" column means:
+
+<dl>
+<dt>SQLite</dt>
+<dd>
+
+<https://github.com/sqlite/sqlite>
+
+</dd>
+<dt>LumoSQL</dt>
+<dd>
+
+<https://github.com/LumoSQL/LumoSQL> (this repository)
+
+</dd>
+</dl>
 
 # Which LMDB version?
 
