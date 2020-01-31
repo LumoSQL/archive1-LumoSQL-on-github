@@ -28,9 +28,15 @@
 ### Summarise and publish the benchmarking data
 
 The steps below summarise and publish the benchmarking results on GitHub pages.
+This process use Node JS and a JavaScript framework called svelte:
 
-First set the `DATA` environment variable to where you want to store the
-benchmarking data e.g. `export DATA=/var/srv/data`, as above.
+- Make sure you have Node JS 12 or higher installed, the [official instructions]
+  may help
+- Run `npm install` in this `benchmarking` directory
+
+Each time you wish to produce a table, set the `DATA` environment variable to
+where you want to store the benchmarking data e.g. `export DATA=/var/srv/data`,
+as above.
 
 Then start with this directory, `benchmarking`, as the current directory:
 
@@ -49,7 +55,9 @@ Exporting the `TITLE` environment variable changes the title and heading text in
 the HTML.
 
 Note that if data is left set then the tests on the JavaScript code will fail —
-`unset DATA`
+`unset DATA`.
+
+[official instructions]: https://nodejs.org/en/download/package-manager
 
 ## Terminology
 
