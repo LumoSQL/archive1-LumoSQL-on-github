@@ -73,17 +73,22 @@ In the process, we noticed things that need to be fixed:
 - Bit-rot. The upstream trees stopped working together in 2015. This was fixed
   by using LMDB as a separate library.
 
-* Regressions, test failures, opportunities and more are tracked as
+---
+
+- Regressions, test failures, opportunities and more are tracked as
   [issues](https://github.com/LumoSQL/LumoSQL/issues)
-* Short term planning and progress reporting is tracked on a
+- Short term planning and progress reporting is tracked on a
   [project board](https://github.com/LumoSQL/LumoSQL/projects)
 
 ## Branches
 
 - The `master` branch is the currently completed work, this should build on
   supported systems and pass the relevant tests (see below).
+
 - Development typically happens in branches beginning with `feature/` .
   feature/benchmarking is very active in January 2020.
+  =======
+
 
 # Compiling SQLite and sqlightning
 
@@ -183,8 +188,9 @@ The "Repository" column means:
 <https://github.com/LMDB/lmdb/commit/be47ca766713f55e5b3abd18120514fdad7d90f2>
 first released in `LMDB_0.9.7` on 14 August 2013. `LMDB_0.9.8` was 9 September
 2013 and `LMDB_0.9.9` was 24 October 2013.
-`58b473f3d5570fca94b88398e0e4314208a077cd` made adapted `sqlightning` to this
-change on 12 September 2013. So first try `LMDB_0.9.8`, but this fails with:
+<https://github.com/LMDB/sqlightning/commit/58b473f3d5570fca94b88398e0e4314208a077cd>
+adapted `sqlightning` to this change on 12 September 2013. So first try
+`LMDB_0.9.8`, but this fails with:
 `sqlite3.c:38156:2: error: unknown type name ‘mdb_hash_t’`.
 
 Likely need
@@ -205,11 +211,11 @@ found through a
 | LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |     5 |   44 |  19 |
 | LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |    10 | 1072 | 565 |
 | LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |    24 |  303 |  57 |
-| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |     6 |  684 | 447 |
-| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |    23 |   81 |  50 |
-| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |    23 |   74 |  58 |
-| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |     4 |   52 |   9 |
-| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |     6 |   16 |  11 |
+| LMDB_0.9.19 | 2016-12-28 | ✓        | ✗          |     6 |  684 | 447 |
+| LMDB_0.9.21 | 2017-06-01 | ✓        | ✗          |    23 |   81 |  50 |
+| LMDB_0.9.22 | 2018-03-22 | ✓        | ✗          |    23 |   74 |  58 |
+| LMDB_0.9.23 | 2018-12-19 | ✓        | ✗          |     4 |   52 |   9 |
+| LMDB_0.9.24 | 2019-07-19 | ✓        | ✗          |     6 |   16 |  11 |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
 a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
