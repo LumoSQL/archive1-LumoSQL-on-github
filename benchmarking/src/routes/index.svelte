@@ -23,7 +23,7 @@
   const versions = getVersions(dataset);
   const tests = getTests(dataset);
   const nested = unconvert(dataset);
-  const title = "Draft LumoSQL Benchmarking — Version 1";
+  const title = process.env.TITLE || "Draft LumoSQL Benchmarking";
 </script>
 
 <style>
