@@ -149,18 +149,35 @@ on hardware.
 The instructions in this section explain how to benchmark four different
 versions:
 
-| V.  | SQLite | LMDB   | Repository  | Name          |
-| --- | ------ | ------ | ----------- | ------------- |
-| A.  | 3.7.17 | -      | SQLite      | SQLite-3.7.17 |
-| B.  | 3.30.1 | -      | SQLite      | SQLite-3.30.1 |
-| C.  | 3.7.17 | 0.9.9  | sqlightning | LMDB_0.9.9    |
-| D.  | 3.7.17 | 0.9.16 | sqlightning | LMDB_0.9.16   |
+| V.  | SQLite | LMDB   | Repository | Report filename    |
+| --- | ------ | ------ | ---------- | ------------------ |
+| A.  | 3.7.17 | -      | SQLite     | SQLite-3.7.17.html |
+| B.  | 3.30.1 | -      | SQLite     | SQLite-3.30.1.html |
+| C.  | 3.7.17 | 0.9.9  | LumoSQL    | LMDB_0.9.9.html    |
+| D.  | 3.7.17 | 0.9.16 | LumoSQL    | LMDB_0.9.16.html   |
 
 To benchmark the four versions above use:
 
 ```sh
 make benchmark
 ```
+
+The "Repository" column means:
+
+<dl>
+<dt>SQLite</dt>
+<dd>
+
+<https://github.com/sqlite/sqlite>
+
+</dd>
+<dt>LumoSQL</dt>
+<dd>
+
+<https://github.com/LumoSQL/LumoSQL> (this repository)
+
+</dd>
+</dl>
 
 # Which LMDB version?
 
@@ -191,11 +208,11 @@ found through a
 | LMDB_0.9.16 | 2015-08-14 | ✓        | ✓          |     5 |   44 |  19 |
 | LMDB_0.9.17 | 2015-11-30 | ✓        | ✗          |    10 | 1072 | 565 |
 | LMDB_0.9.18 | 2016-02-05 | ✓        | ✗          |    24 |  303 |  57 |
-| LMDB_0.9.19 | 2016-12-28 | ✗        | -          |     6 |  684 | 447 |
-| LMDB_0.9.21 | 2017-06-01 | ✗        | -          |    23 |   81 |  50 |
-| LMDB_0.9.22 | 2018-03-22 | ✗        | -          |    23 |   74 |  58 |
-| LMDB_0.9.23 | 2018-12-19 | ✗        | -          |     4 |   52 |   9 |
-| LMDB_0.9.24 | 2019-07-19 | ✗        | -          |     6 |   16 |  11 |
+| LMDB_0.9.19 | 2016-12-28 | ✓        | ✗          |     6 |  684 | 447 |
+| LMDB_0.9.21 | 2017-06-01 | ✓        | ✗          |    23 |   81 |  50 |
+| LMDB_0.9.22 | 2018-03-22 | ✓        | ✗          |    23 |   74 |  58 |
+| LMDB_0.9.23 | 2018-12-19 | ✓        | ✗          |     4 |   52 |   9 |
+| LMDB_0.9.24 | 2019-07-19 | ✓        | ✗          |     6 |   16 |  11 |
 
 The [GitHub LMDB mirror](https://github.com/LMDB/lmdb/releases) does not include
 a release `LMDB_0.9.20`, releases before 0.9.8 are not shown.
