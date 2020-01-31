@@ -27,20 +27,35 @@ clean:
 	rm -rf bld-* version.txt *.html
 
 bld-SQLite-%:
-	# Without constraints the clone below will result in 20K commits and a
-	# .git directory of 112M; restricting to a single branch and history
-	# from the day before first relevant release results in <10K commits
-	# and half the disk space. We use the release branch as it may not
-	# currently be merged into master.
+	# Build sqlite using https://github.com/sqlite/sqlite, a git mirror of
+	# the https://sqlite.org fossil repository
 	#
-	# Cloning in a separate target results in unnecessary rebuilds if
+	# A straight clone results in 120MiB of network traffic 20K commits and
+	# a .git directory of 112MB
+	#
+	# Instead we restrict the history to start the day before the first
+	# relevant release (3.7.17) to give 63MiB of network traffic,
+	# <10K commits and half the disk space.
+	#
+	# The master branch:
+	#
+	# - may not include everything in the release branch
+	# - does not include all point releases e.g. 3.30.1
+	#
+	# As a result we also fetch tags matching a wildcard. Fetching all tags
+	# is a 30MiB transfer, so is avoided.
+	#
+	# Cloning in a separate target would result in unnecessary rebuilds if
 	# multiple versions of SQLite are required: checking out a specific
 	# versions of the SQLite source code results in a change to the
 	# modification time for the src-SQLite directory, which in turn results
 	# in a rebuild of another version.
-	test -d src-SQLite || \
-	git clone --shallow-since 2013-05-19 --branch release \
-		https://github.com/sqlite/sqlite.git src-SQLite
+	if [ ! -d src-SQLite ] ; then \
+		git clone --shallow-since 2013-05-19 \
+			https://github.com/sqlite/sqlite.git src-SQLite && \
+		git -C src-SQLite fetch origin \
+			'refs/tags/version-3.3*:refs/tags/version-3.3*' ; \
+	fi
 	git -C src-SQLite checkout version-$*
 	rm -rf $@ && mkdir $@
 	cd $@ && ../src-SQLite/configure && cd ..
