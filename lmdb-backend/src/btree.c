@@ -191,11 +191,25 @@ int sqlite3BtreeBeginTrans(Btree *p, int wrflag){
 		int rc2;
 		/* move all existing cursors to new transaction */
 		for (pCur = p->pCursor; pCur; pCur = pCur->pNext) {
-		  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
-		  rc2 = mdb_cursor_get(mc, &key, &data, MDB_CURRENT);
-		  mdb_cursor_init(mc, txn, mc->mc_dbi, (MDB_xcursor *)(mc+1));
-		  if (!rc2)
-			  mdb_cursor_set(mc, &key, &data, MDB_GET_BOTH, &rc2);
+		  MDB_cursor *old_mc = pCur->mc;
+		  if (old_mc != NULL) {
+		      MDB_cursor * new_mc;
+		      /* the original sqlightning code reused the cursor, in a way
+		       * which looked similar to the implementation of mdb_cursor_renew
+		       * followed by a search to the position of the old cursor; in
+		       * some cases this resulted in database curruption (this reuse of
+		       * cursor is specifically forbidden by the LMDB docs).
+		       * The following code is slower but safer
+		       */
+		      rc2 = mdb_cursor_open(txn, mdb_cursor_dbi(old_mc), &new_mc);
+		      if (! rc2) {
+			  rc2 = mdb_cursor_get(old_mc, &key, &data, MDB_CURRENT);
+			  if (!rc2)
+			      rc2 = mdb_cursor_get(new_mc, &key, &data, MDB_SET);
+			  mdb_cursor_close(old_mc);
+			  pCur->mc = new_mc;
+		      }
+		  }
 		}
 		mdb_txn_abort(rtxn);
 	  }
@@ -226,7 +240,7 @@ int sqlite3BtreePutData(BtCursor *pCsr, u32 offset, u32 amt, void *z){
   int rc;
   void *ptr;
   MDB_node *node;
-  MDB_cursor *mc = (MDB_cursor *)(pCsr+1);
+  MDB_cursor *mc = pCsr->mc;
   MDB_val data;
 
   if(!(mc->mc_flags & C_INITIALIZED))
@@ -302,8 +316,8 @@ int sqlite3BtreeCheckpoint(Btree *p, int eMode, int *pnLog, int *pnCkpt){
 ** Clear the current cursor position.
 */
 void sqlite3BtreeClearCursor(BtCursor *pCur){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
-  mc->mc_flags &= ~C_INITIALIZED;
+  MDB_val key, data;
+  mdb_cursor_get(pCur->mc, &key, &data, MDB_FIRST);
   LOG("done",0);
 }
 
@@ -541,7 +555,8 @@ int sqlite3BtreeCommitPhaseTwo(Btree *p, int bCleanup){
 ** corruption) an SQLite error code is returned.
 */
 int sqlite3BtreeCount(BtCursor *pCur, i64 *pnEntry){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  // XXX this needs to be rewritten
+  MDB_cursor *mc = pCur->mc;
   *pnEntry = mc->mc_db->md_entries;
   LOG("done",0);
   return SQLITE_OK;
@@ -562,7 +577,6 @@ int sqlite3BtreeCount(BtCursor *pCur, i64 *pnEntry){
 int sqlite3BtreeCreateTable(Btree *p, int *piTable, int flags){
   BtShared *pBt;
   MDB_dbi dbi;
-  MDB_cursor mc;
   MDB_val key;
   char name[13];
   unsigned int mflags;
@@ -638,17 +652,18 @@ int sqlite3BtreeCursor(
   struct KeyInfo *pKeyInfo,                   /* First arg to xCompare() */
   BtCursor *pCur                              /* Write new cursor here */
 ){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
   MDB_dbi dbi;
   int rc;
 
   rc = BtreeTableHandle(p, iTable, &dbi);
   if (rc == 0) {
-    mdb_cursor_init(mc, p->curr_txn, dbi, (MDB_xcursor *)(mc+1));
-    pCur->pNext = p->pCursor;
-    p->pCursor = pCur;
-    pCur->pBtree = p;
-    pCur->pKeyInfo = pKeyInfo;
+    rc = mdb_cursor_open(p->curr_txn, dbi, &pCur->mc);
+    if (rc == 0) {
+      pCur->pNext = p->pCursor;
+      p->pCursor = pCur;
+      pCur->pBtree = p;
+      pCur->pKeyInfo = pKeyInfo;
+    }
   }
   LOG("rc=%d, iTable=%d",rc, iTable);
   return rc;
@@ -663,7 +678,8 @@ int sqlite3BtreeCursor(
 ** integer *pHasMoved is set to one if the cursor has moved and 0 if not.
 */
 int sqlite3BtreeCursorHasMoved(BtCursor *pCur, int *pHasMoved){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  // XXX this needs to be rewritten
+  MDB_cursor *mc = pCur->mc;
   if(!(mc->mc_flags & C_INITIALIZED)) {
     *pHasMoved = 1;
   }else{
@@ -683,7 +699,7 @@ int sqlite3BtreeCursorHasMoved(BtCursor *pCur, int *pHasMoved){
 */
 int sqlite3BtreeCursorSize(void){
   LOG("done",0);
-  return ROUND8(sizeof(BtCursor) + sizeof(MDB_cursor) + sizeof(MDB_xcursor));
+  return ROUND8(sizeof(BtCursor));
 }
 
 /*
@@ -695,23 +711,12 @@ int sqlite3BtreeCursorSize(void){
 ** of run-time by skipping the initialization of those elements.
 */
 void sqlite3BtreeCursorZero(BtCursor *p){
-  MDB_cursor *mc = (MDB_cursor *)(p+1);
   p->pKeyInfo = NULL;
   p->pBtree = NULL;
   p->cachedRowid = 0;
   p->index.mv_data = NULL;
   p->index.mv_size = 0;
-  mc->mc_next = 0;
-  mc->mc_backup = 0;
-  mc->mc_xcursor = 0;
-  mc->mc_txn = 0;
-  mc->mc_dbi = 0;
-  mc->mc_db = 0;
-  mc->mc_dbx = 0;
-  mc->mc_dbflag = 0;
-  mc->mc_snum = 0;
-  mc->mc_top = 0;
-  mc->mc_flags = 0;
+  p->mc = NULL;
   LOG("done",0);
 }
 
@@ -725,7 +730,7 @@ void sqlite3BtreeCursorZero(BtCursor *p){
 ** the available payload.
 */
 int sqlite3BtreeData(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val data;
   MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
   int rc = SQLITE_OK;
@@ -751,8 +756,9 @@ static int joinIndexKey(MDB_val *key, MDB_val *data, BtCursor *pCur, u_int32_t a
 ** in the common case where no overflow pages are used.
 */
 const void *sqlite3BtreeKeyFetch(BtCursor *pCur, int *pAmt){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   LOG("done",0);
+  // XXX this needs to be rewritten
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	  *pAmt = NODEKSZ(node);
@@ -780,7 +786,7 @@ const void *sqlite3BtreeKeyFetch(BtCursor *pCur, int *pAmt){
   }
 }
 const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val data;
   LOG("done",0);
   /* index tables are supposed to be all key, no data */
@@ -811,7 +817,7 @@ const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
 ** to return an integer result code for historical reasons.
 */
 int sqlite3BtreeDataSize(BtCursor *pCur, u32 *pSize){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val data;
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
@@ -828,7 +834,7 @@ int sqlite3BtreeDataSize(BtCursor *pCur, u32 *pSize){
 */
 int sqlite3BtreeDelete(BtCursor *pCur){
   int rc;
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   rc = mdb_cursor_del(mc, 0);
   LOG("rc=%d",rc);
   return errmap(rc);
@@ -862,7 +868,7 @@ int sqlite3BtreeDropTable(Btree *p, int iTable, int *piMoved){
 ** the first entry.  TRUE is also returned if the table is empty.
 */
 int sqlite3BtreeEof(BtCursor *pCur){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   int ret = (mc->mc_flags & C_EOF) != 0;
   LOG("ret=%d",ret);
   return ret;
@@ -873,7 +879,7 @@ int sqlite3BtreeEof(BtCursor *pCur){
 ** or set *pRes to 1 if the table is empty.
 */
 int sqlite3BtreeFirst(BtCursor *pCur, int *pRes){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   if (mc->mc_db->md_root == P_INVALID)
     *pRes = 1;
   else {
@@ -1175,7 +1181,7 @@ int sqlite3BtreeInsert(
   int appendBias,                /* True if this is likely an append */
   int seekResult                 /* Result of prior MovetoUnpacked() call */
 ){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   UnpackedRecord *p;
   MDB_val key[2], data;
   char aSpace[150], *pFree = 0;
@@ -1205,7 +1211,7 @@ int sqlite3BtreeInsert(
     sqlite3DbFree(pCur->pKeyInfo->db, pFree);
   else if (nZero && rc == 0) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
-       mdb_node_read(MC_READ(mc), node, &data);
+	mdb_node_read(MC_READ(mc), node, &data);
 	memset((char *)data.mv_data+nData, 0, nZero);
   }
   LOG("rc=%d",rc);
@@ -1275,7 +1281,7 @@ int sqlite3BtreeIsInBackup(Btree *p){
 ** the available payload.
 */
 int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   int rc = SQLITE_ERROR;
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
@@ -1303,7 +1309,7 @@ int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
 ** This routine cannot fail.  It always returns SQLITE_OK.  
 */
 int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	if (mc->mc_db->md_flags & MDB_INTEGERKEY) {
@@ -1321,7 +1327,7 @@ int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
 ** or set *pRes to 1 if the table is empty.
 */
 int sqlite3BtreeLast(BtCursor *pCur, int *pRes){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   if (mc->mc_db->md_root == P_INVALID)
     *pRes = 1;
   else {
@@ -1385,7 +1391,7 @@ int sqlite3BtreeMovetoUnpacked(
   int biasRight,           /* If true, bias the search to the high end */
   int *pRes                /* Write search results here */
 ){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val key[2], data;
   int rc, res, ret;
   unsigned char buf[ROWIDMAXSIZE];
@@ -1460,7 +1466,7 @@ done:
 ** this routine was called, then set *pRes=1.
 */
 int sqlite3BtreeNext(BtCursor *pCur, int *pRes){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
   if (!mc->mc_db || mc->mc_db->md_root == P_INVALID)
     *pRes = 1;
@@ -1595,7 +1601,7 @@ int sqlite3BtreeOpen(
 		rc = SQLITE_NOMEM;
 		goto done;
 	  }
-         sprintf(pBt->lockname, "%s%s", dirPathName,  LOCKSUFF);
+	  sprintf(pBt->lockname, "%s%s", dirPathName,  LOCKSUFF);
 	}
 	pBt->db = db;
 	pBt->openFlags = flags;
@@ -1637,7 +1643,7 @@ Pager *sqlite3BtreePager(Btree *p){
 ** this routine was called, then set *pRes=1.
 */
 int sqlite3BtreePrevious(BtCursor *pCur, int *pRes){
-  MDB_cursor *mc = (MDB_cursor *)(pCur+1);
+  MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
   if (mc->mc_db->md_root == P_INVALID)
     *pRes = 1;
@@ -1794,10 +1800,10 @@ void sqlite3BtreeSetCachedRowid(BtCursor *pCur, sqlite3_int64 iRowid){
   Btree *p;
   pBt = pCur->pBtree->pBt;
 
-  mc = (MDB_cursor *)(pCur+1);
+  mc = pCur->mc;
   for (p=pBt->trees; p; p=p->pNext) {
     for (pc=p->pCursor; pc; pc=pc->pNext) {
-	  m2 = (MDB_cursor *)(pc+1);
+	  m2 = pc->mc;
 	  if (m2->mc_dbi == mc->mc_dbi)
 	    pc->cachedRowid = iRowid;
 	}
