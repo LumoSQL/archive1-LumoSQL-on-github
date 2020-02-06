@@ -3,17 +3,16 @@ LumoSQL Storage System
 
 Dan Shearer
 dan@shearer.org
-December 2019
+Febrary 2020
 
 The goals of LumoSQL require a new storage system to be added to the SQLite
 code from which LumoSQL is derived.  This document proposes a modern storage
 system with several features that are in advance of every other widely-used
-database. The primary LumoSQL storage mechanism needs to use a contemporary
-Single-level Store architecture as opposed to older Write-ahead Logging. In
-essence, LumoSQL will be the first major SQL database to move away from batch
-processing. LumoSQL also needs to be able to use both the original SQLite and
-additional storage mechanisms, and any or all of these at storage backends at
-once. 
+database. LumoSQL is already the first major SQL database to move away from
+batch processing, since it has a backend that does not use Write-Ahead Logs.
+LumoSQL also needs to be able to use both the original SQLite and additional
+storage mechanisms, and any or all of these storage backends at once. Not all
+future storage will be on local disk, or btree key-values.
 
 # Table of contents
 1. [Write-ahead Logging in Transactional Databases](#WALs)
@@ -103,42 +102,5 @@ Requirements for Multiple Backends
 
 Process For any given release of SQLite
 ---------------------------------------
-
-* extract the list of all functions in the aggregate C source (using
-https://github.com/universal-ctags/ctags and some C code already written)
-* working on the aggregate C source before the C preprocessor has
-touched it means
-that #IFDEFs will still work unmodified, so new SQLite releases will
-continue to be portable etc without change
-* create a jump table (in a new copy of the aggregate source code) for
-all of the main storage backend functions in SQLite,
-initially only the ones referring to existing SQLite btree storage. SQLite does not
-currently have any jumptable at this level of abstraction. Only at a
-lower level of abstraction, for file access, or in-memory database etc.
-* for each function which currently delivers logic referred to in the
-jump table (eg sqlite3_prepare) extract the function code into a
-separate file. This is the first of the new backends, eg backend-btree.c
-* Later, we will make a backend-lmdb.c, and for demonstration a backend-csv.
-Replace every call to these functions with a jump table reference.
-This is where eventually things like networking would get added, by
-creating another kind of storage backend.
-* The new calls to the jump table in in the newly modified aggregate
-source file are effectively a thunking layer.
-The new calls can  optionally can take additional parameters, such as
-"database_type=LMDB". Defaults will be to the original SQLite btree, which does
-not need to be specified.
-
-Having created this new level of abstraction, then we can deal with
-getting rid of WALs.
-
-It will also help us with the practical problem of file format
-versioning, because the current SQLite btree format does not
-match the lmdb on-disk format. One method of conversion would be to
-read in as SQLite btree and write out as LMDB. This approach will make such a
-conversion relatively painless. This file format problem will also be
-an issue for the testsuite.
-
-## Design for SLS in LumoSQL <a name="SLSInLumoSQL"></a>
-SLS in LumoSQL requires rewriting the storage engine
 
 
