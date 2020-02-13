@@ -1,0 +1,8 @@
+status = [
+  "Semi linear",
+]
+pr_status = [
+  "Check commits",
+]
+required_approvals = 1
+delete_merged_branches = true
