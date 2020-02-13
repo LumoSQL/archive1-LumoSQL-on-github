@@ -1,0 +1,39 @@
+on: { pull_request }
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Check commits
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetch all history so that later commands succeed
+        run: git fetch --prune --unshallow
+      - name: Fail if any commits have a subject line starting fixup!
+        run:
+          "! git log --pretty=format:%s%n origin/master..HEAD | grep -q ^fixup!"
+      - name: Fail if any commits have a subject line starting squash!
+        run:
+          "! git log --pretty=format:%s%n origin/master..HEAD | grep -q ^squash!"
+      - name: Fail if any commits are a merge
+        run: test -z "$(git rev-list --merges origin/master..HEAD^2)"
+        # If triggered by a push, replace HEAD^2 with HEAD above.
+        #
+        # If triggered by a pull request the GitHub actions checks out  a
+        # reference like: `+<hash>:refs/remotes/pull/?/merge` which
+        # shows the result of the pull request merged into master
+#
+# Copyright 2020 Keith Maxwell
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# /.github/workflows/check-commits.yaml
