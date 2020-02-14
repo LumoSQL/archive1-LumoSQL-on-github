@@ -27,6 +27,7 @@ SQLite code has been incorporated into many other projects, and besides there ar
 | [rqlite](https://github.com/rqlite/rqlite) | current | Distributed database with networking and Raft consensus on top of SQLite nodes |
 | [Bedrock](https://github.com/Expensify/Bedrock) | current | WAN-replicated blockchain multimaster database built on SQLite. Has MySQL emulation |
 | [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
+| [ActorDB](https://github.com/biokoda/actordb) | current | SQLite with a data sharding/distribution system across clustered nodes. Each node stores data in LMDB, which is connected to SQLite at the SQLite WAL layer. |
 
 # List of On-disk File Format-related Prior Art
 
@@ -39,4 +40,11 @@ The on-disk file format is important to many SQLite use cases, and introspection
 | [Undark](https://github.com/inflex/undark) | 2016 | SQLite deleted and corrupted data recovery tool |
 | [SQLite Deleted Records Parser](https://github.com/mdegrazia/SQLite-Deleted-Records-Parser) | 2015 | Script to recover deleted entries in an SQLite database |
 | [lua-mdb](https://github.com/catwell/cw-lua/tree/master/lua-mdb) | 2016 | Parse and investigate LMDB file format |
+
+# List of Relevant Benchmarking and Test Prior Art
+
+| Project | Last modified | Description |
+| ------- | ------------- | ----------- |
+| 
+
 
