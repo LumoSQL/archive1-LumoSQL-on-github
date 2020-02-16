@@ -46,8 +46,7 @@ The on-disk file format is important to many SQLite use cases, and introspection
 
 | Project | Last modified | Description | 
 | ------- | ------------- | ----------- |
-| [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf)| n/a | Helpful paper: "...changing just one parameter in SQLite can change
-the performance by 11.8X... up to 28X difference in performance" |
+| [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf)| n/a | Helpful paper: "...changing just one parameter in SQLite can change the performance by 11.8X... up to 28X difference in performance" |
 | [sqllogictest](https://www.sqlite.org/sqllogictest/doc/trunk/about.wiki)|2017 | [sqlite.org code](https://www.sqlite.org/sqllogictest/artifact/2c354f3d44da6356) to [compare the results](https://gerardnico.com/data/type/relation/sql/test) of many SQL statements between multiple SQL servers, either SQLite or an ODBC-supporting server |
 | [TCL SQLite tests](https://github.com/sqlite/sqlite/tree/master/test)|current| These are a mixture of code covereage tests, unit tests and test coverage. Well-maintained. |
 | [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases 
