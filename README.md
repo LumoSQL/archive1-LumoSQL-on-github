@@ -85,7 +85,7 @@ In the process, we noticed things that need to be fixed:
 - The `master` branch is the currently completed work, this should build on
   supported systems and pass the relevant tests (see below).
 - Development typically happens in branches beginning with `feature/`.
-  `feature/benchmarking` is very active in January 2020.
+- For further details see `./doc/using-git-and-github.md`
 
 # Compiling SQLite and sqlightning
 
