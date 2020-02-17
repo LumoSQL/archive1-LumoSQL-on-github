@@ -35,7 +35,7 @@ SQLite code has been incorporated into many other projects, and besides there ar
 
 # List of On-disk File Format-related Prior Art
 
-The on-disk file format is important to many SQLite use cases, and introspection tools are both important and rare. Other K-V stores also have third-party on-disk introspection tools. There are advantages to having investigative tools that do not use the original/canonical source code to read and write these databases.
+The on-disk file format is important to many SQLite use cases, and introspection tools are both important and rare. Other K-V stores also have third-party on-disk introspection tools. There are advantages to having investigative tools that do not use the original/canonical source code to read and write these databases. The SQLite file format is promoted as being a stable, backwards-compatible transport (recommend by the Library of Congress as an archive format) but it also has significant drawbacks as discussed elsewhere in the LumoSQL documentation.
 
 | Project | Last modified | Description |
 | ------- | ------------- | ----------- |
@@ -64,7 +64,7 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 
 # List of Just a Few SQLite Encryption Projects
 
-Encryption is a problem with SQLite. There are no official implementations in open source, althought the APIs are documented (apparently by an SCM mistake years ago?). This means that there are many implementations, some of them incompatible and several of them very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with upstream or with the file format. 
+Encryption is a major problem for SQLite. There are no official implementations in open source, althought the APIs are documented (apparently by an SCM mistake years ago?). This means that there are many implementations, some of them incompatible and several of them very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with upstream or with the file format. 
 
 | Project | Last modified | Description | 
 | ------- | ------------- | ----------- |
