@@ -1,3 +1,4 @@
+
 Prior Art for LumoSQL
 ======================
 
@@ -59,3 +60,17 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 | [TCL SQLite tests](https://github.com/sqlite/sqlite/tree/master/test)|current| These are a mixture of code covereage tests, unit tests and test coverage. Actively maintained. |
 | [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
 | [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
+
+
+# List of Just a Few SQLite Encryption Projects
+
+Encryption is a problem with SQLite. There are no official implementations in open source, althought the APIs are documented (apparently by an SCM mistake years ago?). This means that there are many implementations, some of them incompatible and several of them very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with upstream or with the file format. 
+
+| Project | Last modified | Description | 
+| ------- | ------------- | ----------- |
+| [SQLCipher](https://github.com/sqlcipher/sqlcipher) | current | Adds at-rest encryption to SQLite [at the pager level](https://www.zetetic.net/sqlcipher/design/), using OpenSSL (the default) or optionally other providers |
+| [sqleet](https://github.com/resilar/sqleet) | current | An encryption extension, ie dynamic library, implementing SHA256 encryption, also at the pager level |
+| [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Interesting documentation that perhaps sqlite.org never meant to publish their crypto APIs? |
+| [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
+
+
