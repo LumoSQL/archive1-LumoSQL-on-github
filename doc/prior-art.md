@@ -71,6 +71,6 @@ Encryption is a problem with SQLite. There are no official implementations in op
 | [SQLCipher](https://github.com/sqlcipher/sqlcipher) | current | Adds at-rest encryption to SQLite [at the pager level](https://www.zetetic.net/sqlcipher/design/), using OpenSSL (the default) or optionally other providers |
 | [sqleet](https://github.com/resilar/sqleet) | current | An encryption extension, ie dynamic library, implementing SHA256 encryption, also at the pager level |
 | [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Interesting documentation that perhaps sqlite.org never meant to publish their crypto APIs? |
-| [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
+| [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
 
 
