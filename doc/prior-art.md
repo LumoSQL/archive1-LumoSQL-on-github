@@ -64,13 +64,13 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 
 # List of Just a Few SQLite Encryption Projects
 
-Encryption is a major problem for SQLite users looking for open code. There are no official implementations in open source, although the APIs are documented (seemingly by an SCM mistake years ago (?), see sqlite3-dbx below). This means that there are many implementations, some of them incompatible and several of them very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with upstream or with the file format. This choice of either closed source or fragmented solutions is a poor security approach from the point of view of maintainance as well as peer-reviewed security. This means that SQLite in 2020 does not have an ideal approach to privacy.
+Encryption is a major problem for SQLite users looking for open code. There are no official implementations in open source, although the APIs are documented (seemingly by an SCM mistake years ago (?), see sqlite3-dbx below) and most solutions use the SQLite extension interaface. This means that there are many mutually-incompatible implementations, several of them seeming to be very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with SQLite upstream or with the file format. Besides the closed source solution from sqlite.org, there are also at least three other closed source options not listed here. This choice between either closed source or fragmented solutions is a poor security approach from the point of view of maintainance as well as peer-reviewed security. This means that SQLite in 2020 does not have a good approach to privacy.
 
 | Project | Last modified | Description | 
 | ------- | ------------- | ----------- |
 | [SQLite Encryption Extension](https://www.sqlite.org/see/doc/release/www/readme.wiki)| current | Info about the (closed source) official SQLite crypto solution, illustrating that there is little to be compatible with in the wider SQLite landscape |
 | [SQLCipher](https://github.com/sqlcipher/sqlcipher) | current | Adds at-rest encryption to SQLite [at the pager level](https://www.zetetic.net/sqlcipher/design/), using OpenSSL (the default) or optionally other providers |
-| [sqleet](https://github.com/resilar/sqleet) | current | An encryption extension, ie dynamic library, implementing SHA256 encryption, also at the pager level |
+| [sqleet](https://github.com/resilar/sqleet) | current | Implements SHA256 encryption, also at the pager level |
 | [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Interesting documentation that perhaps sqlite.org never meant to publish their crypto APIs? |
 | [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
 
