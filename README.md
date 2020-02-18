@@ -48,6 +48,8 @@ SQLite.
 
 LumoSQL is supported by the [NLNet Foundation](https://nlnet.nl).
 
+If you are interesting in contributing to LumoSQL please see </CONTRIBUTING.md>.
+
 ## The LumoSQL Makefile tool
 
 LumoSQL provides a Makefile and benchmarking subsystem which:
