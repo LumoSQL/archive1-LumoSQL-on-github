@@ -126,8 +126,10 @@ sudo dnf install --assumeyes \
   git make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
 ```
 
-The following steps have been tested on Fedora 30 and Ubuntu 18.04 LTS (via the
-`container` target in the [Makefile](/Makefile)).
+The maintainers test building LumoSQL on Debian, Fedora, Gentoo and Ubuntu.
+Container images with the dependencies installed are available at
+<https://quay.io/repository/keith_maxwell/lumosql-build> and the build steps are
+in <https://github.com/maxwell-k/containers>.
 
 ## Using the Makefile tool
 
