@@ -1,8 +1,8 @@
 # How LumoSQL uses git and GitHub
 
 We want to be welcoming to new LumoSQL contributors regardless of their
-experience with git and GitHub. We have developed a lightweight workflow
-process with a few automated checks.
+experience with git and GitHub. We have developed a lightweight workflow process
+with a few automated checks.
 
 We welcome contributions from the community and at the moment
 [Dan](https://github.com/danshearer) and [Keith](https://github.com/maxwell-k/)
@@ -10,12 +10,12 @@ are the two people who are reviewing pull requests.
 
 ## New authors
 
-If you are contributing code or docs to LumoSQL for the first time then start here. 
-The default workflow involves [working with forks] on GitHub. If
-this is difficult for you, please [raise an issue] or otherwise contact us and we
-will find another way to collaborate. GitHub's [help on pull requests] is
-comprehensive. And if you're a commandline kind of person, you can do what you need
-from there.
+If you are contributing code or docs to LumoSQL for the first time then start
+here. The default workflow involves [working with forks] on GitHub. If this is
+difficult for you, please [raise an issue] or otherwise contact us and we will
+find another way to collaborate. GitHub's [help on pull requests] is
+comprehensive. And if you're a command line kind of person, you can do what you
+need from there.
 
 This is the pull request process:
 
@@ -27,7 +27,7 @@ This is the pull request process:
    images which include the dependencies for LumoSQL at
    <https://quay.io/repository/keith_maxwell/lumosql-build>.
 
-2. Fork the repository under your own GitHub account. 
+2. Fork the repository under your own GitHub account.
 
 3. Commit your changes locally using git and push them to a new branch in your
    own fork on GitHub.
@@ -35,9 +35,9 @@ This is the pull request process:
 4. [Create a pull request]
 
    Authors who prefer to work on the command line may choose to use
-   [hub](https://github.com/github/hub) to submit pull requests. UPDATE: As of February 2020
-   it seems there is a new and better commandline tool; we will update this paragraph
-   when we have spent more time with it.
+   [hub](https://github.com/github/hub) to submit pull requests. UPDATE: As of
+   February 2020 it seems there is a new and better command line tool; we will
+   update this paragraph when we have spent more time with it.
 
    This project has a preference for keeping the git history clean and easy to
    follow. Version control is important to the project as we are integrating
@@ -53,8 +53,8 @@ This is the pull request process:
 6. Respond to comments and work with the maintainers to get your changes merged.
 
 What if you'd like to share your enthusiasm for some changes with us but aren't
-sure they are ready to be reviewed or merged into the project yet? You can use
-a [draft pull request] , which is very similar to the pull request process above.
+sure they are ready to be reviewed or merged into the project yet? You can use a
+[draft pull request] , which is very similar to the pull request process above.
 
 If you have contributed before and been given privileged access to this
 repository the following section, "Existing authors", explains the slightly
@@ -75,9 +75,9 @@ modified guidelines.
 
 If you have been given privileged access to this GitHub repository (because you
 have successfully contributed before and you want to make it a habit, and
-thankyou very much)... you do not need to work in your own separate fork. You can
-instead work in a branch within this repository. As a project we have adopted
-some conventions for naming our branches:
+thankyou very much)... you do not need to work in your own separate fork. You
+can instead work in a branch within this repository. As a project we have
+adopted some conventions for naming our branches:
 
 - `feature/example-short-description` if you are working on a new feature
 - `bug/X` if you are working on issue number X from the tracker, otherwise if
@@ -105,6 +105,6 @@ prevent merging before the author runs the related `git rebase --autosquash`.
 
 At present we are trialling https://bors.tech as a way of running additional
 checks before merging a pull request. This is in part an attempt to maintain a
-semi-linear history. You don't need to know anything about it, only that if 
+semi-linear history. You don't need to know anything about it, only that if
 everything works the way we hope then we will get alerted if someone looks like
 they are about to accidentally cause a git history problem.
