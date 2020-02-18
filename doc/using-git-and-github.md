@@ -35,9 +35,10 @@ This is the pull request process:
 4. [Create a pull request]
 
    Authors who prefer to work on the command line may choose to use
-   [hub](https://github.com/github/hub) to submit pull requests. UPDATE: As of
-   February 2020 it seems there is a new and better command line tool; we will
-   update this paragraph when we have spent more time with it.
+   [hub](https://github.com/github/hub) to submit pull requests. In February
+   2020, GitHub launched a [command line interface](https://cli.github.com). It
+   is [in beta](https://github.com/cli/cli/#gh---the-github-cli-tool) and we're
+   trying it out.
 
    This project has a preference for keeping the git history clean and easy to
    follow. Version control is important to the project as we are integrating
