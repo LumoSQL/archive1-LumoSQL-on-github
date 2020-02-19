@@ -236,6 +236,7 @@ done:
 ** parameters that attempt to write past the end of the existing data,
 ** no modifications are made and SQLITE_CORRUPT is returned.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreePutData(BtCursor *pCsr, u32 offset, u32 amt, void *z){
   int rc;
   void *ptr;
@@ -327,6 +328,7 @@ static int BtreeCompare(const MDB_val *a, const MDB_val *b)
   return -sqlite3VdbeRecordCompare(b->mv_size, b->mv_data, p);
 }
 
+// XXX This function accesses LMDB's internals and will need to be rewritten
 static int BtreeTableHandle(Btree *p, int iTable, MDB_dbi *dbi)
 {
   char name[13], *nptr;
@@ -381,6 +383,7 @@ done:
 /*
 ** Close an open database and invalidate all cursors.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeClose(Btree *p){
   BtShared *pBt = p->pBt;
   BtCursor *pCur;
@@ -554,8 +557,8 @@ int sqlite3BtreeCommitPhaseTwo(Btree *p, int bCleanup){
 ** Otherwise, if an error is encountered (i.e. an IO error or database
 ** corruption) an SQLite error code is returned.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeCount(BtCursor *pCur, i64 *pnEntry){
-  // XXX this needs to be rewritten
   MDB_cursor *mc = pCur->mc;
   *pnEntry = mc->mc_db->md_entries;
   LOG("done",0);
@@ -574,6 +577,7 @@ int sqlite3BtreeCount(BtCursor *pCur, i64 *pnEntry){
 **     BTREE_INTKEY|BTREE_LEAFDATA     Used for SQL tables with rowid keys
 **     BTREE_ZERODATA                  Used for SQL indices
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeCreateTable(Btree *p, int *piTable, int flags){
   BtShared *pBt;
   MDB_dbi dbi;
@@ -677,8 +681,8 @@ int sqlite3BtreeCursor(
 ** This routine returns an error code if something goes wrong.  The
 ** integer *pHasMoved is set to one if the cursor has moved and 0 if not.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeCursorHasMoved(BtCursor *pCur, int *pHasMoved){
-  // XXX this needs to be rewritten
   MDB_cursor *mc = pCur->mc;
   if(!(mc->mc_flags & C_INITIALIZED)) {
     *pHasMoved = 1;
@@ -729,6 +733,7 @@ void sqlite3BtreeCursorZero(BtCursor *p){
 ** wrong.  An error is returned if "offset+amt" is larger than
 ** the available payload.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeData(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
   MDB_cursor *mc = pCur->mc;
   MDB_val data;
@@ -755,10 +760,10 @@ static int joinIndexKey(MDB_val *key, MDB_val *data, BtCursor *pCur, u_int32_t a
 ** These routines are used to get quick access to key and data
 ** in the common case where no overflow pages are used.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 const void *sqlite3BtreeKeyFetch(BtCursor *pCur, int *pAmt){
   MDB_cursor *mc = pCur->mc;
   LOG("done",0);
-  // XXX this needs to be rewritten
   if(mc->mc_flags & C_INITIALIZED) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	  *pAmt = NODEKSZ(node);
@@ -785,6 +790,7 @@ const void *sqlite3BtreeKeyFetch(BtCursor *pCur, int *pAmt){
     return NULL;
   }
 }
+// XXX This function accesses LMDB's internals and will need to be rewritten
 const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
   MDB_cursor *mc = pCur->mc;
   MDB_val data;
@@ -816,6 +822,7 @@ const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
 ** It might just as well be a procedure (returning void) but we continue
 ** to return an integer result code for historical reasons.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeDataSize(BtCursor *pCur, u32 *pSize){
   MDB_cursor *mc = pCur->mc;
   MDB_val data;
@@ -867,6 +874,7 @@ int sqlite3BtreeDropTable(Btree *p, int iTable, int *piMoved){
 ** past the last entry in the table or sqlite3BtreePrev() moves past
 ** the first entry.  TRUE is also returned if the table is empty.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeEof(BtCursor *pCur){
   MDB_cursor *mc = pCur->mc;
   int ret = (mc->mc_flags & C_EOF) != 0;
@@ -878,6 +886,7 @@ int sqlite3BtreeEof(BtCursor *pCur){
 ** on success.  Set *pRes to 0 if the cursor actually points to something
 ** or set *pRes to 1 if the table is empty.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeFirst(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   if (mc->mc_db->md_root == P_INVALID)
@@ -1089,6 +1098,7 @@ static int joinIndexKey(MDB_val *key, MDB_val *data, BtCursor *pCur, u_int32_t a
 	return SQLITE_OK;
 }
 
+// XXX This function accesses LMDB's internals and will need to be rewritten
 static void squashIndexKey(UnpackedRecord *pun, int file_format, MDB_val *key)
 {
 	int i, changed = 0;
@@ -1173,6 +1183,7 @@ static void squashIndexKey(UnpackedRecord *pun, int file_format, MDB_val *key)
 ** point to any entry or to no entry at all and so this function has to seek
 ** the cursor before the new key can be inserted.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeInsert(
   BtCursor *pCur,                /* Insert data into the table of this cursor */
   const void *pKey, i64 nKey,    /* The key of the new record */
@@ -1280,6 +1291,7 @@ int sqlite3BtreeIsInBackup(Btree *p){
 ** wrong.  An error is returned if "offset+amt" is larger than
 ** the available payload.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
   MDB_cursor *mc = pCur->mc;
   int rc = SQLITE_ERROR;
@@ -1308,6 +1320,7 @@ int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
 ** 
 ** This routine cannot fail.  It always returns SQLITE_OK.  
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
   MDB_cursor *mc = pCur->mc;
   if(mc->mc_flags & C_INITIALIZED) {
@@ -1326,6 +1339,7 @@ int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
 ** on success.  Set *pRes to 0 if the cursor actually points to something
 ** or set *pRes to 1 if the table is empty.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeLast(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   if (mc->mc_db->md_root == P_INVALID)
@@ -1384,6 +1398,7 @@ int sqlite3BtreeLockTable(Btree *p, int iTab, u8 isWriteLock){
 **                  is larger than intKey/pUnKey.
 **
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeMovetoUnpacked(
   BtCursor *pCur,          /* The cursor to be moved */
   UnpackedRecord *pUnKey,  /* Unpacked index key */
@@ -1465,6 +1480,7 @@ done:
 ** was already pointing to the last entry in the database before
 ** this routine was called, then set *pRes=1.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeNext(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
@@ -1502,6 +1518,7 @@ int sqlite3BtreeNext(BtCursor *pCur, int *pRes){
 ** objects in the same database connection since doing so will lead
 ** to problems with locking.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeOpen(
   sqlite3_vfs *pVfs,      /* VFS to use for this b-tree */
   const char *zFilename,  /* Name of the file containing the BTree database */
@@ -1642,6 +1659,7 @@ Pager *sqlite3BtreePager(Btree *p){
 ** was already pointing to the first entry in the database before
 ** this routine was called, then set *pRes=1.
 */
+// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreePrevious(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
