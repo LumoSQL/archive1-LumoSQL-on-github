@@ -102,22 +102,5 @@ BUILD_DEPENDENCIES := $(BUILD_DEPENDENCIES) git ca-certificates
 # for /usr/bin/tclsh, tcl8.6-dev brings in tcl8.6 which only includes tclsh8.6
 BUILD_DEPENDENCIES := $(BUILD_DEPENDENCIES) tcl
 
-container:
-	container1="$$(buildah from ubuntu:18.04)" && \
-	buildah run "$$container1" -- /bin/sh -c "apt-get update \
-		&& DEBIAN_FRONTEND=noninteractive apt-get install \
-			--no-install-recommends --yes $(BUILD_DEPENDENCIES) \
-		&& rm -rf /var/lib/apt/lists/*" && \
-	buildah config \
-		--entrypoint '[ "make", "-C", "/usr/src" ]' \
-		--cmd bin \
-		"$$container1" && \
-	buildah commit --rm "$$container1" make
-# To build and run withint a container:
-#   make container
-#   podman run -v .:/usr/src:Z make
-#   podman run -v .:/usr/src:Z make bld-LMDB_0.9.9
-#   podman run -v .:/usr/src:Z --interactive --tty --entrypoint=/bin/bash make
-
 .PRECIOUS: bld-LMDB_% bld-SQLite-% src-lmdb
-.PHONY: clean bin container
+.PHONY: clean bin
