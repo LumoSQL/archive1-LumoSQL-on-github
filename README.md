@@ -48,6 +48,8 @@ SQLite.
 
 LumoSQL is supported by the [NLNet Foundation](https://nlnet.nl).
 
+If you are interesting in contributing to LumoSQL please see </CONTRIBUTING.md>.
+
 ## The LumoSQL Makefile tool
 
 LumoSQL provides a Makefile and benchmarking subsystem which:
@@ -85,7 +87,7 @@ In the process, we noticed things that need to be fixed:
 - The `master` branch is the currently completed work, this should build on
   supported systems and pass the relevant tests (see below).
 - Development typically happens in branches beginning with `feature/`.
-  `feature/benchmarking` is very active in January 2020.
+- For further details see `./doc/using-git-and-github.md`
 
 # Compiling SQLite and sqlightning
 
@@ -124,8 +126,10 @@ sudo dnf install --assumeyes \
   git make gcc ncurses-devel readline-devel glibc-devel autoconf tcl-devel
 ```
 
-The following steps have been tested on Fedora 30 and Ubuntu 18.04 LTS (via the
-`container` target in the [Makefile](/Makefile)).
+The maintainers test building LumoSQL on Debian, Fedora, Gentoo and Ubuntu.
+Container images with the dependencies installed are available at
+<https://quay.io/repository/keith_maxwell/lumosql-build> and the build steps are
+in <https://github.com/maxwell-k/containers>.
 
 ## Using the Makefile tool
 
