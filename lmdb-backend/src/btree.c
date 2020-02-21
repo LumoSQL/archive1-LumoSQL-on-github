@@ -23,6 +23,7 @@
 #include "vdbeInt.h"
 #define MDB_MAXKEYSIZE	2000
 #define MDB_USE_HASH	1
+// #include <lmdb.h>
 #include "mdb.c"
 #include "midl.c"
 
@@ -103,6 +104,19 @@ static int errmap(int err)
   default:
     return SQLITE_INTERNAL;
   }
+}
+
+/* sqlightning used direct access to a cursor's internals to see if it
+ * had been initialised; it also sets it to uninitialised in some cases;
+ * we use a separate element to track this, and if we believe the cursor
+ * to be initialised, we also use mdb_cursor_count to check if that's
+ * still the case */
+static int mdb_cursor_initialised(BtCursor *pCur) {
+  if (pCur->mc_init) {
+    size_t cp;
+    return (mdb_cursor_count(pCur->mc, &cp) != EINVAL);
+  }
+  return 0;
 }
 
 /*
@@ -244,7 +258,7 @@ int sqlite3BtreePutData(BtCursor *pCsr, u32 offset, u32 amt, void *z){
   MDB_cursor *mc = pCsr->mc;
   MDB_val data;
 
-  if(!(mc->mc_flags & C_INITIALIZED))
+  if (! mdb_cursor_initialised(pCsr))
     return SQLITE_ABORT;
 
   /* Check some assumptions: 
@@ -319,6 +333,7 @@ int sqlite3BtreeCheckpoint(Btree *p, int eMode, int *pnLog, int *pnCkpt){
 void sqlite3BtreeClearCursor(BtCursor *pCur){
   MDB_val key, data;
   mdb_cursor_get(pCur->mc, &key, &data, MDB_FIRST);
+  pCur->mc_init = 1;
   LOG("done",0);
 }
 
@@ -328,12 +343,12 @@ static int BtreeCompare(const MDB_val *a, const MDB_val *b)
   return -sqlite3VdbeRecordCompare(b->mv_size, b->mv_data, p);
 }
 
-// XXX This function accesses LMDB's internals and will need to be rewritten
 static int BtreeTableHandle(Btree *p, int iTable, MDB_dbi *dbi)
 {
   char name[13], *nptr;
   int rc;
 
+  // XXX the next line uses the txn's internals and needs to be rewritten
   if (iTable == 1 && !p->curr_txn->mt_dbs[MAIN_DBI].md_entries) {
 	iTable = 0;
 	nptr = NULL;
@@ -383,7 +398,6 @@ done:
 /*
 ** Close an open database and invalidate all cursors.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeClose(Btree *p){
   BtShared *pBt = p->pBt;
   BtCursor *pCur;
@@ -403,12 +417,20 @@ int sqlite3BtreeClose(Btree *p){
   if (p->isTemp) {
     MDB_env *env = pBt->env;
     char *path;
-	int len;
+    const char * epath;
+	int len, rc;
 	sqlite3_free(pBt);
-	len = strlen(env->me_path);
-	path = sqlite3_malloc(len + sizeof(LOCKSUFF));
-	if (path)
-	  strcpy(path, env->me_path);
+	rc = mdb_env_get_path(env, &epath);
+	/* if the env is correct, the above call will return OK, but just
+	 * in case it doesn't... */
+	if (rc) {
+	  path = NULL;
+	} else {
+	  len = strlen(epath);
+	  path = sqlite3_malloc(len + sizeof(LOCKSUFF));
+	  if (path)
+	    strcpy(path, epath);
+	}
     mdb_env_close(env);
 	if (path) {
 	  unlink(path);
@@ -684,7 +706,7 @@ int sqlite3BtreeCursor(
 // XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeCursorHasMoved(BtCursor *pCur, int *pHasMoved){
   MDB_cursor *mc = pCur->mc;
-  if(!(mc->mc_flags & C_INITIALIZED)) {
+  if (! mdb_cursor_initialised(pCur)) {
     *pHasMoved = 1;
   }else{
     *pHasMoved = 0;
@@ -721,6 +743,7 @@ void sqlite3BtreeCursorZero(BtCursor *p){
   p->index.mv_data = NULL;
   p->index.mv_size = 0;
   p->mc = NULL;
+  p->mc_init = 0;
   LOG("done",0);
 }
 
@@ -764,7 +787,7 @@ static int joinIndexKey(MDB_val *key, MDB_val *data, BtCursor *pCur, u_int32_t a
 const void *sqlite3BtreeKeyFetch(BtCursor *pCur, int *pAmt){
   MDB_cursor *mc = pCur->mc;
   LOG("done",0);
-  if(mc->mc_flags & C_INITIALIZED) {
+  if (mdb_cursor_initialised(pCur)) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	  *pAmt = NODEKSZ(node);
 	if (mc->mc_db->md_flags & MDB_INTEGERKEY) {
@@ -800,7 +823,7 @@ const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
     *pAmt = 0;
 	return NULL;
   }
-  if(mc->mc_flags & C_INITIALIZED) {
+  if (mdb_cursor_initialised(pCur)) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
     mdb_node_read(MC_READ(mc), node, &data);
 	*pAmt = data.mv_size;
@@ -826,7 +849,7 @@ const void *sqlite3BtreeDataFetch(BtCursor *pCur, int *pAmt){
 int sqlite3BtreeDataSize(BtCursor *pCur, u32 *pSize){
   MDB_cursor *mc = pCur->mc;
   MDB_val data;
-  if(mc->mc_flags & C_INITIALIZED) {
+  if (mdb_cursor_initialised(pCur)) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
     mdb_node_read(MC_READ(mc), node, &data);
 	*pSize = data.mv_size;
@@ -843,6 +866,7 @@ int sqlite3BtreeDelete(BtCursor *pCur){
   int rc;
   MDB_cursor *mc = pCur->mc;
   rc = mdb_cursor_del(mc, 0);
+  if (rc == 0) pCur->mc_init = 0;
   LOG("rc=%d",rc);
   return errmap(rc);
 }
@@ -886,18 +910,23 @@ int sqlite3BtreeEof(BtCursor *pCur){
 ** on success.  Set *pRes to 0 if the cursor actually points to something
 ** or set *pRes to 1 if the table is empty.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeFirst(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
-  if (mc->mc_db->md_root == P_INVALID)
+  MDB_val key, data;
+  int rc = mdb_cursor_get(mc, &key, &data, MDB_FIRST);
+  if (rc == MDB_NOTFOUND) {
     *pRes = 1;
-  else {
-    MDB_val key, data;
-    mdb_cursor_get(mc, &key, &data, MDB_FIRST);
-	*pRes = 0;
+    rc = SQLITE_OK;
+	pCur->mc_init = 1;
+  } else if (rc) {
+    rc = errmap(rc);
+  } else {
+    *pRes = 0;
+	pCur->mc_init = 1;
+    rc = SQLITE_OK;
   }
-  LOG("rc=0, *pRes=%d",*pRes);
-  return SQLITE_OK;
+  LOG("rc=%d, *pRes=%d", rc,*pRes);
+  return rc;
 }
 
 /*
@@ -1218,6 +1247,7 @@ int sqlite3BtreeInsert(
 	squashIndexKey(p, pCur->pBtree->db->pVdbe->minWriteFileFormat, key);
   }
   rc = mdb_cursor_put(mc, key, &data, flag);
+  pCur->mc_init = 1;
   if (pFree)
     sqlite3DbFree(pCur->pKeyInfo->db, pFree);
   else if (nZero && rc == 0) {
@@ -1295,7 +1325,7 @@ int sqlite3BtreeIsInBackup(Btree *p){
 int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
   MDB_cursor *mc = pCur->mc;
   int rc = SQLITE_ERROR;
-  if(mc->mc_flags & C_INITIALIZED) {
+  if (mdb_cursor_initialised(pCur)) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	if (offset+amt <= NODEKSZ(node)) {
       memcpy(pBuf, (char *)NODEKEY(node)+offset, amt);
@@ -1323,13 +1353,15 @@ int sqlite3BtreeKey(BtCursor *pCur, u32 offset, u32 amt, void *pBuf){
 // XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
   MDB_cursor *mc = pCur->mc;
-  if(mc->mc_flags & C_INITIALIZED) {
+  if (mdb_cursor_initialised(pCur)) {
 	MDB_node *node = NODEPTR(mc->mc_pg[mc->mc_top], mc->mc_ki[mc->mc_top]);
 	if (mc->mc_db->md_flags & MDB_INTEGERKEY) {
 	  memcpy(pSize, NODEKEY(node), sizeof(i64));
 	} else {
 	  *pSize = NODEKSZ(node) + NODEDSZ(node);
 	}
+  } else {
+    *pSize = 0;
   }
   LOG("done",0);
   return SQLITE_OK;
@@ -1339,18 +1371,23 @@ int sqlite3BtreeKeySize(BtCursor *pCur, i64 *pSize){
 ** on success.  Set *pRes to 0 if the cursor actually points to something
 ** or set *pRes to 1 if the table is empty.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeLast(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
-  if (mc->mc_db->md_root == P_INVALID)
+  MDB_val key, data;
+  int rc = mdb_cursor_get(mc, &key, &data, MDB_LAST);
+  if (rc == MDB_NOTFOUND) {
     *pRes = 1;
-  else {
-    MDB_val key, data;
-    mdb_cursor_get(mc, &key, &data, MDB_LAST);
-	*pRes = 0;
+    rc = SQLITE_OK;
+	pCur->mc_init = 1;
+  } else if (rc) {
+    rc = errmap(rc);
+  } else {
+    *pRes = 0;
+    rc = SQLITE_OK;
+	pCur->mc_init = 1;
   }
-  LOG("rc=0, *pRes=%d",*pRes);
-  return SQLITE_OK;
+  LOG("rc=%d, *pRes=%d", rc,*pRes);
+  return rc;
 }
 
 /*
@@ -1415,7 +1452,7 @@ int sqlite3BtreeMovetoUnpacked(
   ret = MDB_NOTFOUND;
 
   if (!mc->mc_db->md_entries) {
-	mc->mc_flags &= ~C_INITIALIZED;
+	pCur->mc_init = 0;
 	ret = 0;
 	goto done;
   }
@@ -1480,16 +1517,20 @@ done:
 ** was already pointing to the last entry in the database before
 ** this routine was called, then set *pRes=1.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeNext(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
-  if (!mc->mc_db || mc->mc_db->md_root == P_INVALID)
-    *pRes = 1;
-  else {
+  /* sqlightning used the cursor's internals to see if the database was
+   * completely empty and return pRes = 1 without making any other changes;
+   * this presumably saves some time but we omit the test and let the
+   * normal call notice this */
+  /* if (!mc->mc_db || mc->mc_db->md_root == P_INVALID) */
+    /* *pRes = 1; */
+  /* else { */
     int rc = mdb_cursor_get(mc, &key, &data, MDB_NEXT);
 	*pRes = (rc == MDB_NOTFOUND) ? 1 : 0;
-  }
+	pCur->mc_init = 1;
+  /* } */
   LOG("rc=0, *pRes=%d",*pRes);
   return SQLITE_OK;
 }
@@ -1659,16 +1700,20 @@ Pager *sqlite3BtreePager(Btree *p){
 ** was already pointing to the first entry in the database before
 ** this routine was called, then set *pRes=1.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreePrevious(BtCursor *pCur, int *pRes){
   MDB_cursor *mc = pCur->mc;
   MDB_val key, data;
-  if (mc->mc_db->md_root == P_INVALID)
-    *pRes = 1;
-  else {
+  /* sqlightning used the cursor's internals to see if the database was
+   * completely empty and return pRes = 1 without making any other changes;
+   * this presumably saves some time but we omit the test and let the
+   * normal call notice this */
+  /* if (mc->mc_db->md_root == P_INVALID) */
+    /* *pRes = 1; */
+  /* else { */
     int rc = mdb_cursor_get(mc, &key, &data, MDB_PREV);
 	*pRes = (rc == MDB_NOTFOUND) ? 1 : 0;
-  }
+	pCur->mc_init = 1;
+  /* } */
   LOG("done",0);
   return SQLITE_OK;
 }
