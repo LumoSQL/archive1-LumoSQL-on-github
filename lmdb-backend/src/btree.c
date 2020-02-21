@@ -23,12 +23,14 @@
 #include "vdbeInt.h"
 #define MDB_MAXKEYSIZE	2000
 #define MDB_USE_HASH	1
+#include <sys/types.h>
+#include <dirent.h>
 // #include <lmdb.h>
 #include "mdb.c"
 #include "midl.c"
 
-#ifndef LOCKSUFF
-#define LOCKSUFF (mdb_suffixes[1][1])
+#ifndef NAME_MAX
+#define NAME_MAX 256
 #endif
 
 #if MDB_VERSION_FULL < MDB_VERINT(0,9,19)
@@ -417,7 +419,7 @@ int sqlite3BtreeClose(Btree *p){
   if (p->isTemp) {
     MDB_env *env = pBt->env;
     char *path;
-    const char * epath;
+    const char *epath;
 	int len, rc;
 	sqlite3_free(pBt);
 	rc = mdb_env_get_path(env, &epath);
@@ -426,16 +428,37 @@ int sqlite3BtreeClose(Btree *p){
 	if (rc) {
 	  path = NULL;
 	} else {
+	  /* a temporary database is created in its own temporary directory,
+	   * and we need to store the full path to files inside that
+	   */
 	  len = strlen(epath);
-	  path = sqlite3_malloc(len + sizeof(LOCKSUFF));
+	  path = sqlite3_malloc(len + NAME_MAX + 2);
 	  if (path)
 	    strcpy(path, epath);
 	}
     mdb_env_close(env);
 	if (path) {
-	  unlink(path);
-	  strcpy(path+len, LOCKSUFF);
-	  unlink(path);
+	  /* delete all files inside this directory, then the directory itself;
+	   * we don't expect anybody to create directories inside this, so we
+	   * don't recurse
+	   */
+	  DIR * dp = opendir(path);
+	  if (dp) {
+		struct dirent * ent;
+		path[len++] = '/';
+		while ((ent = readdir(dp)) != NULL) {
+			if (ent->d_name[0] == '.') {
+				if (! ent->d_name[1]) continue;
+				if (ent->d_name[1] == '.' && ! ent->d_name[2]) continue;
+			}
+			strncpy(&path[len], ent->d_name, NAME_MAX);
+			path[len + NAME_MAX] = 0;
+			unlink(path);
+		}
+		closedir(dp);
+		path[--len] = 0;
+	  }
+	  rmdir(path);
 	  sqlite3_free(path);
 	}
   } else {
@@ -450,7 +473,6 @@ int sqlite3BtreeClose(Btree *p){
 	  prev = &sqlite3SharedCacheList;
 	  while (*prev != pBt) prev = &(*prev)->pNext;
 	  *prev = pBt->pNext;
-	  sqlite3_free(pBt->lockname);
 	  sqlite3_free(pBt);
 	} else {
       Btree **prev;
@@ -956,21 +978,32 @@ sqlite3_int64 sqlite3BtreeGetCachedRowid(BtCursor *pCur){
 ** open so it is safe to access without the BtShared mutex.
 */
 const char *sqlite3BtreeGetFilename(Btree *p){
-  LOG("done",0);
-  return p->pBt->env->me_path;
+  const char *epath;
+  int rc = mdb_env_get_path(p->pBt->env, &epath);
+  if (rc) epath = NULL;
+  LOG("done rc=%d",rc);
+  return epath;
 }
 
 /*
 ** Return the pathname of the journal file for this database. The return
 ** value of this routine is the same regardless of whether the journal file
 ** has been created or not.
-**
-** The pager journal filename is invariant as long as the pager is
-** open so it is safe to access without the BtShared mutex.
 */
 const char *sqlite3BtreeGetJournalname(Btree *p){
+  /* sqlite3 will delete this file if there is an error during commit;
+   * this may be correct for the original btree.c but we need something
+   * different here (actually we'll need a new commit function which can
+   * cope properly with multiple backends i.e. a transaction involving
+   * tables handled by different backends).
+   * For now we return NULL and the commit will ignore the journal file -
+   * XXX vdbeaux will need a new commit function which can abort the
+   * XXX commit without accessing journal files directly and is aware
+   * XXX of the possibility of multiple, independent backends being
+   * XXX involved in the same transaction
+   */
   LOG("done",0);
-  return p->pBt->lockname;
+  return NULL;
 }
 
 /*
@@ -1559,7 +1592,6 @@ int sqlite3BtreeNext(BtCursor *pCur, int *pRes){
 ** objects in the same database connection since doing so will lead
 ** to problems with locking.
 */
-// XXX This function accesses LMDB's internals and will need to be rewritten
 int sqlite3BtreeOpen(
   sqlite3_vfs *pVfs,      /* VFS to use for this b-tree */
   const char *zFilename,  /* Name of the file containing the BTree database */
@@ -1587,22 +1619,33 @@ int sqlite3BtreeOpen(
   p->locked = 0;
   p->wantToLock = 0;
   /* Transient and in-memory are all the same, use /tmp */
-  if ((vfsFlags & SQLITE_OPEN_TRANSIENT_DB) || !zFilename || !zFilename[0] ||
-	!strcmp(zFilename, ":memory:")) {
-	char *envpath;
+  if ((vfsFlags & (SQLITE_OPEN_TRANSIENT_DB|SQLITE_OPEN_TEMP_DB))
+	|| !zFilename || !zFilename[0] || !strcmp(zFilename, ":memory:")) {
+	if (vfsFlags & SQLITE_OPEN_READONLY) {
+	  /* a read-onlyu temporary database is not much use - it'll just
+	   * remain empty... */
+	  rc = SQLITE_INTERNAL;
+	  goto done;
+	}
 	p->isTemp = 1;
-	envpath = tempnam(NULL, "mdb.");
-	strcpy(dirPathBuf, envpath);
-	free(envpath);
+	strcpy(dirPathBuf, "/tmp/mdb.XXXXXX");
+	if (! mkdtemp(dirPathBuf)) {
+	  rc = errmap(errno);
+	  goto done;
+	}
   } else {
 	sqlite3OsFullPathname(pVfs, zFilename, sizeof(dirPathBuf), dirPathName);
     mutexOpen = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_OPEN);
 	sqlite3_mutex_enter(mutexOpen);
 	for (pBt = sqlite3SharedCacheList; pBt; pBt = pBt->pNext) {
-		if (pBt->env && !strcmp(pBt->env->me_path, dirPathName)) {
-			p->pBt = pBt;
-			pBt->nRef++;
-			break;
+		if (pBt->env) {
+		  const char *epath;
+		  int rc = mdb_env_get_path(pBt->env, &epath);
+		  if (!rc && !strcmp(epath, dirPathName)) {
+			  p->pBt = pBt;
+			  pBt->nRef++;
+			  break;
+		  }
 		}
 	}
 	if (pBt) {
@@ -1637,29 +1680,27 @@ int sqlite3BtreeOpen(
 	  mdb_env_set_maxreaders(pBt->env, 254);
 	}
 	mdb_env_set_mapsize(pBt->env, 256*1048576);
-	eflags = MDB_NOSUBDIR;
+	eflags = 0;
+	if (p->isTemp) {
+	  eflags |= MDB_NOSYNC;
+	} else {
+	  if (vfsFlags & SQLITE_OPEN_DELETEONCLOSE) {
+		/* we only support delete-on-close for temporary DBs.  I don't believe
+		 * this flag is set in any other case, but just in case it happens */
+		sqlite3_mutex_leave(mutexOpen);
+		rc = SQLITE_INTERNAL;
+		goto done;
+	  }
+	  eflags |= MDB_NOSUBDIR;
+	}
 	if (vfsFlags & SQLITE_OPEN_READONLY)
 	  eflags |= MDB_RDONLY;
-	if (vfsFlags & (SQLITE_OPEN_DELETEONCLOSE|SQLITE_OPEN_TEMP_DB|
-	  SQLITE_OPEN_TRANSIENT_DB))
-	  eflags |= MDB_NOSYNC;
 	rc = mdb_env_open(pBt->env, dirPathName, eflags, SQLITE_DEFAULT_FILE_PERMISSIONS);
 	if (rc) {
 	  if (!p->isTemp)
 	    sqlite3_mutex_leave(mutexOpen);
 	  rc = errmap(rc);
 	  goto done;
-	}
-	{
-	  int len = strlen(dirPathName);
-	  pBt->lockname = sqlite3_malloc(len + sizeof(LOCKSUFF));
-	  if (!pBt->lockname) {
-	    if (!p->isTemp)
-	        sqlite3_mutex_leave(mutexOpen);
-		rc = SQLITE_NOMEM;
-		goto done;
-	  }
-	  sprintf(pBt->lockname, "%s%s", dirPathName,  LOCKSUFF);
 	}
 	pBt->db = db;
 	pBt->openFlags = flags;
