@@ -27,11 +27,13 @@ SQLite code has been incorporated into many other projects, and besides there ar
 | [Sleepycat/Oracle BDB-SQL](https://fossies.org/linux/misc/db-18.1.32.tar.gz/db-18.1.32/lang/sql/sqlite/main.mk) | current | Port of SQLite to the Sleepycat/Oracle bdb K-V store. This link is indicative only. | 
 | [rqlite](https://github.com/rqlite/rqlite) | current | Distributed database with networking and Raft consensus on top of SQLite nodes |
 | [Bedrock](https://github.com/Expensify/Bedrock) | current | WAN-replicated blockchain multimaster database built on SQLite. Has MySQL emulation |
+| 
 | [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
 | [ActorDB](https://github.com/biokoda/actordb) | current | SQLite with a data sharding/distribution system across clustered nodes. Each node stores data in LMDB, which is connected to SQLite at the SQLite WAL layer |
 | [WAL-G](https://github.com/wal-g/wal-g) | current | Backup/replication tool that intercepts the WAL journal log for each of Postgres, Mysql, MonogoDB and Redis |
 | [sqlite3odbc](https://github.com/gdev2018/sqlite3odbc) | current | ODBC driver for SQLite by [Christian Werner](http://www.ch-werner.de/sqliteodbc/) as used by many projects including LibreOffice |
 | [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)| current | Geospatial GIS extension to SQLite, similar to PostGIS |
+| [Gigimushroom's Database Backend Engine](https://github.com/gigimushroom/DatabaseBackendEngine)|2019| A good example of an alternative BTree storage engine implemented using SQLite's Virtual Table Interface. This approach is not what LumoSQL has chosen for many reasons, but this code demonstrates virtual tables can work, and also that storage engines implemented at virtual tables can be ported to be LumoSQL backends.|
 
 # List of On-disk File Format-related Prior Art
 
@@ -60,6 +62,7 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 | [TCL SQLite tests](https://github.com/sqlite/sqlite/tree/master/test)|current| These are a mixture of code covereage tests, unit tests and test coverage. Actively maintained. |
 | [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
 | [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
+| [Sysbench] (https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
 
 
 # List of Just a Few SQLite Encryption Projects
@@ -75,3 +78,14 @@ Encryption is a major problem for SQLite users looking for open code. There are 
 | [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
 
 ... there are at least another half dozen crypto projects for SQLite. 
+
+# List of from-scratch MySQL SQL and MySQL Server implementations
+
+If we want to make SQLite able to process MySQL queries there is a lot of existing code in this area to consider. There are at least 80 projects on github which implement some or all of the MySQL network-parse-optimise-execute SQL pathway, a few of them implement all of it. None so far reviewed used MySQL or MariaDB code to do so. Perhaps that is because the SQL processing code alone in these databases is many times bigger than the whole of SQLite, and it isn't even clear how to add them to this table if we wanted to. 
+
+| Project | Last modified | Description |
+| ------- | ------------- | ----------- |
+| [Bedrock](https://github.com/Expensify/Bedrock) | current | The MySQL compatibility seems to be popular and is actively supported but it is also small. It speaks the MySQL/MariaDB protocol accurately but doesn't seem to try very hard to match MySQL SQL language semantics and extensions, rather relying on the fact that SQLite substantially overlaps with MySQL. |
+| [TiDB](https://github.com/pingcap/tidb/) | current | Distributed database with MySQL emulation as the primary dialect and referred to throughout the code, with frequent detailed bugfixes on deviations from MySQL SQL language behaviour. |
+| [phpMyAdmin parser](https://github.com/phpmyadmin/sql-parser) | current | A very complete parser for MySQL code, demonstrating that completeness is not the unrealistic goal some claim it to be |
+| [Go MySQL Server](https://github.com/src-d/go-mysql-server) | current | A MySQL server written in Go that executes queries but mostly leaves the backend for the user to implement. Intended to put a compliant MySQL server on top of arbitary backend sources. |
