@@ -16,10 +16,11 @@ Table of Contents
    * [Contributions to LumoSQL Documentation are Welcome](#contributions-to-lumosql-documentation-are-welcome)
    * [LumoSQL Documentation](#lumosql-documentation)
    * [Standards for Text Markup](#standards-for-text-markup)
+   * [Standards for Diagrams](#standards-for-diagrams)
+   * [Standards for Images](#standards-for-images)
    * [Previewing Markdown before Pushing](#previewing-markdown-before-pushing)
    * [Copyright for LumoSQL Documentation](#copyright-for-lumosql-documentation)
    * [Metadata Header for Text Files](#metadata-header-for-text-files)
-   * [Images](#images)
    * [Human Languages - 人类语言](#human-languages---人类语言)
    * [Creating and Maintaining Table of Contents](#creating-and-maintaining-table-of-contents)
    * [Tidying Markdown (if really required)](#tidying-markdown-if-really-required)
@@ -36,15 +37,24 @@ The rest of this document describes our standards, recommended tools and process
 
 # LumoSQL Documentation
 
-LumoSQL documentation sits alongside the [SQLite documentation](https://www.sqlite.org/docs.html), because with the
-following exceptions, LumoSQL works (or should work) in exactly the same way as
-SQLite. Differences with SQLite arise:
+LumoSQL documentation sits alongside the [SQLite
+documentation](https://www.sqlite.org/docs.html), because with the following
+exceptions, LumoSQL works (or should work) in exactly the same way as SQLite.
+LumoSQL definitely not want to duplicate SQLite documentation, and regards the
+excellent SQLite documentation as definitive except where indicated. 
+
+Differences with SQLite arise:
 
 * Where there is an extra/different storage backend to the SQLite Btree storage system
 * Where there are extra parameters in the user interface (commandline, API, pragmas) for another backend
 * When describing how the LumoSQL source tree works
 * When LumoSQL is working as other than an embedded library
 * When LumoSQL has an extra/different frontend to the SQLite SQL processor
+
+It isn't only SQLite documentation that LumoSQL embraces. There is also [LMDB
+Documentation](https:/xxFIXME/), and more to come as LumoSQL integrates more
+components. It is very important that LumoSQL not attempt to replicate these
+other documentation efforts that are kept up to date along with the corresponding code.
 
 LumoSQL documentation media includes:
 
@@ -68,6 +78,40 @@ While Pandoc is generally excellent at handling Markdown input and allows
 LumoSQL documentation to be presented in many other formats such as PDF, Pandoc
 cannot be a default documentation tool for LumoSQL because (strangely) Markdown
 itself is not well-supported by Pandoc as an output format as of February 2020.
+
+One difference between Pandoc Markdown and GFM is the number of spaces for nested lists. Two
+spaces are sufficient for GFM, but Pandoc requires four spaces.
+
+# Standards for Diagrams
+
+## LumoSQL Diagram Signature
+
+The LumoSQL Diagram Signature is identical to the LumoSQL image signature. It should be 
+placed on the bottom right hand corner of all diagrams created for LumoSQL, but not on
+diagrams from other sources unless modified for LumoSQL.
+
+## Using the LumoSQL Diagram Library
+
+The file images/lumo-diagram-library.odg is a LibreOffice Draw document containing all 
+the symbols likely needed for LumoSQL technical diagrams. If you find yourself adding 
+symbols in a new diagram, you should also add it to this document. 
+
+All other diagrams in images/ are in SVG format, as exported by LibreOffice, inkscape and others.
+
+# Standards for Images
+
+Images for LumoSQL documentation will be stored in /images/ and the
+filenames should start with `lumo-` . PNG should be the default image format, 
+followed by JPG. 
+
+Include attribution in the alt-text tag. All images should have attribution,
+even if the LumoSQL project provided them.  The caption should be left out if
+the image is self-evident and the alt-text also explains what the image is, 
+This example is approximately from the top of this chapter:
+
+```
+![Optional caption, eg "Chart of Badgers vs Profit"](./images/lumo-doc-standards-intro.jpg "Image from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Chinese_books_at_a_library.jpg")
+```
 
 # Previewing Markdown before Pushing
 
@@ -103,64 +147,56 @@ The first lines of all LumoSQL documentation files should always be:
 <!-- SPDX-FileType: Documentation -->
 ```
 
-# Images
-
-Images for LumoSQL documentation will be stored in doc/www/images/ and the
-filenames should start with `lumo-` . PNG should be the default image format, 
-followed by JPG. 
-
-Include attribution in the alt-text tag. All images should have attribution,
-even if the LumoSQL project provided them.  The caption should be left out if
-the image is self-evident and the alt-text also explains what the image is, 
-This example is approximately from the top of this chapter:
-
-```
-![Optional caption, eg "Chart of Badgers vs Profit"](./images/lumo-doc-standards-intro.jpg "Image from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Chinese_books_at_a_library.jpg")
-```
 
 # Human Languages - 人类语言
 
 English is currently the main documentation language. Others are welcome, and
 not just as translations. For example, embedded SQL is particularly important
-in China and we welcome original content. As a welcoming gesture, we have tried
-to make illustrative images inclusive of chinese language.
+in China and we welcome original content. To make it feel welcoming, we have tried
+to make all the illustrative images in LumoSQL inclusive of chinese language.
 
 # Creating and Maintaining Table of Contents
 
-To quote a [well-known Github bug report](https://github.com/isaacs/github/issues/215):
+LumoSQL had to make a decision about creating navigable ToC indexes. We would rather not 
+write our own tools or scripts. At the moment the following is what we have.
+
+The problem we have is summarised in a [well-known Github bug report](https://github.com/isaacs/github/issues/215):
 
 > When I see a manually generated table of contents, it makes me sad.
 > When I see a huge README that is impossible to navigate without it, it makes me even sadder.
 > LaTeX has it. Gollum has it. Pandoc has it. So why not Github Format Markdown?
 
-LumoSQL had to make a decision about creating navigable indexes. 
+**Decision as of March 2020**: ToC Markdown must appear in the raw markdown. That means a TOC
+needs to be created and then inserted into the original source markdown file
+rather than automatically generated as part of an online rendering process or offline pipeline.
 
-With Pandoc, when writing, say, a report in Markdown, a tiny bit of metadata at
-the top of the file allows us to say `\tableofcontents`  and `/usr/bin/pandoc`
-will then produce a beautiful PDF, and also other formats such as HTML. 
+**Non-markdown metadata won't work:** With Pandoc, when writing, say, a report
+in Markdown, a tiny bit of metadata at the top of the file allows us to say
+`\tableofcontents`  and `/usr/bin/pandoc` will then produce a beautiful PDF,
+and also other formats such as HTML.  However, LumoSQL documentation needs to
+be processed by renderers that are a lot less sophisticated than Pandoc,
+including the Github markup processor. So we can't rely on metadata.
 
-LumoSQL documentation needs to be processed by renderers that are a lot less
-sophisticated than Pandoc, including Github itself.  That means that any table
-of contents has to appear in the raw markdown, and _that_ means that a TOC
-needs to be created and then inserted into the raw markdown rather than
-automatically generated as part of the rendering process.
+**Markdown parsers aren't great:** Ideally we'd use Pandoc, because Pandoc will
+read Markdown and output Markdown, including a ToC.  Sadly Pandoc cannot
+reliably produce Markdown. A command such as `pandoc -t markdown_github --toc
+input.md -o output.md` just doesn't work, or any of the variations. (Pandoc's poor 
+Markdown output is also discussed under the heading of Tidying up Markdown.)
 
-So what software will parse Markdown and produce a TOC? Ideally that would be Pandoc,
-but sadly Pandoc cannot reliably produce Markdown. A command such as
-`pandoc -t markdown_github --toc input.md -o output.md` just doesn't work, or any of the 
-variations.
+**We are left with ad-hoc processing solutions for now:**
 
-One reasonable solution is the [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc). You can get the script at wget https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc and use it like this:
+* One reasonable solution is the [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc). You can get the script at wget https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc and use it like this:
 
 `gh-md-toc some-lumosql-document.md > /tmp/toc.md`
 
 and then insert the file /tmp/toc.md into the document using your editor. It's
 not a pretty operation but given all the other advantages of Markdown it seems
-a small price to pay. 
+a small price to pay. It does not necessarily handle multi-level ToCs well, or at least,
+we're still trying it out.
 
-There are also options for doing in editors such as vim. 
+* There are also options for doing in editors such as vim. 
 
-Editor.md, referred to in the "Previewing Markdown Before Pushing" section above, will generate a table of contents where it sees the token `[TOC]` and a dropdown index TOC menu where it sees `[TOCM`. However since the output is HTML not markdown it is not as helpful as it may seem (but it is very beautiful.)
+* Editor.md, referred to in the "Previewing Markdown Before Pushing" section above, will generate a table of contents where it sees the token `[TOC]` and a dropdown index TOC menu where it sees `[TOCM`. However since the output is HTML not markdown it is not as helpful as it may seem (but it is very beautiful.)
 
 # Tidying Markdown (if really required)
 
@@ -177,9 +213,10 @@ commit of a file and then again before subsequent commits - or just write clean
 Markdown and you can expect others to respect that.
 
 It would be ideal if we could use Pandoc to clean up markdown, but it just
-doesn't work.  There are several pretty printing pacakges to choose from. 
-One that may work is [Prettier](https://prettier.io) , although that requires 
-familiarity with Node package installation and configuration. (LumoSQL uses 
-Node for the benchmarking code, so arguably you will have NodeJS installed anyway.)
+doesn't work.  There are several pretty printing pacakges to choose from.  One
+that may work is [Prettier](https://prettier.io) , although that requires
+familiarity with Node package installation and configuration, and can be quite
+awkward. (LumoSQL uses Node for the benchmarking code, so arguably you will
+have NodeJS installed anyway.)
 
 
