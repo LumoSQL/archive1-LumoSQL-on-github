@@ -28,7 +28,7 @@ all: preptmp $(objects)
 
 # Recipe for getting clean temporary directory for local HTML rendering of GHF Markdown
 preptmp: 
-	test -d $(output) && rm -rf $(output)
+	if test -d $(output); then rm -rf $(output); fi
 	echo $(output)
 	mkdir $(output)
 	cp -a images $(output)
