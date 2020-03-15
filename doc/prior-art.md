@@ -1,18 +1,30 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2019 The LumoSQL Authors -->
+<!-- SPDX-ArtifactOfProjectName: LumoSQL -->
+<!-- SPDX-FileType: Documentation -->
+<!-- SPDX-FileComment: Original by Dan Shearer, 2019 -->
+
 
 Prior Art for LumoSQL
 ======================
 
-Dan Shearer
 dan@shearer.org
 February 2020
 
 LumoSQL has many antecedents and relevant codebases.  This document is intended
 to be a terse list of published source code for reference of LumoSQL
-developers. Detailed discussion should be in the LumoSQL documentation web pages.
+developers. Detailed discussion is in the LumoSQL documentation web pages.
 
 Everything listed below is open source.
+
+Table of Contents
+=================
+
+   * [List of SQLite Code-related Prior Art](#list-of-sqlite-code-related-prior-art)
+   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
+   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
+   * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
+   * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
 
 
 # List of SQLite Code-related Prior Art
@@ -64,6 +76,8 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 | [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
 | [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
 | [Sysbench](https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
+| [Percona TPCC-like tests in Sysbench](https://github.com/Percona-Lab/sysbench-tpcc) | current | [Percona use testing in all their MySQL releases](https://www.percona.com/blog/2018/03/05/tpcc-like-workload-sysbench-1-0/) which also [run on Postgres](https://www.percona.com/blog/2018/06/15/tuning-postgresql-for-sysbench-tpcc/).
+| [Official TPCC Benchmarking](http://www.tpc.org/tpcc/) | current | The TPCC SQL benchmarks are traditional and useful, but do not support SQLite out of the box. |
 
 
 # List of Just a Few SQLite Encryption Projects

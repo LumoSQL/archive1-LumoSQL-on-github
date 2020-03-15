@@ -6,8 +6,6 @@
 # SPDX-FileCopyrightText: 2019 The LumoSQL Authors
 #
 #
-# Modified from https://gist.github.com/bertvv/e77e3a5d24d8c2a9bcc4
-#
 # In order to use this Makefile, you need Pandoc version 2.0 or higher, https://pandoc.org
 #
 # This Makefile does not do many safety checks yet
@@ -28,19 +26,19 @@ objects := $(patsubst %.md,%.html,$(subst $(source),$(output),$(sources)))
 
 all: preptmp $(objects)
 
-preptmp:
-	# Create target directory
-	test -d $(output) && \
-	rm -rf $(output)
+# Recipe for getting clean temporary directory for local HTML rendering of GHF Markdown
+preptmp: 
+	if test -d $(output); then rm -rf $(output); fi
+	echo $(output)
 	mkdir $(output)
 	cp -a images $(output)
 
 
 # Recipe for converting a Markdown file into PDF using Pandoc
 $(output)/%.html: $(source)/%.md
-	echo pandoc \
+	pandoc \
 		--lua-filter=bin/md-links-html.lua \
-		-f markdown_github  $< \
+		-f gfm  $< \
 		-o $@
 
 .PHONY : clean

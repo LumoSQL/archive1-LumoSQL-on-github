@@ -1,6 +1,8 @@
 <!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
 <!-- SPDX-FileCopyrightText: 2020 The LumoSQL Authors -->
+<!-- SPDX-ArtifactOfProjectName: LumoSQL -->
 <!-- SPDX-FileType: Documentation -->
+<!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
 LumoSQL Documentation Standards
 ===============================
@@ -12,12 +14,15 @@ This chapter covers how LumoSQL documentation should be written and maintained.
 Table of Contents
 =================
 
+   * [LumoSQL Documentation Standards](#lumosql-documentation-standards)
    * [Table of Contents](#table-of-contents)
    * [Contributions to LumoSQL Documentation are Welcome](#contributions-to-lumosql-documentation-are-welcome)
-   * [LumoSQL Documentation](#lumosql-documentation)
-   * [Standards for Text Markup](#standards-for-text-markup)
-   * [Standards for Diagrams](#standards-for-diagrams)
-   * [Standards for Images](#standards-for-images)
+   * [LumoSQL Respects Documentation for SQLite, LMDB and More](#lumosql-respects-documentations-for-sqlite-lmdb-and-more)
+   * [Text Standards and Tools](#text-standards-and-tools)
+   * [Diagram Standards and Tools](#diagram-standards-and-tools)
+      * [LumoSQL Diagram Signature](#lumosql-diagram-signature)
+      * [Using the LumoSQL Diagram Library](#using-the-lumosql-diagram-library)
+   * [Image Standards and Tools](#image-standards-and-tools)
    * [Previewing Markdown before Pushing](#previewing-markdown-before-pushing)
    * [Copyright for LumoSQL Documentation](#copyright-for-lumosql-documentation)
    * [Metadata Header for Text Files](#metadata-header-for-text-files)
@@ -29,15 +34,33 @@ Table of Contents
 # Contributions to LumoSQL Documentation are Welcome
 
 The first rule of LumoSQL documentation is "Yes please, we'd be delighted to
-receive patches and pull requests, however you want to make them". Anyone who
-has gone to the trouble to write down how they solve a problem with LumoSQL is
-our friend. We know there's a lot to fix.
+receive patches and pull requests, in any way you want to make them". Anyone
+who has gone to the trouble to write down something useful about LumoSQL is our
+friend. We know there's a lot to fix.
 
-The rest of this document describes our standards, recommended tools and processes.
+If you want to make a quick documentation fix, then edit the Markdown and send
+it to us by any means you like, especially a Github Issue or Pull Request. You
+might just want to send us some improved paragraphs on their own. If this
+sounds like you, stop reading now and get on with sending us text :-)
 
-# LumoSQL Documentation
+If you want to do something more serious with the documentation then you need
+to read on, learning about our standards, recommended tools and processes. 
 
-LumoSQL documentation sits alongside the [SQLite
+* The main website text, under the directory `doc/` .
+** Text, such as this document you are reading, stored in the directory `doc/www`
+** Images, such as PNG or JPEG format, stored in `doc/www/images`
+** Images that are captured from videos and in the docs as thumbnails, also in `doc/www/images`
+
+The Markdown files are standalone and complete - you can read them online just as they are.
+
+The file `doc/www/Makefile` is an evolving tool to test these Markdown files, and soon will also
+be for generating images and probably the tables of contents.
+
+# LumoSQL Respects Documentation for SQLite, LMDB and More
+
+LumoSQL Documentation is standalone in evey way, including formats, tools and standards.
+
+However, LumoSQL documentation refers to and should be consulted together with the [SQLite
 documentation](https://www.sqlite.org/docs.html), because with the following
 exceptions, LumoSQL works (or should work) in exactly the same way as SQLite.
 LumoSQL definitely not want to duplicate SQLite documentation, and regards the
@@ -52,18 +75,11 @@ Differences with SQLite arise:
 * When LumoSQL has an extra/different frontend to the SQLite SQL processor
 
 It isn't only SQLite documentation that LumoSQL embraces. There is also [LMDB
-Documentation](https:/xxFIXME/), and more to come as LumoSQL integrates more
+Documentation](http://www.lmdb.tech/doc/), and more to come as LumoSQL integrates more
 components. It is very important that LumoSQL not attempt to replicate these
 other documentation efforts that are kept up to date along with the corresponding code.
 
-LumoSQL documentation media includes:
-
-* The main website text, under the directory `doc/www`
-** Text, such as this document, stored in the directory `doc/www`
-** Images, such as PNG or JPEG format, stored in `doc/www/images`
-** Images that are captured from videos and in the docs as thumbnails, also in `doc/www/images`
-
-# Standards for Text Markup
+# Text Standards and Tools
 
 LumoSQL documentation will be written in [Github-flavoured
 Markdown](https://github.github.com/gfm/) as supported by many tools including
@@ -82,7 +98,7 @@ itself is not well-supported by Pandoc as an output format as of February 2020.
 One difference between Pandoc Markdown and GFM is the number of spaces for nested lists. Two
 spaces are sufficient for GFM, but Pandoc requires four spaces.
 
-# Standards for Diagrams
+# Diagram Standards and Tools
 
 ## LumoSQL Diagram Signature
 
@@ -119,7 +135,7 @@ Colour palette: Libreoffice 'standard'.
 Fonts: *Source (Han) Sans Medium* or *Noto Sans Medium* due to their on-screen clarity and good language support (both are 100% compatible)
 Corner radii: OS and large container boxes: 0.4, small box elements: 0.25
 
-# Standards for Images
+# Image Standards and Tools
 
 Images for LumoSQL documentation will be stored in /images/ and the
 filenames should start with `lumo-` . PNG should be the default image format, 
@@ -137,9 +153,9 @@ This example is approximately from the top of this chapter:
 # Previewing Markdown before Pushing
 
 It's best to check syntax before pushing changes, which means rendering
-Markdown into HTML. Here are three ways of doing that:
+Markdown into HTML that is hopefully close to what Github produces. Here are three ways of doing that:
 
-* You can do this with `pandoc -t html input.md -o output.html and then use your browser to look at the file output.html
+* The Makefile and support files in bin/ uses Pandoc to render the GFM to HTML in /tmp . You need to have Pandoc version 2.0+ for this to work. 
 * The excellent [Editor.md](https://github.com/pandao/editor.md) does a great job of rendering,
 as can be seen at [The Online Installation](https://pandao.github.io/editor.md/en.html) . You can paste GFM into it and see it rendered, WYSIWYG-style. You can download the HTML for
 Editor.md and run it locally. (Editor.md is also an editor, and it adds its own features, but you don't need to use it for that.)
@@ -187,7 +203,7 @@ The problem we have is summarised in a [well-known Github bug report](https://gi
 > When I see a huge README that is impossible to navigate without it, it makes me even sadder.
 > LaTeX has it. Gollum has it. Pandoc has it. So why not Github Format Markdown?
 
-**Decision as of March 2020**: ToC Markdown must appear in the raw markdown. That means a TOC
+**LumoSQL Decision as of March 2020**: ToC Markdown must appear in the raw markdown. That means a TOC
 needs to be created and then inserted into the original source markdown file
 rather than automatically generated as part of an online rendering process or offline pipeline.
 
@@ -206,18 +222,33 @@ Markdown output is also discussed under the heading of Tidying up Markdown.)
 
 **We are left with ad-hoc processing solutions for now:**
 
-* One reasonable solution is the [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc). You can get the script at wget https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc and use it like this:
+* Use the Github API: One reasonable solution is the
+[github-markdown-toc](https://github.com/ekalinin/github-markdown-toc) bash
+script. You can get the script at wget
+https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc
+and use it like this:
 
-`gh-md-toc some-lumosql-document.md > /tmp/toc.md`
+	gh-md-toc some-lumosql-document.md > /tmp/toc.md
 
 and then insert the file /tmp/toc.md into the document using your editor. It's
 not a pretty operation but given all the other advantages of Markdown it seems
-a small price to pay. It does not necessarily handle multi-level ToCs well, or at least,
-we're still trying it out.
+a small price to pay. This script can now be found in www/bin/gh-md-toc .
+Because it uses the Github API (and therefore produces canonical results) it
+needs internet access. After more testing, perhaps we can trust the `--insert` option and then
+include gd-md-toc in the documentation Makefile.
 
-* There are also options for doing in editors such as vim. 
+The way API works is made clear in the comments:
 
-* Editor.md, referred to in the "Previewing Markdown Before Pushing" section above, will generate a table of contents where it sees the token `[TOC]` and a dropdown index TOC menu where it sees `[TOCM`. However since the output is HTML not markdown it is not as helpful as it may seem (but it is very beautiful.)
+	# Converts local md file into html by GitHub
+	# $ curl -X POST --data '{"text": "Hello world github/linguist#1 **cool**, and #1!"}' https://api.github.com/markdown
+	# <p>Hello world github/linguist#1 <strong>cool</strong>, and #1!</p>'"
+
+* There are also options for doing Markdown TOC in editors such as vim, for example [vim-markdown-toc](https://github.com/mzlogin/vim-markdown-toc)
+
+* Editor.md, referred to in the "Previewing Markdown Before Pushing" section
+above, will generate a table of contents where it sees the token `[TOC]` and a
+dropdown index TOC menu where it sees `[TOCM`. However since the output is HTML
+not markdown it is not as helpful as it may seem (but it is very beautiful.)
 
 # Tidying Markdown (if really required)
 
