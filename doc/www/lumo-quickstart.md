@@ -25,5 +25,5 @@ LumoSQL is not supported on Windows as of March 2020. We are aiming for May 2020
 
 ## Android
 
-LumoSQL is not supported on Windows as of March 2020. We are aiming for July 2020. Want to help?
+LumoSQL is not supported on Android as of March 2020. We are aiming for July 2020. Want to help?
 
