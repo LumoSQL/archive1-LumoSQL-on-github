@@ -4,7 +4,7 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
-![](./images/lumo-project-aims-intro.jpg "XXXXXXXXXX")
+![](./images/lumo-project-aims-intro.jpg "Mongolian horseback archery, rights request pending from https://www.toursmongolia.com/")
 
 Overall Objective of LumoSQL
 ============================
@@ -33,13 +33,11 @@ Aims
 * SQLite upstream promise: LumoSQL will not fork SQLite, and will offer 100%
   compatibility with SQLite by default, and contribute to SQLite where possible
 
-* Developer contract: LumoSQL will have stable APIs for features found in
-  multiple unrelated SQLite downstream projects: backends, frontends,
-  encryption, networking and more
+* Developer contract: LumoSQL will have stable APIs ([Application Programming Interfaces](https://en.wikipedia.org/wiki/Application_programming_interface#Libraries_and_frameworks)) for features found in multiple unrelated SQLite downstream projects:
+  backends, frontends, encryption, networking and more. 
 
 * Devops contract: LumoSQL will reduce risk by making it possible to omit
-  compliation of many features, and will have stable ABIs so as to not break
-  dynamically-linked applications.
+  compliation of many features, and will have stable ABIs ([Application Binary Interfaces](https://en.wikipedia.org/wiki/Application_binary_interface))so as to not break dynamically-linked applications.
 
 * Ecosystem creation: LumoSQL will offer consolidated contact, code curation, bug tracking,
   licensing, and community communications across all these features from
