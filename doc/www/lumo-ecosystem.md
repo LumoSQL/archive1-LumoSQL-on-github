@@ -129,7 +129,7 @@ serious problems with it too:
 	* this kind of backwards-compatibility was one of the problems that led
 	  to Microsoft Windows stagnation for years, see [The Case Against
 	  Backwards Compatibility](https://joomla.digital-peak.com/blog/178-the-case-against-backward-compatibility).
-	  The problem isn't clear-cut, as shown by [Why is ABI Stability Important?](https://www.dpdk.org/blog/2019/10/10/why-is-abi-stability-important/)
+	  The problem isn't clear-cut, as shown by [Why is API Stability Important?](https://www.dpdk.org/blog/2019/10/10/why-is-abi-stability-important/)
 	  and Greg Kroah-Hartman's paper [Stable API Nonsense](https://www.kernel.org/doc/Documentation/process/stable-api-nonsense.rst),
 	  noting that the Linux distribution companies such as Red Hat charge money to maintain a time-limited
 	  stable API.  LumoSQL has the luxury of choosing what extensions to stable formats and APIs to introduce, and how.
