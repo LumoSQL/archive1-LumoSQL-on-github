@@ -38,7 +38,7 @@ Aims
   encryption, networking and more
 
 * Devops contract: LumoSQL will reduce risk by making it possible to omit
-  compliation of many features, and will have stable ABIs so as to not break
+  compliation of many features, and will have stable APIs so as to not break
   dynamically-linked applications.
 
 * Ecosystem creation: LumoSQL will offer consolidated contact, code curation, bug tracking,
