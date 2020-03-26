@@ -64,8 +64,8 @@ potential problem is that this paper itself is in error, LumoSQL repeated
 the literature research component. We conclude that the paper is correct in stating:
 
 > When we investigated 16 papers from the 2015-2017
-> whose evaluation included SQLite, we find that none re-
-> port all the parameters required to meaningfully compare
+> whose evaluation included SQLite, we find that none report
+> all the parameters required to meaningfully compare
 > results: ten papers do not report any parameters [17–26],
 > five do not report the sync mode [27–31], while only
 > one paper reports all parameters except write-ahead log
