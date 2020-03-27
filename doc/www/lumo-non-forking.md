@@ -24,6 +24,14 @@ upstream sources are used unchanged).
 
 # Table of contents
 
+   * [Upstream definition file <a name="user-content-upstream"></a>](#upstream-definition-file-)
+      * [git](#git)
+      * [download](#download)
+   * [Modification definition file <a name="user-content-modification"></a>](#modification-definition-file-)
+   * [Example Configuration directory <a name="user-content-example"></a>](#example-configuration-directory-)
+   * [Notforking tool <a name="user-content-tool"></a>](#notforking-tool-)
+
+
 # Upstream definition file <a name="upstream"></a>
 
 The file `upstream.conf` has a simple "key = value" format with one such
