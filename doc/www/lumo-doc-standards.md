@@ -109,10 +109,32 @@ diagrams from other sources unless modified for LumoSQL.
 ## Using the LumoSQL Diagram Library
 
 The file images/lumo-diagram-library.odg is a LibreOffice Draw document containing all 
-the symbols likely needed for LumoSQL technical diagrams. If you find yourself adding 
-symbols in a new diagram, you should also add it to this document. 
+the elements likely needed for LumoSQL technical diagrams. If you find that you need to
+add a new element when making a diagram, you should also add it to this document.
 
-All other diagrams in images/ are in SVG format, as exported by LibreOffice, inkscape and others.
+The lumo-signature file is to be added to the base of all LumoSQL diagrams and images.
+It contains the logo and copyright string.
+
+All other diagrams in images/ are PNG format final diagrams and SVG format process
+diagrams kept for ease of editing, as exported by LibreOffice, inkscape and others.
+
+## Adding Diagrams
+
+The current process for making diagrams is as follows.
+
+1. Make in LibreOffice Draw.
+1.1 Reset corners of box elements to their proper radii (LibreOffice modifies this when scaling boxes).
+  1.2. Export as SVG.
+2. Convert to png and add signature.
+  4.1 Trim borders and output: `$ convert -density 200 -trim MyLbreOfficeOutput.svg MyNewDiagram.png`
+  4.2 Re-border with space for the logo(adjust border as required if the signature doesn't fit): `$ convert MyNewDiagram.png -bordercolor white -border 40x40 -gravity south -splice 0x80 MyNewDiagram.png`
+  4.3 Add logo and copyright information: `$ composite -density 200 -gravity SouthEast lumo-signature.svg MyNewDiagram.png MyNewDiagram.png`
+
+## Diagram Style Guide
+
+Colour palette: Libreoffice 'standard'.
+Fonts: *Source (Han) Sans Medium* or *Noto Sans Medium* due to their on-screen clarity and good language support (both are 100% compatible)
+Corner radii: OS and large container boxes: 0.4, small box elements: 0.25
 
 # Image Standards and Tools
 
