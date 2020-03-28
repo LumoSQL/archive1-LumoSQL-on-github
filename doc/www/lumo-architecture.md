@@ -16,19 +16,19 @@ Table of Contents
 
 # Online Database Servers
 
-<img src="./images/lumo-architecture-online-db-server.png"  width=200" height="200" alt="Overview of an online database server">
+![](./images/lumo-architecture-online-db-server.svg "What an online server database looks like") -->
 
-<!-- ![](./images/lumo-architecture-online-db-server-scale.png "How an online database server scales") -->
+![](./images/lumo-architecture-online-db-server-scale.svg "How an online database server scales") -->
 
 # SQLite as an Embedded Database
 
-![](./images/lumo-architecture-sqlite-overview.png "Overview of a SQLite being an embedded database server")
+![](./images/lumo-architecture-sqlite-overview.svg "Overview of a SQLite being an embedded database server")
 
-![](./images/lumo-architecture-sqlite-parts.png "The simplest view of the three parts to SQLite in typical embedded use")
+![](./images/lumo-architecture-sqlite-parts.svg "The simplest view of the three parts to SQLite in typical embedded use")
 
 
-LumoSQL
-=======
+# LumoSQL Architecture
 
+![](./images/lumo-architecture-lumosql-theoretical-future.svg "Where LumoSQL architecture is headed")
 
 
