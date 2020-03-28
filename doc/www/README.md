@@ -8,7 +8,7 @@
 LumoSQL
 =======
 
-![](./images/lumo-logo.png "LumoSQL logo")
+![](./images/lumo-logo-temp.svg "LumoSQL logo")
 
 
 Table of Contents
