@@ -16,9 +16,9 @@ Table of Contents
 
 # Online Database Servers
 
-![](./images/lumo-architecture-online-db-server.png "Overview of an online database server")
+<img src="./images/lumo-architecture-online-db-server.png"  width=200" height="200" alt="Overview of an online database server">
 
-![](./images/lumo-architecture-online-db-server-scale.png "How an online database server scales")
+<!-- ![](./images/lumo-architecture-online-db-server-scale.png "How an online database server scales") -->
 
 # SQLite as an Embedded Database
 
