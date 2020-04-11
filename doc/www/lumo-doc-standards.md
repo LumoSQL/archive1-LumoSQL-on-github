@@ -83,17 +83,16 @@ other documentation efforts that are kept up to date along with the correspondin
 
 LumoSQL documentation will be written in [Github-flavoured
 Markdown](https://github.github.com/gfm/) as supported by many tools including
-the well-known [Pandoc](https://pandoc.org). LumoSQL documentation will not be
-specific to any system, certainly not Github. The main extension
-Github-flavoured Markdown (GFM) adds is tables and code blocks.
+the well-known [Pandoc](https://pandoc.org), version 2.0 or higher. LumoSQL documentation will not be
+highly specific to any system. The main extension Github-flavoured Markdown
+(GFM) adds is tables and code blocks, and a single switch in Pandoc can change
+that dependency.
 
 Text encoding will be [UTF-8](https://en.wikipedia.org/wiki/UTF-8) . Here is
 one [expert anecdote about why UTF-8 matters](https://yihui.org/en/2018/11/biggest-regret-knitr/).
 
-While Pandoc is generally excellent at handling Markdown input and allows
-LumoSQL documentation to be presented in many other formats such as PDF, Pandoc
-cannot be a default documentation tool for LumoSQL because (strangely) Markdown
-itself is not well-supported by Pandoc as an output format as of February 2020.
+Versions of Pandoc earlier than 2.0 did not support Markdown well as an output format, and the 
+Lua extension system was insufficient for LumoSQL's HTML generation needs.
 
 One difference between Pandoc Markdown and GFM is the number of spaces for nested lists. Two
 spaces are sufficient for GFM, but Pandoc requires four spaces.
@@ -156,7 +155,7 @@ This example is approximately from the top of this chapter:
 It's best to check syntax before pushing changes, which means rendering
 Markdown into HTML that is hopefully close to what Github produces. Here are three ways of doing that:
 
-* The Makefile and support files in bin/ uses Pandoc to render the GFM to HTML in /tmp . You need to have Pandoc version 2.0+ for this to work. 
+* The Makefile and support files in bin/ uses Pandoc to render the GFM to HTML in /tmp .
 * The excellent [Editor.md](https://github.com/pandao/editor.md) does a great job of rendering,
 as can be seen at [The Online Installation](https://pandao.github.io/editor.md/en.html) . You can paste GFM into it and see it rendered, WYSIWYG-style. You can download the HTML for
 Editor.md and run it locally. (Editor.md is also an editor, and it adds its own features, but you don't need to use it for that.)
@@ -215,15 +214,18 @@ and also other formats such as HTML.  However, LumoSQL documentation needs to
 be processed by renderers that are a lot less sophisticated than Pandoc,
 including the Github markup processor. So we can't rely on metadata.
 
-**Markdown parsers aren't great:** Ideally we'd use Pandoc, because Pandoc will
-read Markdown and output Markdown, including a ToC.  Sadly Pandoc cannot
-reliably produce Markdown. A command such as `pandoc -t markdown_github --toc
-input.md -o output.md` just doesn't work, or any of the variations. (Pandoc's poor 
-Markdown output is also discussed under the heading of Tidying up Markdown.)
+**Pandoc's Markdown output needs to be studied:** Pandoc can 
+read Markdown and output Markdown, including a ToC.  A command such as 
+
+```pandoc --standalone -f gfm -t gfm --toc -o lumo-output.md -i lumo-input.md```
+
+is supposed to work and probably does, we just haven't seen it yet. Pandoc's Markdown
+output used to be poor, but since version 2.0 is has improved a lot. Pandoc --toc is
+almost certainly the eventual answer.
 
 **We are left with ad-hoc processing solutions for now:**
 
-* Use the Github API: One reasonable solution is the
+* Use the Github API: The most practical solution we have for now is the
 [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc) bash
 script. You can get the script at wget
 https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc
@@ -233,7 +235,7 @@ and use it like this:
 
 and then insert the file /tmp/toc.md into the document using your editor. It's
 not a pretty operation but given all the other advantages of Markdown it seems
-a small price to pay. This script can now be found in www/bin/gh-md-toc .
+a small price to pay. This script can now be found in ```www/bin/gh-md-toc``` .
 Because it uses the Github API (and therefore produces canonical results) it
 needs internet access. After more testing, perhaps we can trust the `--insert` option and then
 include gd-md-toc in the documentation Makefile.
@@ -265,11 +267,7 @@ If it's your own markdown, it's much better to run prettier before the first
 commit of a file and then again before subsequent commits - or just write clean
 Markdown and you can expect others to respect that.
 
-It would be ideal if we could use Pandoc to clean up markdown, but it just
-doesn't work.  There are several pretty printing pacakges to choose from.  One
-that may work is [Prettier](https://prettier.io) , although that requires
-familiarity with Node package installation and configuration, and can be quite
-awkward. (LumoSQL uses Node for the benchmarking code, so arguably you will
-have NodeJS installed anyway.)
+As of version 2.0 Pandoc works well for cleaning up markdown, that is, specifying
+both ```-f gfm``` and ```-t gfm```.
 
 
