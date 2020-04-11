@@ -271,8 +271,9 @@ gh_toc_app() {
         gh_toc "$md" "$#" "$need_replace"
     done
 
-    echo ""
-    echo "Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)"
+#    echo ""
+#    echo "Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)"
+#    commented out for LumoSQL
 }
 
 #

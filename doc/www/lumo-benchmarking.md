@@ -27,7 +27,7 @@ Table of Contents
 About Benchmarking
 ==================
 
-LumoSQL aims to be:
+The [LumoSQL project aims](./lumo-project-aims.md) include:
 
 > A Privacy-compliant Open Source Database Platform with Modern Design and Benchmarking.
 
@@ -44,7 +44,7 @@ databases with each other, or even of being sure that the tests that do exist
 are in any way realistic, or even of simply reproducing results that other
 people have found.  LumoSQL covers so many codebases and use cases that better
 SQL benchmarking is a project requirement. Benchmarking and testing overlap,
-which is addressed in the code and docs.
+which is addressed in the code and documentation.
 
 The well-described [testing of SQLite](https://sqlite.org/testing.html)
 involves some open code, some closed code, and many ad hoc processes. Clearly
@@ -320,13 +320,25 @@ immediately for January to March 2020:
 
 # List of Relevant Benchmarking and Test Prior Art
 
-| Project | Last modified | Description | 
-| ------- | ------------- | ----------- |
-| [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf)| n/a | Helpful 2017 paper: "...changing just one parameter in SQLite can change the performance by 11.8X... up to 28X difference in performance" |
-| [sqllogictest](https://www.sqlite.org/sqllogictest/doc/trunk/about.wiki)|2017 | [sqlite.org code](https://www.sqlite.org/sqllogictest/artifact/2c354f3d44da6356) to [compare the results](https://gerardnico.com/data/type/relation/sql/test) of many SQL statements between multiple SQL servers, either SQLite or an ODBC-supporting server |
-| [TCL SQLite tests](https://github.com/sqlite/sqlite/tree/master/test)|current| These are a mixture of code covereage tests, unit tests and test coverage. Actively maintained. |
-| [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
-| [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
-| [Sysbench](https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
+There is a section in the [LumoSQL list of prior art](./lumo-prior-art.md#list-of-relevant-benchmarking-and-test-prior-art) on benchmarking. That is the canonical list of up-to-date prior art.
 
+The 2017 paper from this list [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf) talks at length about why this is so difficult. The abstract says:
+
+> Benchmarking systems in a repeatable fashion is com-plex and  error-prone.
+> The systems  community has re-peatedly  discussed  the  complexities  of
+> benchmarkingand how to properly report benchmarking results.   Us-ing the
+> example of SQLite, we examine the current stateof  benchmarking  in  industry
+> and  academia.   We  showthat changing justoneparameter in SQLite can
+> changethe  performance  by  11.8X,  and  that  changing  multipleparameters
+> can  lead  up  to  a  28X  difference  in  perfor-mance.  We find that these
+> configuration parameters areoften not set or reported in academic research,
+> leading toincomplete and misleading evaluations
+
+[Sysbench](https://github.com/akopytov/sysbench) is a multithreaded generic
+benchmarking tool, with one well-supported use case being networked SQL
+servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/)
+. There is no reason why SQLite cannot work with Sysbench, and there is some
+evidence ([for example](https://github.com/bloomberg/comdb2/pull/1377)) that
+this has already been done. However as of March 2020 this has not been done for
+LumoSQL. 
 
