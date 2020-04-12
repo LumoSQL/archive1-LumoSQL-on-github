@@ -30,6 +30,7 @@ SQLite code has been incorporated into many other projects, and besides there ar
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
 | [sqlightning](https://github.com/LMDB/sqlightning)  | 2013 | SQLight ported to the LMDB key-value store |
+| [Original MDB Paper](https://www.openldap.org/pub/hyc/mdb-paper.pdf) | 2012 | Paper by Howard Chu describing the motivations, design and constraints of the LMDB key-value store |
 | [SQLHeavy](https://github.com/btrask/sqlheavy)  | 2016 | sqlightning updated, and ported to LevelDB, LMDB, RocksDB and more, with a key-value store library abstraction |
 | [libkvstore](https://github.com/btrask/libkvstore) | 2016 | The k-v store abstraction library used by SQLHeavy |
 | [SQLite 4](https://sqlite.org/src4/tree?ci=trunk) | 2014 | Abandoned new version of SQLite with improved backend support and other features |
