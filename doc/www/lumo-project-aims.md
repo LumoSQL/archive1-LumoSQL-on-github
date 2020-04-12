@@ -31,7 +31,9 @@ Aims
 ====
 
 * SQLite upstream promise: LumoSQL will not fork SQLite, and will offer 100%
-  compatibility with SQLite by default, and contribute to SQLite where possible
+  compatibility with SQLite by default, and contribute to SQLite where possible.
+  This especially includes the SQLite user interface mechanisms of pragmas, 
+  library APIs, and commandline parameters.
 
 * Developer contract: LumoSQL will have stable APIs ([Application Programming Interfaces](https://en.wikipedia.org/wiki/Application_programming_interface#Libraries_and_frameworks)) for features found in multiple unrelated SQLite downstream projects:
   backends, frontends, encryption, networking and more. 
@@ -46,6 +48,11 @@ Aims
 
 Short Term Goals
 ================
+
+* LumoSQL will have three canonical and initial backends: btree (the existing
+SQLite btree, ported to a new backend system); a test backend such as text or
+csv; and the LMDB backend. Control over these interfaces will be through the
+same user interface mechanisms as the rest of LumoSQL, and SQLite.
 
 * LumoSQL will improve SQLite quality and privacy compliance by introducing
 optional on-disk checksums including in the existing official SQLite btree
@@ -74,22 +81,30 @@ sure that anything other than the API chokepoints can be synched at each
 release, or more often if need be
 
 * LumoSQL will provide updated, public testing tools, with results published
-and instructions for reproducing the test results
+and instructions for reproducing the test results. This also means
+excluding parts of the LumoSQL test suite that don't apply to new backends
 
 * LumoSQL will provide benchmarking tools, otherwise as per the testing
 tools
 
-* LumoSQL will ensure that new code remains optional (as an extreme
-example of modularity, despite having nearly 30 million lines of code, a
-usable Linux kernel can be compiled from around 200k lines.)
+* LumoSQL will ensure that new code remains optional by means of modularity at
+compiletime and also runtime. By illustration of modularity, at compiletime
+nearly all 30 million lines of the Linux kernel can be exclude giving just 200k
+lines. Runtime modularity will be controlled through the same user interfaces 
+as the rest of LumoSQL.
 
-* LumoSQL will also ensure that new code can all be active at one, eg
+* LumoSQL will ensure that new code can all be active at one, eg
 multiple backends or frontends for conversion between/upgrading from one
 format or protocol to another. This is crucial to provide continuity and
 supported upgrade paths for users, for example, users who want to become
 privacy-compliant without disrupting their end users
 
-* LumoSQL will carefully consider the benefits of dropping some of the most
-ancient parts of SQLite when merging from upstream, provided it does not
-conflict with any of the other goals in this document.
+* Over time, LumoSQL will carefully consider the potential benefits of dropping
+some of the most ancient parts of SQLite when merging from upstream, provided
+it does not conflict with any of the other goals in this document. Eliminating 
+SQLite code can be done by a similar non-forking mechanism as used to keep in synch
+with the SQLite upstream.
+
+
+
 
