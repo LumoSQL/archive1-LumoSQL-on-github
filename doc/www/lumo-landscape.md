@@ -7,19 +7,27 @@
 ![](./images/lumo-ecosystem-intro.png "LumoSQL logo")
 
 
-The LumoSQL Ecosystem
-=====================
+Table of Contents
+=================
+
+   * [LumoSQL Context](#lumosql-context)
+   * [Table of Contents](#table-of-contents)
+   * [The SQLite Landscape](#the-sqlite-landscape)
+      * [LumoSQL and The SQLite Project](#lumosql-and-the-sqlite-project)
+   * [SQLite Downstreams](#sqlite-downstreams)
+   * [LumoSQL 2019 Prototype Conclusions And Lessons](#lumosql-2019-prototype-conclusions-and-lessons)
+      * [Facts Established by 2019 LumoSQL Prototype](#facts-established-by-2019-lumosql-prototype)
+      * [Lessons Learned from sqlightning](#lessons-learned-from-sqlightning)
+
+
+LumoSQL Context
+===============
 
 LumoSQL is not a fork of SQLite. LumoSQL integrates several bodies of code
 including SQLite into a new database. The idea of building on SQLite isn't new.
 The reach and breadth of the SQLite code is astonishing and far more than the
 LumoSQL project realised at the beginning. Before LumoSQL nobody has tried to
 document this as one whole.
-
-
-Table of Contents
-=================
-
 
 
 The SQLite Landscape

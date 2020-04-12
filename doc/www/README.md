@@ -25,8 +25,8 @@ LumoSQL emphasises benchmarking, code reuse and modern database implementation.
 * LumoSQL in Technical Detail
     + [Architecture](./lumo-architecture.md)
     + [Implementation](./lumo-implementation.md)
-    + [Not-forking Scheme](./lumo-non-forking.md)
-    + [Corruption Dection and Magic](./lumo-corruption-detection-and-magic.md)
+        * [Not-forking Scheme](./lumo-non-forking.md)
+        * [Corruption Dection and Magic](./lumo-corruption-detection-and-magic.md)
 * Creating a LumoSQL Ecosystem
     + [The LumoSQL Landscape](./lumo-landscape.md)
     + [Codebases relevant to LumoSQL](./lumo-relevant-codebases)

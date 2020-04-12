@@ -5,6 +5,21 @@
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
 
+Table of Contents
+=================
+
+   * [LumoSQL Interfaces Are Almost the Same as SQLite](#lumosql-interfaces-are-almost-the-same-as-sqlite)
+   * [Table of Contents](#table-of-contents)
+   * [Running LumoSQL](#running-lumosql)
+   * [Building and Installing LumoSQL](#building-and-installing-lumosql)
+      * [Directory layout](#directory-layout)
+      * [Linux/Unix](#linuxunix)
+         * [Build environment](#build-environment)
+         * [Using the Makefile tool](#using-the-makefile-tool)
+      * [Windows](#windows)
+      * [Android](#android)
+
+
 LumoSQL Interfaces Are Almost the Same as SQLite
 ================================================
 
@@ -18,8 +33,6 @@ To learn how to use SQLite, see the [SQLite Documentation](https://sqlite.org/do
 That said, there are a few small differences between the two interfaces. These
 are described in the remainder of this chapter. 
 
-Table of Contents
-=================
 
 # Running LumoSQL
 
