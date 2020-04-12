@@ -14,6 +14,12 @@ LumoSQL Implementation
 Table of Contents
 =================
 
+   * [Changes to SQLite](#changes-to-sqlite)
+      * [Lockfile/tempfile Pushed to Backend](#lockfiletempfile-pushed-to-backend)
+      * [SQLite API Interception Points](#sqlite-api-interception-points)
+      * [SQLite Virtual Machine Layer](#sqlite-virtual-machine-layer)
+
+
 # Changes to SQLite
 
 ## Lockfile/tempfile Pushed to Backend
