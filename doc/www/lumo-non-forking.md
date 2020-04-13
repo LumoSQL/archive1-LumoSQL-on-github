@@ -4,6 +4,19 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Claudio Calvelli, March 2020 -->
 
+
+Table of Contents
+=================
+
+   * [Not-Forking Upstream Source Code Tracker](#not-forking-upstream-source-code-tracker)
+   * [Table of contents](#table-of-contents)
+   * [Upstream definition file <a name="user-content-upstream"></a>](#upstream-definition-file-)
+      * [git](#git)
+      * [download](#download)
+   * [Modification definition file <a name="user-content-modification"></a>](#modification-definition-file-)
+   * [Example Configuration directory <a name="user-content-example"></a>](#example-configuration-directory-)
+   * [Notforking tool <a name="user-content-tool"></a>](#notforking-tool-)
+
 Not-Forking Upstream Source Code Tracker
 ========================================
 
@@ -21,16 +34,6 @@ changes to apply. This is done by providing a number of files in a directory;
 the minimum requirement is an upstream definition file; other files can also be
 present indicating what modifications to apply (if none are provided, the
 upstream sources are used unchanged).
-
-# Table of contents
-
-   * [Upstream definition file <a name="user-content-upstream"></a>](#upstream-definition-file-)
-      * [git](#git)
-      * [download](#download)
-   * [Modification definition file <a name="user-content-modification"></a>](#modification-definition-file-)
-   * [Example Configuration directory <a name="user-content-example"></a>](#example-configuration-directory-)
-   * [Notforking tool <a name="user-content-tool"></a>](#notforking-tool-)
-
 
 # Upstream definition file <a name="upstream"></a>
 

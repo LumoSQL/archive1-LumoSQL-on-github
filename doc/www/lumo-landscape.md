@@ -4,20 +4,20 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
-![](./images/lumo-ecosystem-intro.png "LumoSQL logo")
-
 
 Table of Contents
 =================
 
    * [LumoSQL Context](#lumosql-context)
-   * [Table of Contents](#table-of-contents)
    * [The SQLite Landscape](#the-sqlite-landscape)
       * [LumoSQL and The SQLite Project](#lumosql-and-the-sqlite-project)
    * [SQLite Downstreams](#sqlite-downstreams)
    * [LumoSQL 2019 Prototype Conclusions And Lessons](#lumosql-2019-prototype-conclusions-and-lessons)
       * [Facts Established by 2019 LumoSQL Prototype](#facts-established-by-2019-lumosql-prototype)
       * [Lessons Learned from sqlightning](#lessons-learned-from-sqlightning)
+
+
+![](./images/lumo-ecosystem-intro.png "LumoSQL logo")
 
 
 LumoSQL Context
@@ -33,30 +33,29 @@ document this as one whole.
 The SQLite Landscape
 ====================
 
-The Internet runs on data stored in rows, ie Relational Databases. There are 
-many exceptions and alternatives but this is where the deciding data is stored:
+The Internet runs on data stored in rows, ie Relational Databases (RDBMS). There are 
+many exceptions and alternatives but RDBMS are where the deciding data is stored including:
 
 * in routers that direct internet traffic
 * in mobile phones that enable the user to navigate the internet
 * business applications or those that deal with reconciling important numbers
-* in millions of everyday applications, such as Wikipedia
+* in millions of everyday web applications, from Wikipedia to ticket booking systems
 
-And the most widely-used relational database is almost certainly SQLite.
+The most widely-used relational database is almost certainly SQLite, and nearly
+all SQLite usage is in embedded devices, frequently with internet access as the
+Internet of Things.
 
 In addition there are SQLite-derived projects that address traditional online
-database use cases in a similar way only in 4%-10% of size of code. The SQLite
-landscape feels reminiscent of XFree86 in the early 2000s, a massively useful
-project that became less responsive to modern needs.  The analogy is imperfect,
-as SQLite is very actively developed (within the project's strict scope) and
-can be relied on to keep producing a quality database library. But like X.org,
-LumoSQL seeks to be inclusive, rigorous and accepting of the many exciting
+database use cases in a similar way only in a tiny fraction (4%-10%) of size of
+code. SQLite sticks to its strict original project definition. LumoSQL seeks to
+be still rigorous and also inclusive and accepting of the many new
 SQLite-based features fragmented across the web.
 
-The databases to compare LumoSQL against are those that together are the
+The databases to compare LumoSQL against are those which together are the
 most-used on the internet today: 
 
 * Oracle MySQL - open source, with closed source licensing available, ubiquitous on the internet
-* MariaDB - a mostly-compatible fork of MySQL, perhaps taking over from MySQL on the internet
+* MariaDB - a mostly-compatible fork of MySQL, seemingly taking over from MySQL on the internet
 * Postgresql - open source, highly compliant with SQL standards,
 * Oracle's traditional RDBMs - the closed source database that makes its owners the most money
 * Microsoft SQL Server - ubiquitous in business applications, less common on the internet 
@@ -98,20 +97,22 @@ project.
 **Sqlite has a very strict and reliable view on maintaining backwards
 compatibility both binary and API (except when it comes to encryption, see
 further down.)** The Sqlite foundation aims to keep SQLite3 interfaces and
-formats stable until the year 2050 years, as once requested by an airframe
-construction company (Airbus). Whatever happens in years to come SQLite has
-definitely delivered on this to date. This means that there are many things
-SQLite cannot do which LumoSQL can, and it also means that LumoSQL needs to
-suppor strict compatibility with SQLite3 interfaces and formats at least as an
-option if not the default.
+formats stable until the year 2050 years, according to Richard Hipp in the
+podcast interview, as once requested by an airframe construction company
+(Airbus). Whatever happens in years to come SQLite has definitely delivered on
+this to date. This means that there are many things SQLite cannot do which
+LumoSQL can, and it also means that LumoSQL needs to suppor strict
+compatibility with SQLite3 interfaces and formats at least as an option if not
+the default.
 
 **Sqlite.org not entirely an open project.** No code is accepted from contributors
 external to the company HWACI, which is owned by D Richard Hipp, the original
 author and lead of SQLite. From the [SQLite copyright page](https://www.sqlite.org/copyright.html):
 
-	In order to keep SQLite completely free and unencumbered by copyright, the project does not accept
-	patches. If you would like to make a suggested change, and include a patch as a proof-of-concept, 
-	that would be great. However please do not be offended if we rewrite your patch from scratch. 
+> _In order to keep SQLite completely free and unencumbered by copyright, the
+> project does not accept patches. If you would like to make a suggested change,
+> and include a patch as a proof-of-concept, that would be great.  However please
+> do not be offended if we rewrite your patch from scratch._
 
 That fact is not hidden in any way, and there have been many years of
 successful SQLite use on this basis. It is definitely not acceptable under the
@@ -124,63 +125,68 @@ LumoSQL does not have to navigate historical decisions in the way SQLite does.
 
 The [SQLite Long Term Support](https://sqlite.com/lts.html) page states:
 
-	“In addition to supporting SQLite through the year 2050, the developers also
-	promise to keep the SQLite [C-language API](https://sqlite.com/cintro.html) and
-	[on-disk format](https://sqlite.com/fileformat2.html) fully backwards
-	compatible. This means that applications written to use SQLite today should be
-	able to link against and use future versions of SQLite released decades in the
-	future.”
+> _“In addition to supporting SQLite through the year 2050, the developers also
+> promise to keep the SQLite [C-language API](https://sqlite.com/cintro.html) and
+> [on-disk format](https://sqlite.com/fileformat2.html) fully backwards
+> compatible. This means that applications written to use SQLite today should be
+> able to link against and use future versions of SQLite released decades in the
+> future.”_
 
 As well as the success of this policy and its obvious advantages, there are some 
 serious problems with it too:
 
-	* this kind of backwards-compatibility was one of the problems that led
-	  to Microsoft Windows stagnation for years, see [The Case Against
-	  Backwards Compatibility](https://joomla.digital-peak.com/blog/178-the-case-against-backward-compatibility).
-	  The problem isn't clear-cut, as shown by [Why is ABI Stability Important?](https://www.dpdk.org/blog/2019/10/10/why-is-abi-stability-important/)
-	  and Greg Kroah-Hartman's paper [Stable API Nonsense](https://www.kernel.org/doc/Documentation/process/stable-api-nonsense.rst),
-	  noting that the Linux distribution companies such as Red Hat charge money to maintain a time-limited
-	  stable API.  LumoSQL has the luxury of choosing what extensions to stable formats and APIs to introduce, and how.
+* this kind of backwards-compatibility was one of the problems that led
+  to Microsoft Windows stagnation for years, see [The Case Against
+  Backwards Compatibility](https://joomla.digital-peak.com/blog/178-the-case-against-backward-compatibility).
+  The problem isn't clear-cut, as shown by [Why is ABI Stability Important?](https://www.dpdk.org/blog/2019/10/10/why-is-abi-stability-important/)
+  and Greg Kroah-Hartman's paper [Stable API Nonsense](https://www.kernel.org/doc/Documentation/process/stable-api-nonsense.rst),
+  noting that the Linux distribution companies such as Red Hat charge money to maintain a time-limited
+  stable API.  LumoSQL has the luxury of choosing what extensions to stable formats and APIs to introduce, and how.
 
-	* Since SQLite crypto implementation details are secret, any encrypted database 
-	  created by the official closed-source SQLite is almost certainly incompatible 
-	  with any other encryption project by third parties, despite file format compatibility 
-	  being a major feature of SQLite. Yet with encryption being a requirement for 
-	  many applications, this means there is no guarantee of SQLite file format
-	  compatibility.
+* Since SQLite crypto implementation details are secret, any encrypted database 
+  created by the official closed-source SQLite is almost certainly incompatible 
+  with any other encryption project by third parties, despite file format compatibility 
+  being a major feature of SQLite. Yet with encryption being a requirement for 
+  many applications, this means there is no guarantee of SQLite file format
+  compatibility.
 
-	* this rigid rule becomes difficult when it comes to a long-term
-	  storage format discussions.  See below for discussion of how the
-	  SQLite binary format has almost zero internal integrity checking.
-	  LumoSQL aims to add options to address this problem.
+* this rigid rule becomes difficult when it comes to a long-term
+  storage format discussions.  See below for discussion of how the
+  SQLite binary format has almost zero internal integrity checking.
+  LumoSQL aims to add options to address this problem.
 
 **Sqlite is less open source than it appears**. The existance of so many SQLite
 spin-offs is evidence that SQLite code is highly available. However there are
 several aspects of SQLite that mean it cannot be considered open source, in
 ways that are increasingly important in the 21st century:
 
-	* Public domain is not is not recognised in some countries such as
-	  Germany and Australia, which means that legal certainty is not
-          possible for users in these countries who need it or want it. Public
-	  Domain is not a valid grant of right, which is why it is not one of
-	  the [Open Source Initiative licenses](https://opensource.org/licenses) nor
-	  does it appear on the [SPDX License List](https://spdx.org/licenses/).
+* Public domain is not is not recognised in some countries such as
+  Germany and Australia, which means that legal certainty is not
+  possible for users in these countries who need it or want it. Public
+  Domain is not a valid grant of right, which is why it is not one of
+  the [Open Source Initiative licenses](https://opensource.org/licenses) nor
+  does it appear on the [SPDX License List](https://spdx.org/licenses/).
 
-	* sqlite.org charge USD6000 for “perpetual right-to-use for the SQLite
-          source code", and implies that this right-to-use has grants actual
-          legal benefits. This is an additional reason why the SQLite public domain
-	  licensing approach cannot be open source, because you have to pay money 
-	  in order to be sure where you stand.
+* sqlite.org charge USD6000 for “perpetual right-to-use for the SQLite source
+  code", and implies that this right-to-use grants legal benefits. This is an
+  additional reason why the SQLite public domain licensing approach cannot be
+  open source, because you have to pay money in order to be sure where you stand.
+  Paying money for open source is encouraged throughout the open source movement,
+  however if that casts doubt on the validity of the open source license then it
+  cannot be open source in the first place.
 
-        * As sqlite.org states, the most important test harness is only available commercially. 
-          This is perfectly legal, but is definitely not an open source approach at all.
+* As [sqlite.org states](https://www.sqlite.org/th3.html), the most important test harness is only available commercially. 
+  This is perfectly legal, but is definitely not the way open source projects
+  generally behave.
 
-	* The only supported encryption code is closed source, and even the mailing list 
-	  for discussing this is not public. 
+* The only supported encryption code is closed source, and even the mailing list 
+  for discussing this is not public. This is not expected behaviour for an open 
+  source project.
 
-This really matters, because MariaDB now publish cryptographic and network
-scaling code under their Business Source License, which requires "Power Users"
-to pay.  These pressures are not compatible with modern open source.
+This really matters, because in an analogous move, MariaDB now publish some of their
+cryptographic and network scaling code under their [Business Source License](https://mariadb.com/bsl-faq-mariadb/)
+which requires "Power Users" to pay.  These pressures are not compatible with
+modern open source and LumoSQL wants to provide an alternative.
 
 **SQLite Code has Many Independent Downstreams** Multiple front ends, backends
 and network replication, clustering and encryption solutions exist today. This

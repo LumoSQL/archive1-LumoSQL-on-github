@@ -4,6 +4,19 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2019 -->
 
+
+Table of Contents
+=================
+
+   * [Prior Art for LumoSQL](#prior-art-for-lumosql)
+   * [Tables of Contents](#tables-of-contents)
+   * [List of SQLite Code-related Prior Art](#list-of-sqlite-code-related-prior-art)
+   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
+   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
+   * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
+   * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
+
+
 Prior Art for LumoSQL
 ======================
 
@@ -13,15 +26,6 @@ developers. Although it is stored with the rest of the LumoSQL documentation
 and referred to throughout, it is a standalone document.
 
 Everything listed here is open source.
-
-Tables of Contents
-==================
-
-   * [List of SQLite Code-related Prior Art](#list-of-sqlite-code-related-prior-art)
-   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
-   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
-   * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
-   * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
 
 # List of SQLite Code-related Prior Art
 

@@ -4,6 +4,16 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
+
+Table of Contents
+=================
+
+   * [Overall Objective of LumoSQL](#overall-objective-of-lumosql)
+   * [Table of Contents](#table-of-contents)
+   * [Aims](#aims)
+   * [Short Term Goals](#short-term-goals)
+
+
 ![](./images/lumo-project-aims-intro.jpg "Mongolian horseback archery, rights request pending from https://www.toursmongolia.com/")
 
 Overall Objective of LumoSQL
@@ -18,14 +28,6 @@ SQLite-related ecosystem.
 
 The rest of this document will be updated frequently in 2020, and over time
 will become more strategic and with less listing of specific new features.
-
-Table of Contents
-=================
-
-   * [Overall Objective of LumoSQL](#overall-objective-of-lumosql)
-   * [Table of Contents](#table-of-contents)
-   * [Aims](#aims)
-   * [Short Term Goals](#short-term-goals)
 
 Aims
 ====

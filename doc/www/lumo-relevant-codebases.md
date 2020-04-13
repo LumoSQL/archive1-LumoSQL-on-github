@@ -4,14 +4,24 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2019 -->
 
+
+Table of Contents
+=================
+
+   * [Codebases Relevant to LumoSQL](#codebases-relevant-to-lumosql)
+   * [Table of Contents](#table-of-contents)
+   * [What is a Relevant Codebase?](#what-is-a-relevant-codebase)
+   * [Useful Dead SQLite Forks](#useful-dead-sqlite-forks)
+   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
+   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
+   * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
+   * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
+
+
 Codebases Relevant to LumoSQL
 =============================
 
 ![Ingredients](./images/lumo-relevant-codebases-intro.jpg "FuQin Market in Chengdu, CC license, https://chopsticksinmysuitcase.typepad.com/.a/6a0133f251ecbe970b0133f60d5807970b-500wi")
-
-
-Table of Contents
-=================
 
 
 What is a Relevant Codebase?

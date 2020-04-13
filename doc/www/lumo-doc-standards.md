@@ -4,32 +4,34 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
-LumoSQL Documentation Standards
-===============================
-
-This chapter covers how LumoSQL documentation should be written and maintained. 
-
-![](./images/lumo-doc-standards-intro.jpg "Image from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Chinese_books_at_a_library.jpg")
 
 Table of Contents
 =================
 
    * [LumoSQL Documentation Standards](#lumosql-documentation-standards)
-   * [Table of Contents](#table-of-contents)
    * [Contributions to LumoSQL Documentation are Welcome](#contributions-to-lumosql-documentation-are-welcome)
-   * [LumoSQL Respects Documentation for SQLite, LMDB and More](#lumosql-respects-documentations-for-sqlite-lmdb-and-more)
+   * [LumoSQL Respects Documentation for SQLite, LMDB and More](#lumosql-respects-documentation-for-sqlite-lmdb-and-more)
    * [Text Standards and Tools](#text-standards-and-tools)
    * [Diagram Standards and Tools](#diagram-standards-and-tools)
       * [LumoSQL Diagram Signature](#lumosql-diagram-signature)
       * [Using the LumoSQL Diagram Library](#using-the-lumosql-diagram-library)
+      * [Adding Diagrams](#adding-diagrams)
+      * [Diagram Style Guide](#diagram-style-guide)
    * [Image Standards and Tools](#image-standards-and-tools)
    * [Previewing Markdown before Pushing](#previewing-markdown-before-pushing)
    * [Copyright for LumoSQL Documentation](#copyright-for-lumosql-documentation)
    * [Metadata Header for Text Files](#metadata-header-for-text-files)
    * [Human Languages - 人类语言](#human-languages---人类语言)
    * [Creating and Maintaining Table of Contents](#creating-and-maintaining-table-of-contents)
-   * [Tidying Markdown (if really required)](#tidying-markdown-if-really-required)
+   * [Tidying Markdown (mostly not required)](#tidying-markdown-mostly-not-required)
 
+
+LumoSQL Documentation Standards
+===============================
+
+This chapter covers how LumoSQL documentation should be written and maintained. 
+
+![](./images/lumo-doc-standards-intro.jpg "Image from Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Chinese_books_at_a_library.jpg")
 
 # Contributions to LumoSQL Documentation are Welcome
 
@@ -176,14 +178,15 @@ attribution, and this must be respected.
 
 # Metadata Header for Text Files
 
-The first lines of all LumoSQL documentation files should always be:
+The first lines of all LumoSQL documentation files should always be something like this:
 
 ```
-<!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
-<!-- SPDX-FileCopyrightText: 2020 The LumoSQL Authors -->
-<!-- SPDX-FileType: Documentation -->
+   <!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
+   <!-- SPDX-FileCopyrightText: 2020 The LumoSQL Authors -->
+   <!-- SPDX-ArtifactOfProjectName: LumoSQL -->
+   <!-- SPDX-FileType: Documentation -->
+   <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 ```
-
 
 # Human Languages - 人类语言
 
@@ -214,31 +217,33 @@ and also other formats such as HTML.  However, LumoSQL documentation needs to
 be processed by renderers that are a lot less sophisticated than Pandoc,
 including the Github markup processor. So we can't rely on metadata.
 
-**Pandoc's Markdown output needs to be studied:** Pandoc can 
+**Pandoc's Markdown output is improving but not yet good enough:** Pandoc can 
 read Markdown and output Markdown, including a ToC.  A command such as 
 
 ```pandoc --standalone -f gfm -t gfm --toc -o lumo-output.md -i lumo-input.md```
 
 is supposed to work and probably does, we just haven't seen it yet. Pandoc's Markdown
 output used to be poor, but since version 2.0 is has improved a lot. Pandoc --toc is
-almost certainly the eventual answer.
+hopefully the eventual answer, although as of 2.9 it doesn't seem to work at all, despite 
+the documentation claiming it does.
 
 **We are left with ad-hoc processing solutions for now:**
 
 * Use the Github API: The most practical solution we have for now is the
 [github-markdown-toc](https://github.com/ekalinin/github-markdown-toc) bash
-script. You can get the script at wget
-https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc
-and use it like this:
+script:
 
-	gh-md-toc some-lumosql-document.md > /tmp/toc.md
+```
+    $ https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc
+    $ ./gh-md-toc some-lumosql-document.md > /tmp/toc.md
+```
 
-and then insert the file /tmp/toc.md into the document using your editor. It's
-not a pretty operation but given all the other advantages of Markdown it seems
-a small price to pay. This script can now be found in ```www/bin/gh-md-toc``` .
-Because it uses the Github API (and therefore produces canonical results) it
-needs internet access. After more testing, perhaps we can trust the `--insert` option and then
-include gd-md-toc in the documentation Makefile.
+Then insert the file /tmp/toc.md into the document using your editor. It's not
+a pretty operation but given all the other advantages of Markdown it seems a
+small price to pay. This script can now be found in ```www/bin/gh-md-toc``` .
+It uses the Github API and therefore produces canonical results, so that means
+it needs internet access. After more testing, perhaps we can trust the
+`--insert` option and then include gd-md-toc in the documentation Makefile.
 
 The way API works is made clear in the comments:
 
@@ -246,28 +251,40 @@ The way API works is made clear in the comments:
 	# $ curl -X POST --data '{"text": "Hello world github/linguist#1 **cool**, and #1!"}' https://api.github.com/markdown
 	# <p>Hello world github/linguist#1 <strong>cool</strong>, and #1!</p>'"
 
+gh-md-toc will insert a TOC between these markers:
+
+```
+    <!--ts-->
+    <!--te-->
+```
+
+meaning TOC could be handled in the Makefile, but that requires further thought.
+
 * There are also options for doing Markdown TOC in editors such as vim, for example [vim-markdown-toc](https://github.com/mzlogin/vim-markdown-toc)
 
 * Editor.md, referred to in the "Previewing Markdown Before Pushing" section
 above, will generate a table of contents where it sees the token `[TOC]` and a
 dropdown index TOC menu where it sees `[TOCM`. However since the output is HTML
-not markdown it is not as helpful as it may seem (but it is very beautiful.)
+not markdown it is not so useful to LumoSQL (but it is very beautiful.)
 
-# Tidying Markdown (if really required)
+# Tidying Markdown (mostly not required)
 
 Tidying is about automatically adjusting the whitespace, pagebreaks and general formatting 
-to be neat and consistent. But maybe you don't even need to?  
+to be neat and consistent. But maybe you don't even need to, just write tidy 
+text in the first place. 
 
 If you want to clean up someone else's Markdown, then stop and ask first.
 Automated cleanups and prettiers change hundreds of lines in a file without any
 effect on the output, and that makes a diff impossible to review, effectively
 rebasing it and destroying the history.
 
-If it's your own markdown, it's much better to run prettier before the first
-commit of a file and then again before subsequent commits - or just write clean
-Markdown and you can expect others to respect that.
+The documentation Makefile is not going to include any Markdown tidying because
+of the potential for making things worse. As of version 2.0 Pandoc works better
+for cleaning up markdown but isn't perfect. Parameters to experiment with include:
 
-As of version 2.0 Pandoc works well for cleaning up markdown, that is, specifying
-both ```-f gfm``` and ```-t gfm```.
-
-
+```
+  -t gfm            (triggers a few defaults, including headers in ATX style)
+  --wrap=preserve   (mostly limits changes to making headings ATX style)
+  --columns=85      (stops most links breaking in editors doing syntax highlighting)
+```
+  
