@@ -5,19 +5,21 @@
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
 
-LumoSQL Implementation
-======================
-
-![](./images/lumo-implementation-intro.jpg "Metro Station Construction Futian Shenzhen China, CC license, https://www.flickr.com/photos/dcmaster/36740345496")
-
-
 Table of Contents
 =================
 
+   * [LumoSQL Implementation](#lumosql-implementation)
+   * [Table of Contents](#table-of-contents)
    * [Changes to SQLite](#changes-to-sqlite)
       * [Lockfile/tempfile Pushed to Backend](#lockfiletempfile-pushed-to-backend)
       * [SQLite API Interception Points](#sqlite-api-interception-points)
       * [SQLite Virtual Machine Layer](#sqlite-virtual-machine-layer)
+
+
+LumoSQL Implementation
+======================
+
+![](./images/lumo-implementation-intro.jpg "Metro Station Construction Futian Shenzhen China, CC license, https://www.flickr.com/photos/dcmaster/36740345496")
 
 
 # Changes to SQLite

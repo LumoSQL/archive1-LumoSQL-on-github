@@ -4,16 +4,12 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
-LumoSQL Architecture
-====================
-
-![](./images/lumo-architecture-intro.jpg "Shanghai Skyline from Pxfuel, CC0 license, https://www.pxfuel.com/en/free-photo-oyvbv")
-
 
 Table of Contents
 =================
 
    * [LumoSQL Architecture](#lumosql-architecture)
+   * [Table of Contents](#table-of-contents)
    * [Online Database Servers](#online-database-servers)
    * [SQLite as an Embedded Database](#sqlite-as-an-embedded-database)
    * [LumoSQL Architecture](#lumosql-architecture-1)
@@ -21,15 +17,21 @@ Table of Contents
       * [WALs in SQLite](#wals-in-sqlite)
       * [Single-level Store](#single-level-store)
 
+LumoSQL Architecture
+====================
+
+![](./images/lumo-architecture-intro.jpg "Shanghai Skyline from Pxfuel, CC0 license, https://www.pxfuel.com/en/free-photo-oyvbv")
+
+
 # Online Database Servers
 
-![](./images/lumo-architecture-online-db-server.svg "What an online server database looks like") -->
+![](./images/lumo-architecture-online-db-server.svg "What an online server database looks like")
 
 An online database server is one where clients connect to the server over a
 network. Although all databases use one of the variants of the SQL language,
 the means of connection is specific to each database. 
 
-![](./images/lumo-architecture-online-db-server-scale.svg "How an online database server scales") -->
+![](./images/lumo-architecture-online-db-server-scale.svg "How an online database server scales")
 
 The most obvious way to scale an online database is to add more RAM, CPU and storage to a single server. This way all code runs in a single address space and is called "Scaling Up". The alternative is to add more servers, and distribute queries between them. This is called "Scale Out".
 
