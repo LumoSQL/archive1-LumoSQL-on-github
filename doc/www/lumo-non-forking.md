@@ -66,19 +66,24 @@ values; in general, the documentation for the corresponding version control
 module defines what else is present in the `upstream.conf` file; this document
 describes briefly the configuration for the above two modules.
 
-Optionally, another key can be present, `compare`, which indicates what
-method to use to compare two different version numbers; if omitted, it
-default to `version` which compares "normal" software version numbers:
-sequences of digits compare numerically, and sequences of letters
-compare alphabetically, with the exception that a suffix "-alpha" or
-"-beta" cause the version to be considered before the string without
-such suffix: examples of version numbers in order are:
+Optionally, two other keys can be present: `compare` and `subtree`.
+
+The `compare` key indicates what method to use to compare two different
+version numbers; if omitted, it default to `version` which compares
+"normal" software version numbers: sequences of digits compare
+numerically, and sequences of letters compare alphabetically, with the
+exception that a suffix "-alpha" or "-beta" cause the version to be
+considered before the string without such suffix: examples of version
+numbers in order are:
 
 - `0.9a` < `0.9z` < `0.10` < `1.0` < `1.1-alpha` < `1.1-beta` < `1.1` < `1.1a`
 
 We may extend this definition to deal with version numbering schemes
 used by normal software, however it will never work correctly with the
 version numbers used by INTERCAL compilers.
+
+The `subtree` key indicates a directory inside the sources to use instead
+of the top level.
 
 ## git
 

@@ -20,12 +20,14 @@ use NotFork::Get qw(set_input set_cache set_output all_names);
 
 Getopt::Long::Configure("bundling");
 
-my ($version, $commit, $query, $help, $verbose, @names);
+my ($version, $commit, $query, $help, $verbose, $noupdate, @names);
 my @options = (
     'c|commit=s'       => \$commit,
     'h|?|help'         => \$help,
     'i|input=s'        => sub { set_input($_[1]) },
     'k|cache=s'        => sub { set_cache($_[1]) },
+    'n|no-update'      => \$noupdate,
+    'update'           => sub { $noupdate = 0 },
     'o|output=s'       => sub { set_output($_[1]) },
     'q|query'          => \$query,
     'verbose=i'        => \$verbose,
@@ -63,7 +65,7 @@ for my $np (@names) {
     my ($name, $version, $commit) = @$np;
     my $nfobj = new NotFork::Get($name, $version, $commit);
     $nfobj->verbose($verbose);
-    $nfobj->get();
+    $nfobj->get($noupdate);
     if ($query) {
 	$nfobj->info(\*STDOUT);
     } else {
@@ -96,6 +98,15 @@ sub usage {
     print $fh "-q --query\n";
     print $fh "    Obtain upstream sources but do not extract them and instead\n";
     print $fh "    show information about them and which version would be selected\n";
+    print $fh "--verbose=LEVEL\n";
+    print $fh "    Ask to show more information about the processing; default is 0\n";
+    print $fh "    which doesn't say much; 1 adds messages about network operations,\n";
+    print $fh "    cache maintenance and files which have changed; 2 also lists files\n";
+    print $fh "    which have not changed\n";
+    print $fh "--update --no-update\n";
+    print $fh "    --no-update skips updates from upstream if there is already a cached\n";
+    print $fh "    version; --update is the default action of checking for upstream\n";
+    print $fh "    updates before extracting the sources\n";
     print $fh "\n";
     print $fh "-c/-v needs to be specified before each NAME, after a NAME has\n";
     print $fh "been processed, these options revert to the default\n";

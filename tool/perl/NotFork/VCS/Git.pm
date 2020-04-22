@@ -45,13 +45,13 @@ sub cache_index {
 }
 
 sub get {
-    @_ == 2 or croak "Usage: GIT->get(DIR)";
-    my ($obj, $dir) = @_;
+    @_ == 2 || @_ == 3 or croak "Usage: GIT->get(DIR [, SKIP_UPDATE?])";
+    my ($obj, $dir, $noupdate) = @_;
     my $git;
     my $verbose = $obj->{verbose};
     if (-d "$dir/.git") {
 	# assume we have already cloned
-	$verbose and print "Updating $obj->{name} in $dir\n";
+	$verbose && ! $noupdate and print "Updating $obj->{name} in $dir\n";
 	$git = Git->repository(WorkingCopy => $dir);
 	my $url = $git->command_oneline('config', '--get', 'remote.origin.url');
 	$url eq $obj->{repos}
@@ -61,10 +61,12 @@ sub get {
 	# instead of always running it and ignoring the error if it wasn't
 	# necessary
 	eval { $git->command(['switch', '-q', '-'], STDERR => 0 ); };
-	eval { $git->command('pull'); };
-	if ($@) {
-	    # Git module is rather buggy...
-	    $@ =~ /command returned error: 141/ or die $@;
+	if (! $noupdate) {
+	    eval { $git->command('pull'); };
+	    if ($@) {
+		# Git module is rather buggy...
+		$@ =~ /command returned error: 141/ or die $@;
+	    }
 	}
     } else {
 	# need to clone into $dir
@@ -82,16 +84,23 @@ sub get {
 
 # calls a function for each file in the repository
 sub list_files {
-    @_ == 2 or croak "Usage: GIT->list_files(CALLBACK)";
-    my ($obj, $call) = @_;
+    @_ == 3 or croak "Usage: GIT->list_files(SUBTREE, CALLBACK)";
+    my ($obj, $subtree, $call) = @_;
     exists $obj->{git} or croak "Need to call GIT->get before list_files";
     my $git = $obj->{git};
     my $cache = $obj->{cache};
+    my $sl = defined $subtree ? length $subtree : 0;
     my ($fh, $c) = $git->command_output_pipe('ls-files', '-z');
     local $/ = "\0";
     while (defined (my $rl = <$fh>)) {
 	chomp $rl;
-	$call->($rl, "$cache/$rl");
+	my $sf = $rl;
+	if (defined $subtree) {
+	    substr($sf, 0, $sl) ne $subtree and next;
+	    substr($sf, $sl, 1) ne '/' and next;
+	    substr($sf, 0, $sl + 1) = '';
+	}
+	$call->($sf, "$cache/$rl");
     }
     $git->command_close_pipe($fh, $c);
 }

@@ -410,8 +410,8 @@ sub _unlock {
 }
 
 sub get {
-    @_ == 1 or croak "Usage: NOTFORK->get";
-    my ($obj) = @_;
+    @_ == 1 || @_ == 2 or croak "Usage: NOTFORK->get [(SKIP_UPDATE?)]";
+    my ($obj, $noupdate) = @_;
     my $vcs = $obj->{vcs};
     _check_cache_dir();
     make_path($cache, { verbose => 0, mode => 0700 });
@@ -432,6 +432,7 @@ sub get {
 	# know we aren't going to truncate the file created by somebody else
 	$vlfh = _lock('>', "$cd/index", "cache for $obj->{cache_index}");
 	print $vlfh "$obj->{cache_index}\n" or die "$cd/index $!\n";
+	$noupdate = undef;
     }
     _unlock($clfh);
     # somebody else could lock the cache directory at this point, but
@@ -441,7 +442,7 @@ sub get {
     $obj->{vcslock} = $vlfh;
     my $top = "$cd/vcs";
     $obj->{vcsbase} = $top;
-    $vcs->get($top);
+    $vcs->get($top, $noupdate);
     $obj->{has_data} = 1;
     if (defined $obj->{version}) {
 	$vcs->set_version($obj->{version});
@@ -513,7 +514,7 @@ sub install {
 	    # files and retry.
 	    _load_filelist($destlist, \%oldlist);
 	    my $ok = 1;
-	    for my $ofp (keys %oldlist) {
+	    for my $ofp (sort keys %oldlist) {
 		lstat "$dest/$ofp" or next;
 		my ($_src, $type, $size, $data) = @{$oldlist{$ofp}};
 		if ($type eq 'f') {
@@ -530,6 +531,7 @@ sub install {
 		# file did not match...
 		warn "Will not overwrite or delete $dest\n";
 		$ok = 0;
+		last;
 	    }
 	    $ok or exit 1;
 	}
@@ -537,7 +539,8 @@ sub install {
     # OK, either they passed us a new directory, or they passed us something
     # which we created and they didn't modify except for building objects;
     my $vcs = $obj->{vcs};
-    # apply modifications as requested in a temporary cache area
+    # apply modifications as requested in a temporary cache area; we remove
+    # any old version and start again, so things don't get confused
     if (exists $obj->{mod}) {
 	$verbose and print "Applying source modifications\n";
 	my $cd = "$obj->{cache}/mods";
@@ -581,7 +584,7 @@ COPY_FILE:
 	my $dp = "$dest/$fp";
 	if (lstat $dp) {
 	    if ($type eq 'f') {
-		-f _ && (lstat _)[7] == $size && _filehash($src, '') eq $data
+		-f _ && (lstat _)[7] == $size && _filehash($dp, '') eq $data
 		    and next COPY_FILE;
 	    } elsif (-l _) {
 		my $rl = readlink($dp);
@@ -673,15 +676,24 @@ sub _filehash {
 sub _make_filelist {
     my ($obj, $filelist) = @_;
     my $vcs = $obj->{vcs};
-    $vcs->list_files(sub { _store_file($filelist, @_); });
+    my $subtree = $obj->{kw}{subtree};
+    $vcs->list_files($subtree, sub { _store_file($filelist, @_); });
 }
 
 # helper function for a VCS to list files using "find"; if all files to be
-# found are inside $base then their list_files can just call this one
-# with ($base, \@dir_exclude, \@file_exclude, $callback)
+# found are inside $top/$subtree and we are looking for file names relative
+# to $base then their list_files can just call this one with arguments
+# ($top, $subtree, \@dir_exclude, \@file_exclude, $callback)
+# -- the excludes are relative to the search root i.e. $top/$subtree
 sub list_files {
-    @_ == 4 or croak "Usage: list_files(DIR, DIR_EXCLUDE, FILE_EXCLUDE, CALLBACK)";
-    my ($base, $dir_excl, $file_excl, $code) = @_;
+    @_ == 5 or croak "Usage: list_files(TOP, SUBTREE, DIR_EXCLUDE, FILE_EXCLUDE, CALLBACK)";
+    my ($top, $subtree, $dir_excl, $file_excl, $code) = @_;
+    my $base = $top;
+    my $prefix = '';
+    if (defined $subtree) {
+	$base .= '/' . $subtree;
+	$prefix = $subtree . '/';
+    }
     my $bl = length $base;
     find({
 	preprocess => sub {
@@ -714,7 +726,7 @@ sub list_files {
 	    substr($idx, 0, $bl) eq $base
 		&& substr($idx, $bl, 1) eq '/'
 		    and substr($idx, 0, $bl + 1) = '';
-	    $code->($idx, $name);
+	    $code->($prefix . $idx, $name);
 	},
 	no_chdir => 1,
     }, $base);
