@@ -48,8 +48,9 @@ only condition which can be tested is whether the version number is in
 a specified range, using the syntax:
 
 ```
-ifver \[>= FIRST\_VERSION\] \[<= LAST\_VERSION\]
+if version \[>\[=\] FIRST\_VERSION\] \[<\[=\] LAST\_VERSION\]
 ...
+[else ...]
 endif
 ```
 
@@ -65,14 +66,41 @@ values; in general, the documentation for the corresponding version control
 module defines what else is present in the `upstream.conf` file; this document
 describes briefly the configuration for the above two modules.
 
+Optionally, two other keys can be present: `compare` and `subtree`.
+
+The `compare` key indicates what method to use to compare two different
+version numbers; if omitted, it default to `version` which compares
+"normal" software version numbers: sequences of digits compare
+numerically, and sequences of letters compare alphabetically, with the
+exception that a suffix "-alpha" or "-beta" cause the version to be
+considered before the string without such suffix: examples of version
+numbers in order are:
+
+- `0.9a` < `0.9z` < `0.10` < `1.0` < `1.1-alpha` < `1.1-beta` < `1.1` < `1.1a`
+
+We may extend this definition to deal with version numbering schemes
+used by normal software, however it will never work correctly with the
+version numbers used by INTERCAL compilers.
+
+The `subtree` key indicates a directory inside the sources to use instead
+of the top level.
+
 ## git
 
 The upstream sources are available via a public git repository; the following
 keys need to be present:
 
 - `repos` (or `repository`) is a valid argument to the `git clone` command.
+- optionally, `branch` to select a branch within the repository.
+- optionally, `version` to convert a version string to a tag: the value is
+either a single string which is prefixed to the version number, or two
+strings separated by space, the first one is prefixed and the second appended.
 - optionally, `user` and `password` can be specified to obtain access to the
 repository.
+
+A software version can be identified by a generic git commit ID, or by a
+version string similar to the one described for the `compare` key, if the
+repository offers that as an option.
 
 ## download
 
@@ -80,17 +108,8 @@ The upstream sources are released as published versions and downloaded
 directly; the following keys need to be present:
 
 - `uri` indicates where to obtain these sources, and can contain the special
-symbol `%V` to indicate the version
-- `compare` if present indicates what method to use to compare
-two different version numbers; if omitted, it default to `version` which
-compares sequences of letters alphabetically and sequences of digits
-numerically (so for example `v10` is before `z` but after `v9`);
-additionally, a suffix "-alpha" or "-beta" can be present and these
-are considered older than the version number without suffix; this
-handles most "normal" version numbers although it does not work with
-weird versioning schemes like the ones used by INTERCAL compilers, for
-example. At the time of writing, this is the only comparison method
-provided.
+symbol `%V` to indicate the version or `%%` to indicate just a percentage
+sign (`%`)
 
 TBC - we also need to say how to unpack the sources etc
 
@@ -101,7 +120,7 @@ directory; each file has a name ending in `.mod` and they are processed
 in lexycographic order according to the "C" locale (rather than the current
 locale, to guarantee consistent ordering). Note that only files are
 considered; if the configuration directory contains subdirectories, these
-are ignored.
+are ignored, but files in there can be referenced by the `.mod` files.
 
 The contents of each modification definition file are an initial part with
 format similar to the Upstream definition file described above ("key = value"
@@ -111,16 +130,16 @@ part", is interpreted based on information from the initial part.
 
 The following keys are currently understood:
 
-- `version`: the value is two strings separated by whitespace, indicating
-a minimum and maximum version number to which this file applies; the
-first string can have the special value "-" to indicate the earliest
-possible version; the second string can be omitted to indicate the latest
-possible version. One use of this key is to indicate that a modification
-is only necessary up to a particular version, because for example that
-modification has been accepted by upstream and is no longer necessary.
-Another use of this key is to identify versions in which substantial
-upstream changes make it difficult to specify a modification which works
-for every possible version.
+- `version`: the value has the same format as the condition on the
+`if version` specification in the Upstream definition file: one or two
+strings separated by whitespace, one of the strings starting with `<`
+or `<=` and the other starting with `>` or `>=` to indicate a maximum,
+minimum or range of versions.  One use of this key is to indicate that
+a modification is only necessary up to a particular version, because
+for example that modification has been accepted by upstream and is
+no longer necessary.  Another use of this key is to identify versions
+in which substantial upstream changes make it difficult to specify a
+modification which works for every possible version.
 - `method`; the method used to specify the modification; currently, the
 value can be either `patch`, indicating that the final part of the file is
 in a format suitable for passing as standard input to the "patch" program;
@@ -130,15 +149,15 @@ lines with format "old-file = new-file", where both are relative paths,
 the first relative to the root of the extracted upstream sources; the
 second path is relative to the configuration directory.
 
-Other keys are interpreted depending on the value of `method`; there
-are no other keys for the `replace` method, and the following for the
-`patch` method:
+Other keys are interpreted depending on the value of `method`; there are
+currently no other keys for the `replace` method, and the following for
+the `patch` method:
 
-- `options`: options to pass to the "patch" program (default: "-sp1")
+- `options`: options to pass to the "patch" program (default: "-Nsp1")
 
 # Example Configuration directory <a name="example"></a>
 
-Obtaining SQLite sources and replacing btree.ci and btreeInt.h with the ones
+Obtaining SQLite sources and replacing btree.c and btreeInt.h with the ones
 from sqlightning, and applying a patch to vdbeaux.c:
 
 File `upstream.conf`:
@@ -184,30 +203,74 @@ which tracks upstream updates from SQLite.
 The `tool` directory contain a script, `notfork` which runs the notforking
 mechanism on a directory.  Usage is:
 
-tool/notfork CONFIG\_DIRECTORY OUTPUT\_DIRECTORY [-v VERSION | -c COMMIT\_ID]
+tool/notfork \[OPTIONS\] \[NAME\]...
 
-where:
+where the following options are available:
 
-- CONFIG\_DIRECTORY is a notforking configuration directory as specified
-in this document
-- OUTPUT\_DIRECTORY is the place where the modified upstream sources will
+- `-i`INPUT\_DIRECTORY (or `--input=`INPUT\_DIRECTORY)
+is a notforking configuration directory as specified
+in this document; default is `notfork` within the current directory
+- `-o`OUTPUT\_DIRECTORY (or `--output=`OUTPUT\_DIRECTORY)
+is the place where the modified upstream sources will
 be stored, and it can be either a directory created by a previous run of
-this tool,  or a new directory (missing or empty directory)
-- VERSION: ask for the specified VERSION
-- COMMIT\_ID: for version control modules which support it, obtain a
-specified commit ID rather than a published version; this is
-incompatible with -v
+this tool, or a new directory (missing or empty directory); default is
+`sources` within the current directory; note that existing sources in
+this directory may be overwritten or deleted by the tool
+- `-c`CACHE\_DIRECTORY (or `--cache=CACHE\_DIRECTORY`)
+is a place used by the program to keep downloads
+and working copies; it must be either a new (missing or empty) directory
+or a directory created by a orevious run of the tool; default is
+`.cache/LumoSQL/notfork` inside the user's home directory
+- `-v`VERSION (or `--version=`VERSION) will retrieve the specified VERSION
+of the next NAME (this option must be repeated for each NAME, in the
+assumption that different projects have different version numbering)
+- `-c`COMMIT\_ID (or `--commit=`COMMIT\_ID) is similar to `-v` but
+only works for version control modules which support commit identifiers,
+and will retrieve the corresponding commit for the next NAME, whether
+or not it has an official version number; this is incompatible with `-v`
+- `-q` (or `--query`) completes all necessary downloads but do not
+extract the sources and apply modifications, instead it shows some
+information about what has been downloaded, including a version number
+if available.
 
-if neither VERSION nor COMMIT\_ID is specified, the default is the latest
-available version, if it can be determined
+If neither VERSION nor COMMIT\_ID is specified, the default is the latest
+available version, if it can be determined, or else an error message.
+If more than one NAME is specified, VERSION and COMMIT\_ID need to
+be provided before each NAME: the assumption is that different
+software projects use different version numbers.
 
-The tool will obtain the upstream sources, make a copy of the files which
-are going to be modified, and attempt to apply all the required modifications;
-if that succeeds, OUTPUT\_DIRECTORY/sources will contain the modified sources
-ready to use; if that fails, an error message will explain the problem and
-if possible suggest corrective action (for example, if `patch` determines
-that a file has changed too much that it cannot figure out how to apply a
-patch supplied, the error message will indicate this and suggest to obtain
-a new patch for that version of the sources).
+If one or more NAMEs are specified, the tool will obtain the upstream
+sources as described in INPUT\_DIRECTORY/NAME for each of the NAMEs
+specified, and attempt to apply all the required modifications; if that
+succeeds, OUTPUT\_DIRECTORY/NAME will contain the modified sources ready
+to use; if that fails, an error message will explain the problem and if
+possible suggest corrective action (for example, if `patch` determines
+that a file has changed too much that it cannot figure out how to apply
+a patch supplied, the error message will indicate this and suggest to
+obtain a new patch for that version of the sources).
 
+If no NAMEs are specified, the tool, will process all subdirectories
+of INPUT\_DIRECTORY. In this special case, any VERSION or COMMIT\_ID
+specified will apply to all rather than just the name immediately
+following them.
+
+The tool looks for a configuration file located at
+`$HOME/.config/LumoSQL/notfork.conf` to read defaults; if the file exists
+and is readable, any non-comment, non-empty lines are processed before
+any command-line options with an implicit `--` prepended and with spaces
+around the first `=` removed, if present: so for example a file containing:
+
+```
+cache = /var/cache/LumoSQL/notfork
+```
+
+would change the default cache from `.cache/LumoSQL/notfork` in the user's
+home directory to the above directory inside `/var/cache`; it can still
+be overridden by specifying `-c`/`--cache` on the command line.
+
+The program will refuse to overwrite the output directory if it cannot
+determine that it has been created by a previous run and that files have
+not been modified since; in this case, delete the output directory
+completely, or rename it to something else, and run the program again.
+There is currently no option to override this safety feature.
 
