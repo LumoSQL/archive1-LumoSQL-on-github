@@ -27,7 +27,15 @@ upstream changes.
 
 The mechanism is similar to applying patches; however patches need to be
 constantly updated as upstream sources changes, and the notforking mechanism
-helps with that.
+helps with that. The overall effect is something like git cherry-picking, 
+except that it also copes with:
+* human-style software versioning
+* code that is not maintained in the same git repo
+* code that is not maintained in git, but is just patches or in some other VCS
+* custom processing that is needed to be run for a specific patch
+* failing with an error asking for human intervention to solve differences with upstream
+
+etc.
 
 Each project tracked by notforking needs to define what to track, and what
 changes to apply. This is done by providing a number of files in a directory;
@@ -40,7 +48,7 @@ upstream sources are used unchanged).
 The file `upstream.conf` has a simple "key = value" format with one such
 key, value pair per line: blank lines and lines whose first nonblank
 character is a hash (`#`) are ignored; long lines can be split into multiple
-lines by ending a line with a backslash meaning conitnuation into the
+lines by ending a line with a backslash meaning continuation into the
 next line.
 
 There is a special line format to indicate conditionals; currently, the
