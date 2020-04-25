@@ -153,7 +153,7 @@ sub new {
     _check_input_name($name);
     my $obj = bless {
 	name    => $name,
-	verbose => 0,
+	verbose => 1,
     }, $class;
     defined $version and $obj->version($version);
     defined $commit and $obj->commit($commit);
@@ -365,7 +365,7 @@ sub _convert_version {
 }
 
 sub verbose {
-    @_ == 1 || @_ == 2 or croak "Usage: NOTFORK->verbose [(VERBOSE?)]";
+    @_ == 1 || @_ == 2 or croak "Usage: NOTFORK->verbose [(LEVEL)]";
     my $obj = shift;
     @_ or return $obj->{verbose};
     $obj->{verbose} = shift(@_) || 0;
@@ -414,7 +414,8 @@ sub get {
     my ($obj, $noupdate) = @_;
     my $vcs = $obj->{vcs};
     _check_cache_dir();
-    make_path($cache, { verbose => 0, mode => 0700 });
+    my $vl = $obj->{verbose} && $obj->{verbose} > 2;
+    make_path($cache, { verbose => $vl, mode => 0700 });
     my $clfh = _lock('>>', "$cache/.lock", 'cache directory');
     my $cd = $obj->{cache} = "$cache/$obj->{hash}";
     my $vlfh;
@@ -426,7 +427,7 @@ sub get {
 	$index eq $vcs->cache_index
 	    or die "Invalid cache directory $cd\n";
     } else {
-	make_path($cd, { verbose => 0, mode => 0700 });
+	make_path($cd, { verbose => $vl, mode => 0700 });
 	# the next _lock() is the only thing which can create the index file,
 	# and we are inside another lock, so we can safely use ">" and we
 	# know we aren't going to truncate the file created by somebody else
@@ -485,18 +486,18 @@ sub install {
     @_ == 1 or croak "Usage: NOTFORK->install";
     my ($obj) = @_;
     exists $obj->{has_data} or croak "Need to call get() before install()";
-    my $verbose = $obj->{verbose};
+    my $verbose = $obj->{verbose} || 0;
     my %filelist = ();
     _make_filelist($obj, \%filelist);
     my %oldlist = ();
     my $index = "$output/.index";
-    make_path($index, { verbose => 0, mode => 0700 });
+    make_path($index, { verbose => $verbose > 2, mode => 0700 });
     my $dest = "$output/$obj->{name}";
     $verbose and print "Installing $obj->{name} into $dest\n";
     my $destlist = "$index/$obj->{name}";
     my $lock = _lock('>', "$index/.lock.$obj->{name}", "output directory for $obj->{name}");
     if (stat $dest) {
-	$verbose and print "Checking existing output directory $dest\n";
+	$verbose > 1 and print "Checking existing output directory $dest\n";
 	-d _ or die "$dest exists but it is not a directory\n";
 	opendir(my $dh, $dest) or die "$dest: $!\n";
 	my $has_entries = 0;
@@ -542,7 +543,7 @@ sub install {
     # apply modifications as requested in a temporary cache area; we remove
     # any old version and start again, so things don't get confused
     if (exists $obj->{mod}) {
-	$verbose and print "Applying source modifications\n";
+	$verbose > 1 and print "Applying source modifications\n";
 	my $cd = "$obj->{cache}/mods";
 	-d $cd and remove_tree($cd);
 	make_path($cd);
@@ -563,7 +564,7 @@ sub install {
     rename ($destlist, "$destlist.old");
     unlink $destlist; # in case the above rename failed
     _write_filelist("$destlist.new", \%filelist);
-    $verbose and print "Copying files...\n";
+    $verbose > 1 and print "Copying files...\n";
 COPY_FILE:
     for my $fp (sort keys %filelist) {
 	my ($src, $type, $size, $data) = @{$filelist{$fp}};
@@ -573,7 +574,7 @@ COPY_FILE:
 	if (exists $oldlist{$fp}) {
 	    my ($osrc, $otype, $osize, $odata) = @{delete $oldlist{$fp}};
 	    if ($otype eq $type && $osize == $size && $odata eq $data) {
-		$verbose && $verbose > 1 and print "==== $fp\n";
+		$verbose > 2 and print "==== $fp\n";
 		next COPY_FILE;
 	    }
 	}
@@ -591,20 +592,20 @@ COPY_FILE:
 		defined $rl && $rl eq $data
 		    and next COPY_FILE;
 	    }
-	    $verbose and print "(rm) $fp\n";
+	    $verbose > 1 and print "(rm) $fp\n";
 	    unlink $dp;
 	}
 	# copy this file
 	my $dir = '.';
 	if ($dp =~ m!^(.*)/[^/]*$!) {
 	    $dir = $1;
-	    make_path($dir, { verbose => 0, mode => 0755 });
+	    make_path($dir, { verbose => $verbose > 2, mode => 0755 });
 	}
 	if ($type eq 'f') {
-	    $verbose and print "(cp) $fp\n";
+	    $verbose > 1 and print "(cp) $fp\n";
 	    cp($src, $dp) or die "copy($src, $dp): $!\n";
 	} else {
-	    $verbose and print "(ln) $fp\n";
+	    $verbose > 1 and print "(ln) $fp\n";
 	    symlink($data, $dp);
 	}
     }
@@ -613,7 +614,7 @@ COPY_FILE:
     # %oldlist can go
     for my $fp (keys %oldlist) {
 	my $dp = "$dest/$fp";
-	$verbose and print "(rm) $fp\n";
+	$verbose > 1 and print "(rm) $fp\n";
 	unlink $dp;
     }
     # all done... rename new filelist and delete old

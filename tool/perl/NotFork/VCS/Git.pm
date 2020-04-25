@@ -13,7 +13,7 @@ sub new {
     my $obj = bless {
 	repos   => $repos,
 	name    => $name,
-	verbose => 0,
+	verbose => 1,
     }, $class;
     exists $options->{user} and $obj->{user} = $options->{user};
     exists $options->{password} and $obj->{password} = $options->{password};
@@ -30,7 +30,7 @@ sub new {
 }
 
 sub verbose {
-    @_ == 1 || @_ == 2 or croak "Usage: GIT->verbose [(VERBOSE?)]";
+    @_ == 1 || @_ == 2 or croak "Usage: GIT->verbose [(LEVEL)]";
     my $obj = shift;
     @_ or return $obj->{verbose};
     $obj->{verbose} = shift(@_) || 0;
@@ -51,7 +51,7 @@ sub get {
     my $verbose = $obj->{verbose};
     if (-d "$dir/.git") {
 	# assume we have already cloned
-	$verbose && ! $noupdate and print "Updating $obj->{name} in $dir\n";
+	$verbose > 1 && ! $noupdate and print "Updating $obj->{name} in $dir\n";
 	$git = Git->repository(WorkingCopy => $dir);
 	my $url = $git->command_oneline('config', '--get', 'remote.origin.url');
 	$url eq $obj->{repos}
@@ -62,17 +62,20 @@ sub get {
 	# necessary
 	eval { $git->command(['switch', '-q', '-'], STDERR => 0 ); };
 	if (! $noupdate) {
-	    eval { $git->command('pull'); };
+	    my @q = $verbose > 2 ? ('-v') : ($verbose == 2 ? () : ('-q'));
+	    eval { $git->command('pull', @q); };
 	    if ($@) {
-		# Git module is rather buggy...
+		# Git module is rather buggy... 141 is a SIGCHLD rewritten wrongly
 		$@ =~ /command returned error: 141/ or die $@;
 	    }
 	}
     } else {
 	# need to clone into $dir
-	$verbose and print "Cloning $obj->{name}: $obj->{repos} --> $dir\n";
+	$verbose > 1 and print "Cloning $obj->{name}: $obj->{repos} --> $dir\n";
 	my @args;
 	exists $obj->{branch} and push @args, ('-b', $obj->{branch});
+	$verbose > 2 and push @args, '-v';
+	$verbose < 2 and push @args, '-q';
 	# XXX user/password?
 	Git::command('clone', @args, $obj->{repos}, $dir);
 	$git = Git->repository(WorkingCopy => $dir);
