@@ -9,14 +9,15 @@ Table of Contents
 =================
 
    * [Codebases Relevant to LumoSQL](#codebases-relevant-to-lumosql)
-   * [Table of Contents](#table-of-contents)
    * [What is a Relevant Codebase?](#what-is-a-relevant-codebase)
    * [Useful Dead SQLite Forks](#useful-dead-sqlite-forks)
-   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
-   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
+   * [Oracle BDB and Oracle BDB-SQL Codebases](#oracle-bdb-and-oracle-bdb-sql-codebases)
+   * [Distributed or Clustered Codebases](#distributed-or-clustered-codebases)
+   * [Code to Potentially Include in LumoSQL](#code-to-potentially-include-in-lumosql)
+   * [List of On-disk File Format-related Knowledge](#list-of-on-disk-file-format-related-knowledge)
+   * [List of Relevant Benchmarking and Test Knowledge](#list-of-relevant-benchmarking-and-test-knowledge)
    * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
    * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
-
 
 Codebases Relevant to LumoSQL
 =============================
@@ -34,15 +35,14 @@ There are three dimensions to codebases relevant to LumoSQL:
 3. Code that supports the development of LumoSQL such as testing, benchmarking or analysing relevant codebases
 
 This is a discussion document, describing our findings as we look at hundreds
-of thousands of lines of other people's code. There is a index of all relevant
-codebases we have considered called [Prior Art](./lumo-prior-art.md). Not
-everything listed there as prior art is in this document.
+of thousands of lines of other people's code. In addition there is the [Full Knowledgebase Relevant to LumoSQL](./lumo-relevant-knowledgebase.md) .
+There is a lot more in the Knowledgebase than there is in this more detailed document.
 
-As to what actually end up implementing, that is in [LumoSQL Implementation](./lumo-implementation.md).
+As to what we are implementing in LumoSQL, that is in [LumoSQL Implementation](./lumo-implementation.md).
 
 # Useful Dead SQLite Forks
 
-Code becomes unmaintained for many reasons, and some interesting code is definitely dead. We have considered the following codebases:
+Code becomes unmaintained for many reasons, and some interesting code is definitely dead. We have considered the following codebases.
 
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
@@ -51,24 +51,68 @@ Code becomes unmaintained for many reasons, and some interesting code is definit
 | [libkvstore](https://github.com/btrask/libkvstore) | 2016 | The backend library used by SQLHeavy |
 | [SQLite 4](https://sqlite.org/src4/tree?ci=trunk) | 2014 | Abandoned new version of SQLite with improved backend support and other features |
 
-```libkvstore``` is after the style of what we are implementing at the API interception point in ```backend.c```. 
+The library ```libkvstore``` is after the style of what we are implementing at the API interception point in ```backend.c```, and the author remains active in this general area.
 
-SQLHeavy never got beyond prototype stage it did support multiple K-V stores. 
+SQLHeavy never got beyond prototype stage but it did support multiple K-V stores. Despite looking at a great deal of code we never noticed SQLHeavy until we had already done our own work to revive sqlightning. This is a reminder that we may still be missing important existing contributions.
 
-The defunct version 4 of SQLite intended to implement pluggable storage engines, the way LumoSQL aims to do.
+The defunct version 4 of SQLite intended to implement [pluggable storage engines](https://sqlite.org/src4/doc/trunk/www/storage.wiki), to similar effect
+to LumoSQL. The intention was that "Transaction commit and rollback is handled
+by the storage engine", meaning that SQLite4 was to be quite conservative technically, not using 
+MVCC-compliant K-V stores, and still using Write-Ahead Logs.
 
+# Oracle BDB and Oracle BDB-SQL Codebases
+
+| Project | Last modified | Description   |
+| ------------- | ------------- | --------|
 | [Sleepycat/Oracle BDB](https://fossies.org/linux/misc/db-18.1.32.tar.gz) | current | The original ubiquitous Unix K-V store, disused in open source since Oracle's 2013 license change; the API template for most of the k-v btree stores around. Now includes many additional features including full MVCC transactions, networking and replication. This link is a mirror of code from download.oracle.com, which requires a login | 
 | [Sleepycat/Oracle BDB-SQL](https://fossies.org/linux/misc/db-18.1.32.tar.gz) | current | Port of SQLite to the Sleepycat/Oracle transactional bdb K-V store. As of 5th March 2020 this mirror is identical to Oracle's login-protected tarball for db 18.1.32 | 
+
+# Distributed or Clustered Codebases
+
+The following four projects are widely-varying examples of how SQLite data can
+be distributed, whether across just a few local nodes or across a much higher
+number of internet-connected nodes.
+
+| Project | Last modified | Description   |
+| ------------- | ------------- | --------|
 | [rqlite](https://github.com/rqlite/rqlite) | current | Distributed database with networking and Raft consensus on top of SQLite nodes |
 | [Bedrock](https://github.com/Expensify/Bedrock) | current | WAN-replicated blockchain multimaster database built on SQLite. Has MySQL emulation |
-| [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
 | [ActorDB](https://github.com/biokoda/actordb) | current | SQLite with a data sharding/distribution system across clustered nodes. Each node stores data in LMDB, which is connected to SQLite at the SQLite WAL layer |
 | [WAL-G](https://github.com/wal-g/wal-g) | current | Backup/replication tool that intercepts the WAL journal log for each of Postgres, Mysql, MonogoDB and Redis |
+
+Unlike all other solutions we have found, rqlite builds its replication on top of SQLite nodes rather than underneath the SQLite storage API layer.
+
+ActorDB uses LMDB but still has a WAL.
+
+WAL-G illustrates a useful side-effect of having a WAL, in that it can be used as a list of transactions for archival as well as replay reasons. A non-WAL storage databases such as LMDB can also generate transaction logs for these sorts of purpose, but they aren't for replay reasons. 
+
+Oracle BDB-SQL discussed in the previous section also has replication. 
+
+| [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
+
+# Code to Potentially Include in LumoSQL
+
+| Project | Last modified | Description   |
+| ------------- | ------------- | --------|
 | [sqlite3odbc](https://github.com/gdev2018/sqlite3odbc) | current | ODBC driver for SQLite by [Christian Werner](http://www.ch-werner.de/sqliteodbc/) as used by many projects including LibreOffice |
+
+SQLite3ODBC is a wrapper around the whole of the SQLite library. None of the
+LumoSQL API interception points can be used for this, nevertheless, ODBC is an
+important cross-platform standard heavily used on Windows and IBM's operating
+systems.
+
 | [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)| current | Geospatial GIS extension to SQLite, similar to PostGIS |
+
+GIS features are a vertical use case, but one that is very popular and
+widely-used. PostGIS would very likely have been merged into PostgreSQL long
+ago, except for a difference in licensing. Spatialite is offered under the MPL
+license (among others) and so does not pose any such problem being included
+with LumoSQL. LumoSQL needs to consider packaging Spatialite in the early
+stages of LumoSQL. 
+
 | [Gigimushroom's Database Backend Engine](https://github.com/gigimushroom/DatabaseBackendEngine)|2019| A good example of an alternative BTree storage engine implemented using SQLite's Virtual Table Interface. This approach is not what LumoSQL has chosen for many reasons, but this code demonstrates virtual tables can work, and also that storage engines implemented at virtual tables can be ported to be LumoSQL backends.|
 
-# List of On-disk File Format-related Prior Art
+# On-disk File Format-related Knowledge
 
 The on-disk file format is important to many SQLite use cases, and introspection tools are both important and rare. Other K-V stores also have third-party on-disk introspection tools. There are advantages to having investigative tools that do not use the original/canonical source code to read and write these databases. The SQLite file format is promoted as being a stable, backwards-compatible transport (recommend by the Library of Congress as an archive format) but it also has significant drawbacks as discussed elsewhere in the LumoSQL documentation.
 
@@ -80,7 +124,7 @@ The on-disk file format is important to many SQLite use cases, and introspection
 | [SQLite Deleted Records Parser](https://github.com/mdegrazia/SQLite-Deleted-Records-Parser) | 2015 | Script to recover deleted entries in an SQLite database |
 | [lua-mdb](https://github.com/catwell/cw-lua/tree/master/lua-mdb) | 2016 | Parse and investigate LMDB file format |
 
-# List of Relevant Benchmarking and Test Prior Art
+# List of Relevant Benchmarking and Test Knowledge
 
 Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TCP being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
 
