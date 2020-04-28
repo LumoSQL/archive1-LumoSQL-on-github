@@ -8,28 +8,26 @@
 Table of Contents
 =================
 
-   * [Prior Art for LumoSQL](#prior-art-for-lumosql)
-   * [Tables of Contents](#tables-of-contents)
-   * [List of SQLite Code-related Prior Art](#list-of-sqlite-code-related-prior-art)
-   * [List of On-disk File Format-related Prior Art](#list-of-on-disk-file-format-related-prior-art)
-   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
+   * [Knowledge Relevant to LumoSQL](#knowledge-relevant-to-lumosql)
+   * [List of SQLite Code-related Knowledge](#list-of-sqlite-code-related-knowledge)
+   * [List of On-disk File Format-related Knowledge](#list-of-on-disk-file-format-related-knowledge)
+   * [List of Relevant Benchmarking and Test Knowledge](#list-of-relevant-benchmarking-and-test-knowledge)
    * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
    * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
 
-
-Prior Art for LumoSQL
-======================
+Knowledge Relevant to LumoSQL
+=============================
 
 LumoSQL has many antecedents and relevant codebases.  This document is intended
 to be a terse list of published source code for reference of LumoSQL
 developers. Although it is stored with the rest of the LumoSQL documentation
 and referred to throughout, it is a standalone document.
 
-Everything listed here is open source.
+Everything listed here is open source. There are many closed-source products that extend and reuse SQLite in various ways, none of which have been considered by the LumoSQL project.
 
-# List of SQLite Code-related Prior Art
+# List of SQLite Code-related Knowledge
 
-SQLite code has been incorporated into many other projects, and besides there are many relevant key-value stores and libraries.
+SQLite code has been incorporated into many other projects, and besides there are many other relevant key-value stores and libraries.
 
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
@@ -49,7 +47,7 @@ SQLite code has been incorporated into many other projects, and besides there ar
 | [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)| current | Geospatial GIS extension to SQLite, similar to PostGIS |
 | [Gigimushroom's Database Backend Engine](https://github.com/gigimushroom/DatabaseBackendEngine)|2019| A good example of an alternative BTree storage engine implemented using SQLite's Virtual Table Interface. This approach is not what LumoSQL has chosen for many reasons, but this code demonstrates virtual tables can work, and also that storage engines implemented at virtual tables can be ported to be LumoSQL backends.|
 
-# List of On-disk File Format-related Prior Art
+# List of On-disk File Format-related Knowledge
 
 The on-disk file format is important to many SQLite use cases, and introspection tools are both important and rare. Other K-V stores also have third-party on-disk introspection tools. There are advantages to having investigative tools that do not use the original/canonical source code to read and write these databases. The SQLite file format is promoted as being a stable, backwards-compatible transport (recommend by the Library of Congress as an archive format) but it also has significant drawbacks as discussed elsewhere in the LumoSQL documentation.
 
@@ -61,7 +59,7 @@ The on-disk file format is important to many SQLite use cases, and introspection
 | [SQLite Deleted Records Parser](https://github.com/mdegrazia/SQLite-Deleted-Records-Parser) | 2015 | Script to recover deleted entries in an SQLite database |
 | [lua-mdb](https://github.com/catwell/cw-lua/tree/master/lua-mdb) | 2016 | Parse and investigate LMDB file format |
 
-# List of Relevant Benchmarking and Test Prior Art
+# List of Relevant Benchmarking and Test Knowledge
 
 Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TCP being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
 
