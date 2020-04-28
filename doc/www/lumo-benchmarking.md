@@ -4,6 +4,7 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
+
 Table of Contents
 =================
 
@@ -21,8 +22,7 @@ Table of Contents
          * [C speed tests](#c-speed-tests)
          * [Web Framework Test](#web-framework-test)
       * [Computer architectures and operating systems](#computer-architectures-and-operating-systems)
-   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
-
+   * [List of Relevant Benchmarking and Test Knowledge](#list-of-relevant-benchmarking-and-test-knowledge)
 
 About Benchmarking
 ==================
@@ -318,21 +318,22 @@ immediately for January to March 2020:
 - Android
 - other processor architectures
 
-# List of Relevant Benchmarking and Test Prior Art
+# List of Relevant Benchmarking and Test Knowledge
 
-There is a section in the [LumoSQL list of prior art](./lumo-prior-art.md#list-of-relevant-benchmarking-and-test-prior-art) on benchmarking. That is the canonical list of up-to-date prior art.
+There is a section in the [Full Knowledgebase Relevant to LumoSQL](./lumo-relevant-knowledgebase.md) on benchmarking. Everything in this
+section appears at least as a line item in the Full Knowledgebase.
 
-The 2017 paper from this list [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf) talks at length about why this is so difficult. The abstract says:
+The 2017 paper [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf) talks at length about why benchmarking in general is so difficult, and using SQLite as a worked example. The abstract says:
 
-> Benchmarking systems in a repeatable fashion is com-plex and  error-prone.
-> The systems  community has re-peatedly  discussed  the  complexities  of
-> benchmarkingand how to properly report benchmarking results.   Us-ing the
-> example of SQLite, we examine the current stateof  benchmarking  in  industry
-> and  academia.   We  showthat changing justoneparameter in SQLite can
-> changethe  performance  by  11.8X,  and  that  changing  multipleparameters
-> can  lead  up  to  a  28X  difference  in  perfor-mance.  We find that these
-> configuration parameters areoften not set or reported in academic research,
-> leading toincomplete and misleading evaluations
+> Benchmarking systems in a repeatable fashion is complex and  error-prone.
+> The systems  community has repeatedly  discussed  the  complexities  of
+> benchmarking and how to properly report benchmarking results.   Using the
+> example of SQLite, we examine the current state of  benchmarking  in  industry
+> and  academia.   We  show that changing just one parameter in SQLite can
+> change the  performance  by  11.8X,  and  that  changing  multiple parameters
+> can  lead  up  to  a  28X  difference  in  performance.  We find that these
+> configuration parameters are often not set or reported in academic research,
+> leading to incomplete and misleading evaluations
 
 [Sysbench](https://github.com/akopytov/sysbench) is a multithreaded generic
 benchmarking tool, with one well-supported use case being networked SQL
