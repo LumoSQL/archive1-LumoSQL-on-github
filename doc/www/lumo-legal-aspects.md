@@ -7,9 +7,8 @@
 ![](./images/lumo-legal-aspects-intro.png "XXXXXXXX")
 
 
-# Licensing 
 
-** LumoSQL Licensing
+# LumoSQL Licensing
 
 The [LumoSQL Project Aims](lumo-projet-aims.md) include this:
 
@@ -35,7 +34,7 @@ While MIT does require users to include a copy of the license and the copyright
 notice, the software can remove the sentence requiring this from the license (thus
 re-licensing LumoSQL.)
 
-** In Detail: the SQLite Public Domain Licensing Problem
+# In Detail: the SQLite Public Domain Licensing Problem
 
 There are numerous reasons other than licensing why SQLite is less open source
 than it appears, and these are covered in the [LumoSQL Landscape](./lumo-landscape.md). As to licensing, SQLite is distributed as
