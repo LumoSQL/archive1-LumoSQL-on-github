@@ -37,6 +37,10 @@ Aims
   This especially includes the SQLite user interface mechanisms of pragmas, 
   library APIs, and commandline parameters.
 
+* Legal promise: LumoSQL will not come with legal terms less favourable than 
+  SQLite. LumoSQL will try to improve the legal standing and safety worldwide
+  as compared to SQLite.
+
 * Developer contract: LumoSQL will have stable APIs ([Application Programming Interfaces](https://en.wikipedia.org/wiki/Application_programming_interface#Libraries_and_frameworks)) for features found in multiple unrelated SQLite downstream projects:
   backends, frontends, encryption, networking and more. 
 
