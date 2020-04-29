@@ -23,7 +23,10 @@ to be a terse list of published source code for reference of LumoSQL
 developers. Although it is stored with the rest of the LumoSQL documentation
 and referred to throughout, it is a standalone document.
 
-Everything listed here is open source. There are many closed-source products that extend and reuse SQLite in various ways, none of which have been considered by the LumoSQL project.
+Everything listed here is open source, except for software produced by
+sqlite.org or the commercial arm hwaci.com. There are many closed-source
+products that extend and reuse SQLite in various ways, none of which have been
+considered by the LumoSQL project.
 
 # List of SQLite Code-related Knowledge
 
@@ -59,6 +62,12 @@ The on-disk file format is important to many SQLite use cases, and introspection
 | [SQLite Deleted Records Parser](https://github.com/mdegrazia/SQLite-Deleted-Records-Parser) | 2015 | Script to recover deleted entries in an SQLite database |
 | [lua-mdb](https://github.com/catwell/cw-lua/tree/master/lua-mdb) | 2016 | Parse and investigate LMDB file format |
 
+(The forensics and data recovery industry has many tools that diagnose SQLite
+database files. Some are open source but many are not. A list of tools commonly
+cited by forensics practicioners, none of which LumoSQL has downloaded or tried
+is: Belkasoft Evidence Center, BlackBag BlackLight, Cellebrite UFED Physical
+Analyser, DB Browser for SQLite, Magnet AXIOM and Oxygen Forensic Detective.)
+
 # List of Relevant Benchmarking and Test Knowledge
 
 Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TCP being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
@@ -83,11 +92,12 @@ Encryption is a major problem for SQLite users looking for open code. There are 
 
 | Project | Last modified | Description | 
 | ------- | ------------- | ----------- |
-| [SQLite Encryption Extension](https://www.sqlite.org/see/doc/release/www/readme.wiki)| current | Info about the (closed source) official SQLite crypto solution, illustrating that there is little to be compatible with in the wider SQLite landscape |
-| [SQLCipher](https://github.com/sqlcipher/sqlcipher) | current | Adds at-rest encryption to SQLite [at the pager level](https://www.zetetic.net/sqlcipher/design/), using OpenSSL (the default) or optionally other providers |
-| [sqleet](https://github.com/resilar/sqleet) | current | Implements SHA256 encryption, also at the pager level |
-| [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Interesting documentation that perhaps sqlite.org never meant to publish their crypto APIs? |
+| [SQLite Encryption Extension](https://www.sqlite.org/see/doc/release/www/readme.wiki)(SEE)| current | Info about the proprietary, closed source official SQLite crypto solution, illustrating that there is little to be compatible with in the wider SQLite landscape. This is a standalone product. The API is published and used by some open source code. |
+| [SQLCipher](https://github.com/sqlcipher/sqlcipher) | current | Adds at-rest encryption to SQLite [at the pager level](https://www.zetetic.net/sqlcipher/design/), using OpenSSL (the default) or optionally other providers. Uses an open core licensing model, and the less-capable open source version is BSD licensed with a requirement that users publish copyright notices. Uses the SEE API. |
+| [sqleet](https://github.com/resilar/sqleet) | current | Implements SHA256 encryption, also at the pager level. Public Domain (not Open Source, similar to SQLite) |
+| [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Accidentally-published but unretracted code on sqlite.org fully documents crypto APIs used by SEE |
 | [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
+| [wxSqlite3](https://github.com/utelle/wxsqlite3/) | current | wxWidgets C++ wrapper, that also implements SEE-equivalent crypto. Licensed under the LGPL |
 
 ... there are many more crypto projects for SQLite. 
 
