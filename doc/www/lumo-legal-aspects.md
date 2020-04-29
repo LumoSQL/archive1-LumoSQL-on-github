@@ -6,15 +6,15 @@
 
 ![](./images/lumo-legal-aspects-intro.png "XXXXXXXX")
 
+
 Table of Contents
 =================
 
-   * [Table of Contents](#table-of-contents)
    * [LumoSQL Licensing](#lumosql-licensing)
    * [In Detail: Patents, MIT and Apache 2.0](#in-detail-patents-mit-and-apache-20)
    * [In Detail: the SQLite Public Domain Licensing Problem](#in-detail-the-sqlite-public-domain-licensing-problem)
    * [History and Rationale](#history-and-rationale)
-   * [Encryption Issues](#encryption-issues)
+   * [Encryption Legal Issues](#encryption-legal-issues)
    * [LumoSQL Requirements and Decisions](#lumosql-requirements-and-decisions)
 
 # LumoSQL Licensing
@@ -113,13 +113,27 @@ Richard Hipp replaced it for SQLite version 2, he also dropped the GPL. SQLite
 has been released as "Public Domain"
 
 
-# Encryption Issues
+# Encryption Legal Issues
+
+SQLite is not available with encryption. There are two common ways of adding encryption to SQLite, both of which have legal implications: 
+
+1. Purchasing the [SQLite Encryption Extension](https://www.hwaci.com/sw/sqlite/see.html)(SEE) from Richard Hipp's company Hwaci. The SEE is proprietary software, and cannot be use with open source applications. 
+2. [SQLcipher](https://www.zetetic.net/sqlcipher/) which has a open core model. The BSD-licensed open source version requires users to publish copyright notices, and the more capable commercial editions are available on similar terms to SEE, and therefore cannot be used with open source applications. 
+
+There are many other ways of adding encryption to SQLite, some of which are listed in the [Knowledgebase Relevant to LumoSQL](./lumo-relevant-knowledgebase.md).
+
+The legal issues addressed in LumoSQL encryption include:
+
+* Usability. Encryption should be available with LumoSQL in the core source code without having to consider any additional legal considerations.
+* Unemcumbered. No encryption code is used that may reasonably be subject to action by companies (eg copyright claims) or governments (eg export regulations). Crypto code will be reused from known-safe sources.
+* Compliant with minima. With encryption being legally mandated or strongly recommended in many jurisdictions for particular use cases (banking, handling personal data, government data, etc) there are also minimum requirements. LumoSQL will not ship crypto code that fails minimum crypto requirements.
+* Not compliant with maxima. LumoSQL will not limit its encryption mechanisms or strength to comply with legal restrictions from any jurisdiction. LumoSQL crypto tries to be as hard to break as possible regardless of the use case or jurisdiction.
+
 
 Local laws
 EU laws
 Facts of Privacy and security
 
 # LumoSQL Requirements and Decisions
-
 
 
