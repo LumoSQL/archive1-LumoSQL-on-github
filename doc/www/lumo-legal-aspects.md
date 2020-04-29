@@ -6,15 +6,26 @@
 
 ![](./images/lumo-legal-aspects-intro.png "XXXXXXXX")
 
+Table of Contents
+=================
 
+   * [Table of Contents](#table-of-contents)
+   * [LumoSQL Licensing](#lumosql-licensing)
+   * [In Detail: Patents, MIT and Apache 2.0](#in-detail-patents-mit-and-apache-20)
+   * [In Detail: the SQLite Public Domain Licensing Problem](#in-detail-the-sqlite-public-domain-licensing-problem)
+   * [History and Rationale](#history-and-rationale)
+   * [Encryption Issues](#encryption-issues)
+   * [LumoSQL Requirements and Decisions](#lumosql-requirements-and-decisions)
 
 # LumoSQL Licensing
 
-The [LumoSQL Project Aims](lumo-projet-aims.md) include this:
+SQLite is released as [Public Domain](https://www.sqlite.org/copyright.html).
+In order to both respect and improve on this, the [LumoSQL Project Aims](lumo-projet-aims.md) make this promise:
 
-> Legal promise: LumoSQL will not come with legal terms less favourable than 
-> SQLite. LumoSQL will try to improve the legal standing and safety worldwide
-> as compared to SQLite.
+> LumoSQL will not come with legal terms less favourable than SQLite. LumoSQL
+> will try to improve the legal standing and safety worldwide as compared to
+> SQLite.
+
 
 To achieve this:
 
@@ -28,11 +39,46 @@ LumoSQL users gain certainty as compared with SQLite users because they have a
 license that is recognised in jurisdictions worldwide. 
 
 LumoSQL users do not lose any rights. For example, the MIT license permits use
-with fully proprietary software, by anyone. 
+with fully proprietary software, by anyone. If you can do something today with
+SQLite, then you can do it with LumoSQL. 
 
 While MIT does require users to include a copy of the license and the copyright
 notice, the software can remove the sentence requiring this from the license (thus
 re-licensing LumoSQL.)
+
+# In Detail: Patents, MIT and Apache 2.0
+
+LumoSQL has a narrower range of possible licenses because of its nature as an
+embedded library, where it is tightly combined with users' code. This means
+that the terms and conditions for using LumoSQL have to be as open as possible
+to accommodate all the different legal statuses of software that users combine
+with LumoSQL. And the status that worries corporate lawyers the most is
+"unknown". What if you aren't completely sure of the patent status of the
+software, or the intentions of your company? And where there is uncertainty,
+users are wise not to commit.
+
+LumoSQL has tried hard to bring more certainty, not less, and this is tricky when it comes to patents.
+
+Software patents are an issue in many jurisdictions. The MIT license includes a grant of patents to its users, as [explained by the Open Source Initiative](https://opensource.com/article/18/3/patent-grant-mit-license). The Apache 2.0 license also includes a generous grant, in identical language to the GPL and the MPL. 
+
+The difficulty is that the Apache 2.0 license also includes *patent relaliation* clause:
+
+> If You institute patent litigation against any entity (including a
+> cross-claim or counterclaim in a lawsuit) alleging that the Work or a
+> Contribution incorporated within the Work constitutes direct or contributory
+> patent infringement, then any patent licenses granted to You under this
+> License for that Work shall terminate as of the date such litigation is
+> filed.  
+
+The intention is progressive and seemingly a Good Thing - after all, unless you
+are a patent troll who wants more pointless patent litigation? However the
+effect is that the Apache 2.0 license brings with it the requirement to check
+for patent issues in any code it is connected to, and to understand whether the
+company paying for the work that includes LumoSQL actually does want to take
+software patent action in court.
+
+MIT has only a patent grant, not retaliation. That is why LumoSQL does not use the high-quality Apache 2.0 license.
+
 
 # In Detail: the SQLite Public Domain Licensing Problem
 
@@ -59,11 +105,12 @@ Initiative does not recommend it and nor does it appear on the [SPDX License Lis
 
 The SPDX License List is a tool used by many organisations to understand where they stand legally with the millions of lines of code they are using. David A Wheeler has produced a helpful [SPDX Tutorial](https://github.com/david-a-wheeler/spdx-tutorial) . All code and documentation developed by the LumoSQL project has a SPDX identifier.
 
-# History
+# History and Rationale
 
 SQLite Version 1 used the gdbm key-value store. This was under the GPL and
 therefore so was SQLite. gdbm is limited, and is not a binary tree. When
-Richard Hipp replaced it for SQLite version 2, he also dropped the GPL. 
+Richard Hipp replaced it for SQLite version 2, he also dropped the GPL. SQLite
+has been released as "Public Domain"
 
 
 # Encryption Issues
