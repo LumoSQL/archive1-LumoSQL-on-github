@@ -1,6 +1,9 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- SPDX-FileCopyrightText: 2019 The LumoSQL Authors -->
 
+<a href="https://opensource.org"><img height="150" align="right" src="https://opensource.org/files/OSIApprovedCropped.png" alt="Open Source Initiative Approved License logo"></a>  <br><br><br><br><br><br><br>
+  
+  
 # LumoSQL
 
 ## About LumoSQL
