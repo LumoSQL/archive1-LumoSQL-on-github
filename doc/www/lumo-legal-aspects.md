@@ -61,7 +61,7 @@ LumoSQL has tried hard to bring more certainty, not less, and this is tricky whe
 
 Software patents are an issue in many jurisdictions. The MIT license includes a grant of patents to its users, as [explained by the Open Source Initiative](https://opensource.com/article/18/3/patent-grant-mit-license). The Apache 2.0 license also includes a generous grant, in identical language to the GPL and the MPL. 
 
-The difficulty is that the Apache 2.0 license also includes *patent relaliation* clause:
+The difficulty is that the Apache 2.0 license also includes a *patent retaliation* clause:
 
 > If You institute patent litigation against any entity (including a
 > cross-claim or counterclaim in a lawsuit) alleging that the Work or a
@@ -73,11 +73,12 @@ The difficulty is that the Apache 2.0 license also includes *patent relaliation*
 The intention is progressive and seemingly a Good Thing - after all, unless you
 are a patent troll who wants more pointless patent litigation? However the
 effect is that the Apache 2.0 license brings with it the requirement to check
-for patent issues in any code it is connected to, and to understand whether the
-company paying for the work that includes LumoSQL actually does want to take
-software patent action in court.
+for patent issues in any code it is connected to. It also is possible that the
+company using LumoSQL actually does want the liberty to take software patent
+action in court. So whether by the risk or the constraint, Apache 2.0 brings with it
+significant change compared to SQLite.
 
-MIT has only a patent grant, not retaliation. That is why LumoSQL does not use the high-quality Apache 2.0 license.
+MIT has only a patent grant, not retaliation. That is why LumoSQL does not use the Apache 2.0 license.
 
 
 # In Detail: the SQLite Public Domain Licensing Problem
