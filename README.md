@@ -4,6 +4,9 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
+<a href="https://opensource.org"><img height="150" align="right" src="https://opensource.org/files/OSIApprovedCropped.png" alt="Open Source Initiative Approved License logo"></a>  <br><br><br><br><br><br><br>
+  
+  
 # LumoSQL
 
 ## About LumoSQL
