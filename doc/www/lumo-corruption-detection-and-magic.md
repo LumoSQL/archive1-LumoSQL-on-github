@@ -86,14 +86,19 @@ sqlite.org has a much more detailed, but still incomplete, summary of [How to Co
 
 The SQLite database format is widely used as a defacto standard. LumoSQL ships
 with the lumo-backend-mdb-traditional which is the unmodified SQLite on-disk
-format, the same code generating the same data. There is no corruption detection for this backend.
+format, the same code generating the same data. There is no corruption
+detection included in the file format for this backend.  However corruption
+detection is available for the traditional backend, and other backends that do
+not have scope for checksums in their headers. For all of these backends,
+LumoSQL offers a separate metadata file containing integrity information.
 
-The new backend lumo-backend-mdb-updated adds row-level checksums but is
-otherwise identical to the traditional SQLite MDB format. There is an argument that
-any change at all is the same as having a completely different format. 
-This is not a strong argument against adding checksums to the
-traditional SQLite on-disk format because with encryption increasingly becoming
-mandatory, the standard cannot apply. The sqlite.org closed-source SSE
+The new backend lumo-backend-mdb-updated adds row-level checksums in the header
+but is otherwise identical to the traditional SQLite MDB format. 
+
+There is an argument that any change at all is the same as having a completely
+different format.  This is not a strong argument against adding checksums to
+the traditional SQLite on-disk format because with encryption increasingly
+becoming mandatory, the standard cannot apply. The sqlite.org closed-source SSE
 solution is described as "All database content, including the metadata, is
 encrypted so that to an outside observer the database appears to be white
 noise." Other solutions are possible involving metadata that is not encrypted
@@ -102,105 +107,28 @@ SQLite databases with encryption.
 
 # Design for Corruption Detection
 
-1. By default, an internally maintained row hash updated with every change to a row
-2. This can be switched off if desired. But we want default to be on because we want people to
-start realising how relatively common this actually is (yes, I'm guessing. But well-founded
-guessing.)
-3. If a corruption is detected on read, LumoSQL should make maximum relevant fuss. At minimum,
-error code 11 is SQLITE_CORRUPT
-4. Later, an additional SQL user command that exposes this hash so that user-level logic can do
-not only corruption detection, but also change detection. That's a short-cut to one specific sort of
-post-hoc trigger.
-What I have not proposed is any kind of table-level hash protection.
+All LumoSQL backends can have corruption detection enabled, with the metadata
+stored either directly in the backend database files, or in a separate file.
+When a user switches on checksums for a database, metadata needs to be stored.
 
-That may work for some backends but not for others;  however if we were to
-have a lumo-backend-magic.c file which:
+This depends on two new functions needed in any case for labelling LumoSQL
+databases provided by backend-magic.c: lumosql_set_magic() and lumosql_get_magic(). These functions add and
+read a unique metadata signature to a LumoSQL database.
 
-1. if possible inserts magic into the existing header
+1. if possible magic is inserted into the existing header
 
-2. if not creates a separate "metadata" b-tree(*) which contains a key
-"magic" and the appropriate value; to recognise the file, first use
-whatever mechanism one uses to decide if the file format is the one for
-that particular (unmodified) backend, and if so look for the special
-metadata b-tree and the "magic" key
+2. if not a separate "metadata" b-tree is created which contains a key "magic"
+and the appropriate value. get_magic() will look for the special metadata
+b-tree and the "magic" key
 
-(*) other meta-backends may share this special b-tree to do things we
-haven't thought about yet
+After LumoSQL has determined how and where metadata will be stored, the high-level design for row-level checksums is:
 
---------------------
+1. an internally maintained row hash updated with every change to a row
+2. If a corruption is detected on read, LumoSQL should make maximum relevant fuss. At minimum, [error code 11 is SQLITE_CORRUPT](https://www.sqlite.org/rescode.html#corrupt)
+3. An additional SQL user command is added that exposes this hash in a column so that user-level logic can do not only corruption detection, but also change detection.
 
-Perhaps if we say that LumoSQL stores meta-data in a special metadata
-btree (or whatever data structure our backend uses, we don't care about
-their internal details) then we have a better access to all these things.
-And we could even have per-table checksums in there if that is what we
-want.
+At a later stage a column checksum can be added giving change detection on a table, or corruption detection for read-only tables.
 
-For example in lmdb-backend the table is translated to a btree called
-Tab.(long_number) so if we also had one called Meta or Meta.(number)
-there would be no clashes.
-
-Hmmm, I just realised that the long_number there is sqlite3's idea of the
-root page of the btree, so I'll want to see that things outside the
-backend don't imagine that they can go and poke their nose directly in the
-file at that location.  If it just treats it as an opaque value like a
-filesystem i-node that's absolutely fine though.
-
-
-* set_magic() in backend.c that says "set magic number for this file",
-to that when creating a new database file, at an appropriate spot in
-the header for that particular filetype we insert some magic. We
-append the Lumo file format version number to this magic. I've only
-looked at LMDB and SQLite btree formats so far, and both of them have
-room in their page 0 metadata for this. In other words, "LumoSQL"
-becomes a subtype of the file format, which must remain recognisable
-to file handling tools. This will be a mandatory function for all
-backends to implement and must be part of every database creation. I
-suppose there may be some backend filetypes where you can't add
-additional magic, I don't know what should be done there.
-
-* get_magic() called by backend.c's open function that says "read the
-magic number for this file to see if it is LumoSQL or not, and if so,
-what backend type and format version number". Both set and get magic
-will be actually implemented in lumo-backend-XXXX.c
-
-* a function pair in backend.c (calling lumo-vfs.c or
-lumo-vfs-mmap.c?) to write and read the whole-of-file checksum, which
-is also stored in page 0 of the file, or whatever the metadata block
-of the particular file format is called. This is a checksum updated on
-backend.c's database_close() to be an SHA1 of the entire file.
-
-The above functions mean the following examples work
-
-    /usr/bin/sha1sum $file
-
-should give the same result as
-
-   /usr/bin/lumosql --sha1sum $file
-
-where lumosql figures out what format the file is using get_magic, and
-then extracts the sha1sum. This is corruption-detection-lite, it could
-just be a dirty file. But it is an excellent start, way ahead of
-anything that exists.
-
-It does mean that there will be a delay when closing the database. And
-backend.c's database_open() call should set the sha1sum field to zero
-if it is opened for write.
-
-***********************
-
-These functions also mean that we can do this:
-
-   /usr/bin/lumosql --file-info $file
-
-to display the meta data (or say "This is not a valid LumoSQL file,
-although we recognise it is an LMDB file")
-
-which reminds me: sqlite does not use double-dash commandline
-separators, only single dash. So I propose that everything we
-implement in lumosql be --double-dash.
-
-*********************
-
-Extremely fast and widely-used hashing code is available from https://keccak.team/ .
+In the case where there is a separate metadata file, a function pair in lumo-backend-magic.c reads and writes a whole-of-file checksum for the database. This can't be done for where metadata is stored in the main database file.
 
 
