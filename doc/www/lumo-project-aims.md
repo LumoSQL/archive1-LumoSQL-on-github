@@ -49,7 +49,8 @@ Aims
 
 * Ecosystem creation: LumoSQL will offer consolidated contact, code curation, bug tracking,
   licensing, and community communications across all these features from
-  other projects
+  other projects. Bringing together SQLite code contributions under one umbrella reduces 
+  technical risk in many ways, from inconsistent use of threads to tracking updated versions.
 
 
 Short Term Goals
@@ -61,8 +62,8 @@ csv; and the LMDB backend. Control over these interfaces will be through the
 same user interface mechanisms as the rest of LumoSQL, and SQLite.
 
 * LumoSQL will improve SQLite quality and privacy compliance by introducing
-optional on-disk checksums including in the existing official SQLite btree
-format.
+optional on-disk checksums for storage backends including to the original
+SQLite btree format.  This will give real-time row-level corruption detection.
 
 * LumoSQL will improve SQLite quality and privacy compliance by introducing
 optional storage backends that are more crash-resistent, starting with LMDB

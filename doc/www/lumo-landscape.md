@@ -43,7 +43,8 @@ many exceptions and alternatives but RDBMS are where the deciding data is stored
 
 The most widely-used relational database is almost certainly SQLite, and nearly
 all SQLite usage is in embedded devices, frequently with internet access as the
-Internet of Things.
+Internet of Things. The question "How widely-used is SQLite?" is addressed in specific
+section below.
 
 In addition there are SQLite-derived projects that address traditional online
 database use cases in a similar way only in a tiny fraction (4%-10%) of size of
@@ -367,4 +368,43 @@ Lessons Learned from sqlightning
    compared to Postgresql, Oracle and MariaDB etc, being much more ready
    to return 'LOCKED' rather than some concurrency algorithm. We will
    return to this problem in later versions of LumoSQL.
+
+How Widely-used is SQLite Compared to Others?
+=============================================
+
+It is easy to establish that SQLite3 is deployed in billions of applications around the world, and as
+sqlite.org has showed it is easy to [credibly quote very large deployment numbers](https://www.sqlite.org/mostdeployed.html).
+
+But what of SQLite in relation to the databases it can be reasonably compared
+to, especially as the use cases for SQLite have become so broad?  There isn't a good 
+answer, and this is something that LumoSQL hopes to change over time as it gains 
+features that feel familiar to users outside traditional embedded development.
+
+SQLite really isn’t a database at all, any more than bdb (the original Unix
+bdb, as still used by a diminishing number of applications) or LMDB. These are
+all embeddable database libraries. That affects how we measure popularity.
+
+The difference in measurement between the online databases and sqlite is significant in these ways:
+* Measures of database popularity with developers don’t map well to a database library (see
+the widely-regarded https://db-engines.com/en/ranking ) because embedded applications use
+fewer database developers than cloud and other higher-level applications. The commercial
+value is concentrated in different parts of the stack for these two use cases, although not the
+commercial risk.
+* Industry surveys are indicative but well short of science-based methods, and almost never
+focussed on embeddable databases and yet nevertheless SQLite is usually included. For
+example [6000 developers surveyed by Jetbrains](https://www.jetbrains.com/research/devecosystem-2018/) and this [Developer Week survey](http://highscalability.com/blog/2019/3/6/2019-database-trends-sql-vs-nosql-top-databases-single-vs-mu.html)
+* Being an embeddable library, SQLite is not intended for use in cloud applications and the
+like, and therefore most surveys of databases do not cover them. As many people including
+the SQLite developers point out, it is possible to run a web application off SQLite just as
+much as it is possible to run an email server using Sendmail. Readers of this document are
+unlikely to be confused that either of these activities are a good idea.
+* In contrast, embedded databases are rarely addressed as a sector because the embedded
+development industry does not tend to be very interested in how data is stored.
+
+
+(Not counting bdb. We can reasonably discount bdb as a currently-relevant database, because its
+prevalence is decreasing rapidly. Evidence: https://en.wikipedia.org/wiki/Berkeley_DB#Past_users
+and noting the heading “Deprecated in favour of LMDB”, and also looking at the reactions
+worldwide when Oracle changed the license of the bdb code. bdb is being erased from the world of
+free software applications.)
 

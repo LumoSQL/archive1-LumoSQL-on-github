@@ -50,7 +50,7 @@ SQLite code has been incorporated into many other projects, and besides there ar
 | [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)| current | Geospatial GIS extension to SQLite, similar to PostGIS |
 | [Gigimushroom's Database Backend Engine](https://github.com/gigimushroom/DatabaseBackendEngine)|2019| A good example of an alternative BTree storage engine implemented using SQLite's Virtual Table Interface. This approach is not what LumoSQL has chosen for many reasons, but this code demonstrates virtual tables can work, and also that storage engines implemented at virtual tables can be ported to be LumoSQL backends.|
 
-# List of On-disk File Format-related Knowledge
+# List of On-disk SQLite Format-related Knowledge
 
 The on-disk file format is important to many SQLite use cases, and introspection tools are both important and rare. Other K-V stores also have third-party on-disk introspection tools. There are advantages to having investigative tools that do not use the original/canonical source code to read and write these databases. The SQLite file format is promoted as being a stable, backwards-compatible transport (recommend by the Library of Congress as an archive format) but it also has significant drawbacks as discussed elsewhere in the LumoSQL documentation.
 
@@ -67,6 +67,14 @@ database files. Some are open source but many are not. A list of tools commonly
 cited by forensics practicioners, none of which LumoSQL has downloaded or tried
 is: Belkasoft Evidence Center, BlackBag BlackLight, Cellebrite UFED Physical
 Analyser, DB Browser for SQLite, Magnet AXIOM and Oxygen Forensic Detective.)
+
+# List of Relevant SQL Checksumming-related Knowledge
+
+| Project | Last modified | Description |
+| ------- | ------------- | ----------- |
+| [eXtended Keccak Code Package](https://github.com/XKCP/XKCP)  | current | Code from https://keccak.team for very fast peer-reviewed hashing |
+| [SQL code for Per-table Multi-database Solution](https://www.periscopedata.com/blog/hashing-tables-to-ensure-consistency-in-postgres-redshift-and-mysql) | 2014 | Periscope's SQL row hashing solution for Postgres, Redshift and MySQL |
+| [SQL code for Public Key Row Tracking](https://www.percona.com/blog/2018/10/12/track-postgresql-row-changes-using-public-private-key-signing/) | 2018 | Percona's SQL row integrity solution for Postgresql using public key crypto |
 
 # List of Relevant Benchmarking and Test Knowledge
 
