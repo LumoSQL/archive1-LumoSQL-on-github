@@ -4,6 +4,15 @@
 <!-- SPDX-FileType: Documentation -->
 <!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
+Table of Contents
+=================
+
+   * [Summary of SQL Database Corruption Detection](#summary-of-sql-database-corruption-detection)
+   * [SQLite and Integrity Checking](#sqlite-and-integrity-checking)
+   * [LumoSQL Checksums and the SQLite On-disk File Format](#lumosql-checksums-and-the-sqlite-on-disk-file-format)
+   * [Design for Corruption Detection](#design-for-corruption-detection)
+
+
 ![](./images/lumo-corruption-detection-and-magic-intro.png "XXXXXXXX")
 
 # Summary of SQL Database Corruption Detection
