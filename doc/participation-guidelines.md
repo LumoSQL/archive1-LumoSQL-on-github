@@ -11,7 +11,7 @@ The heart of LumoSQL is people. We put people first and do our best to recognize
 
 These guidelines aim to support a community where all people should feel safe to participate, introduce new ideas and inspire others, regardless of:
 
-    Background
+- Background
     Family status
     Gender
     Gender identity or expression
@@ -151,5 +151,4 @@ After receiving a concise description of your situation, they will review and de
 Please also report to us if you observe a potentially dangerous situation, someone in distress, or violations of these guidelines, even if the situation is not happening to you.
 
 If you feel you have been unfairly accused of violating these guidelines, please follow the same reporting process.
-
 
