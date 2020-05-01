@@ -3,7 +3,7 @@
 Version 1.0 – Updated February 19, 2020
 
 Adapted from version 3.1 of the 
-[LumoSQL Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/)
+[Mozilla Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/)
 and released under the [Creative Commons Attribution-ShareAlike](https://creativecommons.org/licenses/by-sa/3.0/)
 license. 
 
@@ -151,6 +151,5 @@ After receiving a concise description of your situation, they will review and de
 Please also report to us if you observe a potentially dangerous situation, someone in distress, or violations of these guidelines, even if the situation is not happening to you.
 
 If you feel you have been unfairly accused of violating these guidelines, please follow the same reporting process.
-
 
 
