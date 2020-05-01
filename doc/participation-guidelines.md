@@ -144,7 +144,7 @@ In addition, any participants who abuse the reporting process will be considered
 
 # Reporting
 
-If you believe you’re experiencing unacceptable behavior that will not be tolerated as outlined above please contact:  code-of-conduct@example.org .
+If you believe you’re experiencing unacceptable behavior that will not be tolerated as outlined above please contact one of the [authors](https://github.com/LumoSQL/LumoSQL/blob/master/AUTHORS).
 
 After receiving a concise description of your situation, they will review and determine next steps. In addition to conducting any investigation, they can provide a range of resources, from a private consultation to other community resources. They will involve other colleagues or outside specialists, as needed to appropriately address each situation.
 
