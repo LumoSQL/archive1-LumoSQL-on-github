@@ -4,7 +4,7 @@ Version 1.0 – Updated February 19, 2020
 
 Adapted from version 3.1 of the 
 [Mozilla Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/)
-and released under the [Creative Commons Attribution-ShareAlike](https://creativecommons.org/licenses/by-sa/3.0/)
+and released under the [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)
 license. 
 
 The heart of LumoSQL is people. We put people first and do our best to recognize, appreciate and respect the diversity of our global contributors. The LumoSQL Project welcomes contributions from everyone who shares our goals and wants to contribute in a healthy and constructive manner within our community. As such, we have adopted this code of conduct and require all those who participate to agree and adhere to these Community Participation Guidelines in order to help us create a safe and positive community experience for all.
@@ -151,4 +151,3 @@ After receiving a concise description of your situation, they will review and de
 Please also report to us if you observe a potentially dangerous situation, someone in distress, or violations of these guidelines, even if the situation is not happening to you.
 
 If you feel you have been unfairly accused of violating these guidelines, please follow the same reporting process.
-
