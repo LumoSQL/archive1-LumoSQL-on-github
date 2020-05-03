@@ -20,14 +20,13 @@ Table of Contents
 # LumoSQL Licensing
 
 SQLite is released as [Public Domain](https://www.sqlite.org/copyright.html).
-In order to both respect and improve on this, the [LumoSQL Project Aims](lumo-projet-aims.md) make this promise:
+In order to both respect and improve on this, the [LumoSQL Project Aims](lumo-projet-aims.md) make this promise to SQLite users:
 
 > LumoSQL will not come with legal terms less favourable than SQLite. LumoSQL
 > will try to improve the legal standing and safety worldwide as compared to
 > SQLite.
 
-
-To achieve this:
+To achieve this LumoSQL has made these policy decisions:
 
 * New LumoSQL code is licensed under the [MIT License](https://opensource.org/licenses/MIT), as used by many large corporations worldwide
 * LumoSQL documentation is licensed under the [Creative Commons](https://creativecommons.org/licenses/by-sa/4.0/)
@@ -35,16 +34,49 @@ To achieve this:
 * Open Source code from elsewhere, such as backend data stores, remain under the terms of the original license except where distribution under MIT effectively relicenses it
 * Open Content documentation from elsewhere remains under the terms of the original license. No documentation is used in LumoSQL unless it can be freely mixed with any other documentation. 
 
-LumoSQL users gain certainty as compared with SQLite users because they have a
+The effect of these policy decisions are:
+
+* LumoSQL users gain certainty as compared with SQLite users because they have a
 license that is recognised in jurisdictions worldwide. 
 
-LumoSQL users do not lose any rights. For example, the MIT license permits use
-with fully proprietary software, by anyone. If you can do something today with
-SQLite, then you can do it with LumoSQL. 
+* LumoSQL users do not lose any rights. For example, the MIT license permits use
+with fully proprietary software, by anyone. Whatever users do today with
+SQLite they can continue to do with LumoSQL. 
 
-While MIT does require users to include a copy of the license and the copyright
-notice, the software can remove the sentence requiring this from the license (thus
-re-licensing LumoSQL.)
+* While MIT does require users to include a copy of the license and the
+copyright notice, the MIT license also permits the user to remove the
+sentence requiring this from the license (thus re-licensing LumoSQL.) 
+
+# Why MIT? Why Not MIT?
+
+Github's [License Chooser for MIT](https://choosealicense.com/licenses/mit/) describes the MIT as:
+
+> A short and simple permissive license with conditions only requiring
+> preservation of copyright and license notices. Licensed works, modifications,
+> and larger works may be distributed under different terms and without source
+> code. 
+
+The MIT license aims to get out of the way of software developers, and despite
+some flaws it appears to do so reliably.
+
+In addition, MIT is popular. As documented [on Wikipedia](https://en.wikipedia.org/wiki/MIT_License) MIT appears to be the most-used open source licenses. Popularity matters, because all licenses are in part a matter of community belief and momentum.  Microsoft releasedi
+ [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) and Facebook released
+[React](https://en.wikipedia.org/wiki/React_(web_framework)) under the MIT, and
+these companies are very cautious about the validity of the licenses they use.
+
+In a forensic article analysing [the 171 words of the MIT license](https://writing.kemitchell.com/2016/09/21/MIT-License-Line-by-Line.html) as they apply in the US, lawyer Kyle E. Mitchell writes in his conclusion:
+
+> The MIT License is a legal classic. The MIT License works. It is by no means
+> a panacea for all software IP ills, in particular the software patent
+> scourge, which it predates by decades. But MIT-style licenses have served
+> admirably... We’ve seen that despite some crusty verbiage and lawyerly
+> affectation, one hundred and seventy one little words can get a hell of a lot
+> of legal work done, clearing a path for open-source software through a dense
+> underbrush of intellectual property and contract.
+
+Overall, in LumoSQL we have concluded that the MIT license is solid and it is
+better than any other mainstream license for existing SQLite users. It is
+certainly better than the SQLite Public Domain terms.
 
 # In Detail: Patents, MIT and Apache 2.0
 
@@ -59,9 +91,13 @@ users are wise not to commit.
 
 LumoSQL has tried hard to bring more certainty, not less, and this is tricky when it comes to patents.
 
-Software patents are an issue in many jurisdictions. The MIT license includes a grant of patents to its users, as [explained by the Open Source Initiative](https://opensource.com/article/18/3/patent-grant-mit-license). The Apache 2.0 license also includes a generous grant, in identical language to the GPL and the MPL. 
+Software patents are an issue in many jurisdictions. The MIT license includes a
+grant of patents to its users, as [explained by the Open Source Initiative](https://opensource.com/article/18/3/patent-grant-mit-license),
+including in the grant "... to deal in the software without restriction." While the
+Apache 2.0 license specifically grants patent rights (as do the GPL and MPL), they are not more generous than the MIT license. There is some debate that varies by jurisdiction about exactly how clear the patent grant is, as documented in [the patent section on Wikipedia](https://en.wikipedia.org/wiki/MIT_License#Relation_to_patents).
 
-The difficulty is that the Apache 2.0 license also includes a *patent retaliation* clause:
+The difficulty is that the Apache 2.0 (similar to the GPL and MPL) license also
+includes a *patent retaliation* clause:
 
 > If You institute patent litigation against any entity (including a
 > cross-claim or counterclaim in a lawsuit) alleging that the Work or a
@@ -76,7 +112,7 @@ effect is that the Apache 2.0 license brings with it the requirement to check
 for patent issues in any code it is connected to. It also is possible that the
 company using LumoSQL actually does want the liberty to take software patent
 action in court. So whether by the risk or the constraint, Apache 2.0 brings with it
-significant change compared to SQLite.
+significant change compared to SQLite's license terms in countries that recognise them. 
 
 MIT has only a patent grant, not retaliation. That is why LumoSQL does not use the Apache 2.0 license.
 
@@ -127,8 +163,8 @@ The legal issues addressed in LumoSQL encryption include:
 
 * Usability. Encryption should be available with LumoSQL in the core source code without having to consider any additional legal considerations.
 * Unemcumbered. No encryption code is used that may reasonably be subject to action by companies (eg copyright claims) or governments (eg export regulations). Crypto code will be reused from known-safe sources.
-* Compliant with minima. With encryption being legally mandated or strongly recommended in many jurisdictions for particular use cases (banking, handling personal data, government data, etc) there are also minimum requirements. LumoSQL will not ship crypto code that fails minimum crypto requirements.
-* Not compliant with maxima. LumoSQL will not limit its encryption mechanisms or strength to comply with legal restrictions from any jurisdiction. LumoSQL crypto tries to be as hard to break as possible regardless of the use case or jurisdiction.
+* Compliant with minimum requirements in various jurisdictions. With encryption being legally mandated or strongly recommended in many jurisdictions for particular use cases (banking, handling personal data, government data, etc) there are also minimum requirements. LumoSQL will not ship crypto code that fails minimum crypto requirements.
+* Conspicuously *non-compliant* with maximum requirements in any jurisdiction. LumoSQL will not limit its encryption mechanisms or strength to comply with any legal restrictions, in common with other critical open source infrastructure. LumoSQL crypto tries to be as hard to break as possible regardless of the use case or jurisdiction.
 
 
 Local laws
