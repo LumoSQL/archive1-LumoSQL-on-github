@@ -86,9 +86,12 @@ numbers in order are:
 
 - `0.9a` < `0.9z` < `0.10` < `1.0` < `1.1-alpha` < `1.1-beta` < `1.1` < `1.1a`
 
-We may extend this definition to deal with version numbering schemes
-used by normal software, however it will never work correctly with the
-version numbers used by [INTERCAL](https://en.wikipedia.org/wiki/INTERCAL) compilers.
+This definition will even cope with the numbering scheme used by TeX and
+METAFONT which are "Pi" and "e" respectively. The definition can be extended to
+deal with version numbering schemes used by normal software, however it will
+never work correctly with the version numbers used by some software such as the
+[CLC-INTERCAL](https://en.wikipedia.org/wiki/INTERCAL#Version_Numbers)
+compiler.
 
 The `subtree` key indicates a directory inside the sources to use instead
 of the top level.
