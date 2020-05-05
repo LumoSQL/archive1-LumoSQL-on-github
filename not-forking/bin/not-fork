@@ -1,0 +1,117 @@
+#!/usr/bin/perl -w
+
+# LumoSQL "not-fork" tool: track upstream changes to other packages
+# with consistent local modifications (没叉 or 不叉)
+
+# Requires integration between version control systems used and perl,
+# for example to use git it needs to be built with perl support, which
+# is the default; other VCSs may need to install perl modules.
+
+# See the LumoSQL documentation for more information about this tool
+
+use strict;
+use Getopt::Long qw(GetOptions GetOptionsFromArray);
+
+# modules may be inside the working copy rather than installed
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use NotFork::Get qw(set_input set_cache set_output all_names);
+
+Getopt::Long::Configure("bundling");
+
+my ($version, $commit, $query, $help, $noupdate, @names);
+my $verbose = 1;
+my @options = (
+    'c|commit=s'       => \$commit,
+    'h|?|help'         => \$help,
+    'i|input=s'        => sub { set_input($_[1]) },
+    'k|cache=s'        => sub { set_cache($_[1]) },
+    'n|no-update'      => \$noupdate,
+    'update'           => sub { $noupdate = 0 },
+    'o|output=s'       => sub { set_output($_[1]) },
+    'q|query'          => \$query,
+    'verbose=i'        => \$verbose,
+    'quiet'            => sub { $verbose = 0 },
+    'v|version=s'      => \$version,
+    '<>'               => \&add_name,
+);
+
+if (defined (my $home = $ENV{HOME})) {
+    # read the first configuration file we find
+    my $cfile = "$home/.config/LumoSQL/not-fork.conf";
+    if (open (my $cfh, "<", $cfile)) {
+	my @config = ();
+	while (defined (my $line = <$cfh>)) {
+	    $line =~ /^\s*$/ and next;
+	    $line =~ /^\s*#/ and next;
+	    chomp $line;
+	    $line =~ s/\s*=\s*/=/;
+	    push @config, '--' . $line;
+	}
+	close $cfh;
+	GetOptionsFromArray(\@config, @options) or usage(1);
+    }
+}
+GetOptions(@options) or usage(1);
+
+$help and usage(0);
+
+if (! @names) {
+    for my $name (all_names()) {
+	push @names, [$name, $version, $commit];
+    }
+}
+
+for my $np (@names) {
+    my ($name, $version, $commit) = @$np;
+    my $nfobj = new NotFork::Get($name, $version, $commit);
+    $nfobj->verbose($verbose);
+    $nfobj->get($noupdate);
+    if ($query) {
+	$nfobj->info(\*STDOUT);
+    } else {
+	$nfobj->install();
+    }
+}
+
+sub add_name {
+    my ($name) = @_;
+    defined $version && defined $commit and usage();
+    push @names, [$name, $version, $commit];
+    undef $version;
+    undef $commit;
+}
+
+sub usage {
+    my ($code) = @_;
+    my $fh = $code ? \*STDERR : \*STDOUT;
+    print $fh "Usage: $0 [options] [NAME]...\n";
+    print $fh "\n";
+    print $fh "-iDIR --input=DIR\n";
+    print $fh "    Specify configuration directory, default: ./not-fork.d\n";
+    print $fh "-oDIR --output=DIR\n";
+    print $fh "    Specify output directory, default: ./sources\n";
+    print $fh "-vVERSION --version=VERSION | -cID --commit=ID\n";
+    print $fh "    Specify what version or commit ID (if supported) to obtain,\n";
+    print $fh "    the two are mutually exclusive, default: latest available\n";
+    print $fh "-kDIR --cache=DIR\n";
+    print $fh "    Specify download cache directory, default: \$HOME/.cache/LumoSQL/not-fork\n";
+    print $fh "-q --query\n";
+    print $fh "    Obtain upstream sources but do not extract them and instead\n";
+    print $fh "    show information about them and which version would be selected\n";
+    print $fh "--verbose=LEVEL\n";
+    print $fh "    Ask to show more information about the processing; default is 1\n";
+    print $fh "    which just summarises what's going on; 0 disables all output except\n";
+    print $fh "    error messages; higher number are only useful for debugging or to\n";
+    print $fh "    know exactly what the program does\n";
+    print $fh "--update --no-update\n";
+    print $fh "    --no-update skips updates from upstream if there is already a cached\n";
+    print $fh "    version; --update is the default action of checking for upstream\n";
+    print $fh "    updates before extracting the sources\n";
+    print $fh "\n";
+    print $fh "-c/-v needs to be specified before each NAME, after a NAME has\n";
+    print $fh "been processed, these options revert to the default\n";
+    exit $code;
+}
+
