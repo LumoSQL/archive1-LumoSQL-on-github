@@ -15,18 +15,18 @@ Table of Contents
       * [download](#download)
    * [Modification definition file <a name="user-content-modification"></a>](#modification-definition-file-)
    * [Example Configuration directory <a name="user-content-example"></a>](#example-configuration-directory-)
-   * [Notforking tool <a name="user-content-tool"></a>](#notforking-tool-)
+   * [Not-forking tool <a name="user-content-tool"></a>](#not-forking-tool-)
 
 Not-Forking Upstream Source Code Tracker
 ========================================
 
 The LumoSQL project incorporates software from other projects and some of that
 software needs some modifications.  Rather than fork our own version, we have
-developed a mechanism which we call "notforking" to semi-automatically track
+developed a mechanism which we call "not-forking" to semi-automatically track
 upstream changes.
 
 The mechanism is similar to applying patches; however patches need to be
-constantly updated as upstream sources changes, and the notforking mechanism
+constantly updated as upstream sources changes, and the not-forking mechanism
 helps with that. The overall effect is something like git cherry-picking, 
 except that it also copes with:
 * human-style software versioning
@@ -37,7 +37,7 @@ except that it also copes with:
 
 etc.
 
-Each project tracked by notforking needs to define what to track, and what
+Each project tracked by not-forking needs to define what to track, and what
 changes to apply. This is done by providing a number of files in a directory;
 the minimum requirement is an upstream definition file; other files can also be
 present indicating what modifications to apply (if none are provided, the
@@ -69,7 +69,7 @@ define it again outside the block to provide a default value.
 The only key which must be present is `vcs`, and there is no default.
 It indicates what kind of version control system to use to obtain upstream
 sources; the value is the name of a version control module defined by the
-notforking mechanism; at the time of writing `git` and `download` are valid
+not-forking mechanism; at the time of writing `git` and `download` are valid
 values; in general, the documentation for the corresponding version control
 module defines what else is present in the `upstream.conf` file; this document
 describes briefly the configuration for the above two modules.
@@ -210,21 +210,21 @@ method = patch
 
 Files `files/btree.c` and `files/btreeInt.h`: the new contents.
 
-A more complete example can be found in the directory "notforking/sqlite"
+A more complete example can be found in the directory "not-fork.d/sqlite"
 which tracks upstream updates from SQLite.
 
-# Notforking tool <a name="tool"></a>
+# Not-forking tool <a name="tool"></a>
 
-The `tool` directory contain a script, `notfork` which runs the notforking
+The `tool` directory contain a script, `not-fork` which runs the not-forking
 mechanism on a directory.  Usage is:
 
-tool/notfork \[OPTIONS\] \[NAME\]...
+not-fork \[OPTIONS\] \[NAME\]...
 
 where the following options are available:
 
 - `-i`INPUT\_DIRECTORY (or `--input=`INPUT\_DIRECTORY)
-is a notforking configuration directory as specified
-in this document; default is `notfork` within the current directory
+is a not-forking configuration directory as specified
+in this document; default is `not-fork.d` within the current directory
 - `-o`OUTPUT\_DIRECTORY (or `--output=`OUTPUT\_DIRECTORY)
 is the place where the modified upstream sources will
 be stored, and it can be either a directory created by a previous run of
@@ -235,7 +235,7 @@ this directory may be overwritten or deleted by the tool
 is a place used by the program to keep downloads
 and working copies; it must be either a new (missing or empty) directory
 or a directory created by a orevious run of the tool; default is
-`.cache/LumoSQL/notfork` inside the user's home directory
+`.cache/LumoSQL/not-fork` inside the user's home directory
 - `-v`VERSION (or `--version=`VERSION) will retrieve the specified VERSION
 of the next NAME (this option must be repeated for each NAME, in the
 assumption that different projects have different version numbering)
@@ -270,16 +270,16 @@ specified will apply to all rather than just the name immediately
 following them.
 
 The tool looks for a configuration file located at
-`$HOME/.config/LumoSQL/notfork.conf` to read defaults; if the file exists
+`$HOME/.config/LumoSQL/not-fork.conf` to read defaults; if the file exists
 and is readable, any non-comment, non-empty lines are processed before
 any command-line options with an implicit `--` prepended and with spaces
 around the first `=` removed, if present: so for example a file containing:
 
 ```
-cache = /var/cache/LumoSQL/notfork
+cache = /var/cache/LumoSQL/not-fork
 ```
 
-would change the default cache from `.cache/LumoSQL/notfork` in the user's
+would change the default cache from `.cache/LumoSQL/not-fork` in the user's
 home directory to the above directory inside `/var/cache`; it can still
 be overridden by specifying `-c`/`--cache` on the command line.
 
@@ -289,7 +289,7 @@ not been modified since; in this case, delete the output directory
 completely, or rename it to something else, and run the program again.
 There is currently no option to override this safety feature.
 
-We plan to add logging to the notforking tool, in which all messages are
+We plan to add logging to the not-forking tool, in which all messages are
 written to a log file (under control of configuration), while the subset
 of messages selected by the verbosity setting will go to standard output;
 this will allow us to increase the amount of information provided and make
