@@ -30,7 +30,7 @@ What is a Relevant Codebase?
 
 There are three dimensions to codebases relevant to LumoSQL:
 
-1. Code that is a derivitive of SQLite code adding a feature or improvement, and
+1. Code that is a derivative of SQLite code adding a feature or improvement, and
 2. Code that has nothing to do with SQLite but implements an interesting database feature we want to use in LumoSQL
 3. Code that supports the development of LumoSQL such as testing, benchmarking or analysing relevant codebases
 
@@ -126,7 +126,7 @@ The on-disk file format is important to many SQLite use cases, and introspection
 
 # List of Relevant Benchmarking and Test Knowledge
 
-Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TCP being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
+Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TPC being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
 
 The well-described [testing of SQLite](https://sqlite.org/testing.html) involves some open code, some closed code, and many ad hoc processes. Clearly the SQLite team have an internal culture of testing that has benefitted the world. However that is very different to reproducible testing, which is in turn very different to reproducible benchmarking, and that is even without considering whether the benchmarking is a reasonable approximation of actual use cases.
 

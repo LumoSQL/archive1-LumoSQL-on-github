@@ -195,25 +195,25 @@ Single-level store concepts are well-explained in [Howard Chu's 2013 MDB Paper](
 > Store". The basic idea is to treat all of computer memory as a single address
 > space. Pages of storage may reside in primary storage (RAM) or in secondary
 > storage (disk) but the actual location is unimportant to the application. If
-> a referenced page is currently in primary storagethe application can use it
+> a referenced page is currently in primary storage the application can use it
 > immediately, if not a page fault occurs and the operating system brings the
 > page into primary storage. The concept was introduced in 1964 in the Multics
 > operating system but was generally abandoned by the early 1990s as data
 > volumes surpassed the capacity of 32 bit address spaces. (We last knew of it
-> in the ApolloDOMAIN operating system, though many other Multics-influenced
+> in the Apollo DOMAIN operating system, though many other Multics-influenced
 > designs carried it on.) With the ubiquity of 64 bit processors today this
 > concept can again be put to good use. (Given a virtual address space limit of
-> 63 bits that puts the upper bound of database size at 8exabytes. Commonly
-> available processors today only implement 48 bit address spaces,limiting us
+> 63 bits that puts the upper bound of database size at 8 exabytes. Commonly
+> available processors today only implement 48 bit address spaces, limiting us
 > to 47 bits or 128 terabytes.) Another operating system requirement for this
 > approach to be viable is a Unified BufferCache. While most POSIX-based
 > operating systems have supported an mmap() system call for many years, their
-> initial implementations kept memory managed by the VM subsystemseparate from
+> initial implementations kept memory managed by the VM subsystem separate from
 > memory managed by the filesystem cache. This was not only wasteful
-> (again,keeping data cached in two places at once) but also led to coherency
+> (again, keeping data cached in two places at once) but also led to coherency
 > problems - data modified through a memory map was not visible using
-> filesystem read() calls, or data modifiedthrough a filesystem write() was not
-> visible in the memory map. Most modern operatingsystems now have filesystem
+> filesystem read() calls, or data modified through a filesystem write() was not
+> visible in the memory map. Most modern operating systems now have filesystem
 > and VM paging unified, so this should not be a concern in most deployments.
 
 
