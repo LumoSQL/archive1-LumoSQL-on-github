@@ -155,7 +155,7 @@ has been released as "Public Domain"
 
 SQLite is not available with encryption. There are two common ways of adding encryption to SQLite, both of which have legal implications: 
 
-1. Purchasing the [SQLite Encryption Extension](https://www.hwaci.com/sw/sqlite/see.html)(SEE) from Richard Hipp's company Hwaci. The SEE is proprietary software, and cannot be use with open source applications. 
+1. Purchasing the [SQLite Encryption Extension](https://www.hwaci.com/sw/sqlite/see.html)(SEE) from Richard Hipp's company Hwaci. The SEE is proprietary software, and cannot be used with open source applications.
 2. [SQLcipher](https://www.zetetic.net/sqlcipher/) which has a open core model. The BSD-licensed open source version requires users to publish copyright notices, and the more capable commercial editions are available on similar terms to SEE, and therefore cannot be used with open source applications. 
 
 There are many other ways of adding encryption to SQLite, some of which are listed in the [Knowledgebase Relevant to LumoSQL](./lumo-relevant-knowledgebase.md).

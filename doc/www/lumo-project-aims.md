@@ -100,7 +100,7 @@ nearly all 30 million lines of the Linux kernel can be exclude giving just 200k
 lines. Runtime modularity will be controlled through the same user interfaces 
 as the rest of LumoSQL.
 
-* LumoSQL will ensure that new code can all be active at one, eg
+* LumoSQL will ensure that new code can all be active at once, eg
 multiple backends or frontends for conversion between/upgrading from one
 format or protocol to another. This is crucial to provide continuity and
 supported upgrade paths for users, for example, users who want to become

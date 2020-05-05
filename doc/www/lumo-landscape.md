@@ -85,7 +85,7 @@ profile and attracts technical review.
 
 **Sqlite.org is entirely focussed on its existing scope and traditional user
 needs** and [SQLite imposes strict limits](https://sqlite.org/about.html) for
-example “Think of SQLite not as a replacement for but as a replacement for
+example “Think of SQLite not as a replacement for Oracle but as a replacement for
 fopen()” which eliminates many of the possibilities LumoSQL is now exploring
 that go beyond any version of fopen(). Many things that SQLite can used
 for are [declared out of scope](https://sqlite.org/whentouse.html) by the
@@ -98,7 +98,7 @@ project.
 **Sqlite has a very strict and reliable view on maintaining backwards
 compatibility both binary and API (except when it comes to encryption, see
 further down.)** The Sqlite foundation aims to keep SQLite3 interfaces and
-formats stable until the year 2050 years, according to Richard Hipp in the
+formats stable until the year 2050, according to Richard Hipp in the
 podcast interview, as once requested by an airframe construction company
 (Airbus). Whatever happens in years to come SQLite has definitely delivered on
 this to date. This means that there are many things SQLite cannot do which
@@ -156,7 +156,7 @@ serious problems with it too:
   SQLite binary format has almost zero internal integrity checking.
   LumoSQL aims to add options to address this problem.
 
-**Sqlite is less open source than it appears**. The existance of so many SQLite
+**Sqlite is less open source than it appears**. The existence of so many SQLite
 spin-offs is evidence that SQLite code is highly available. However there are
 several aspects of SQLite that mean it cannot be considered open source, in
 ways that are increasingly important in the 21st century:
@@ -235,7 +235,7 @@ SQLite Downstreams
 
 There is still a lot for LumoSQL to explore because there is just so much code, but
 as of March 2020 we are confident code could be assembled from here and there
-and there on the internet to demonstrate the following features:
+on the internet to demonstrate the following features:
 
 -   SQLite with Berkely bdb backend
 -   SQLite with LevelDB backend

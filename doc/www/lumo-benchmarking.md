@@ -37,7 +37,7 @@ field of SQL databases, and certainly in the SQLite landscape.
 Benchmarking is a big part of LumoSQL, to determine if changes are an
 improvement. The trouble is that SQLite and other top databases are not really
 benchmarked in a realistic and consistent way, despite SQL server benchmarking
-using tools like TPCC from [tpc.org](https://tpc.org) being an obsessive
+using tools like TPC-C from [tpc.org](http://tpc.org) being an obsessive
 industry in itself, and many testing tools released with SQLite, Postgresql,
 MariaDB etc. But in practical terms there is no way of comparing the most-used
 databases with each other, or even of being sure that the tests that do exist
@@ -223,7 +223,7 @@ groups, those using:
    deployments, who are likely to a wider range of the supported SQL features
 
 The embedded style of statement is typically used within the application process
-space,the code written by these developers is often tightly coupled with the
+space, the code written by these developers is often tightly coupled with the
 SQLite library. The online style of SQL statement is typically more loosely
 coupled with the database implementation and these developers may switch to
 execute similar SQL statements on different databases. Further this second style

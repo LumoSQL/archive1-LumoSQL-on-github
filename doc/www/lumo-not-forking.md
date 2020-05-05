@@ -88,7 +88,7 @@ numbers in order are:
 
 We may extend this definition to deal with version numbering schemes
 used by normal software, however it will never work correctly with the
-version numbers used by INTERCAL compilers.
+version numbers used by [INTERCAL](https://en.wikipedia.org/wiki/INTERCAL) compilers.
 
 The `subtree` key indicates a directory inside the sources to use instead
 of the top level.
@@ -104,7 +104,8 @@ keys need to be present:
 either a single string which is prefixed to the version number, or two
 strings separated by space, the first one is prefixed and the second appended.
 - optionally, `user` and `password` can be specified to obtain access to the
-repository.
+repository (this is currently not implemented, all repositories must be
+accessible without authentication).
 
 A software version can be identified by a generic git commit ID, or by a
 version string similar to the one described for the `compare` key, if the
@@ -147,7 +148,9 @@ a modification is only necessary up to a particular version, because
 for example that modification has been accepted by upstream and is
 no longer necessary.  Another use of this key is to identify versions
 in which substantial upstream changes make it difficult to specify a
-modification which works for every possible version.
+modification which works for every possible version. Specifying this
+keyword is essentially equivalent to put the whole `.mod` file in
+a conditional.
 - `method`; the method used to specify the modification; currently, the
 value can be either `patch`, indicating that the final part of the file is
 in a format suitable for passing as standard input to the "patch" program;
@@ -162,6 +165,10 @@ currently no other keys for the `replace` method, and the following for
 the `patch` method:
 
 - `options`: options to pass to the "patch" program (default: "-Nsp1")
+- `list`: extra options to the "patch" program to list what it would do
+instead of actually doing it (this is used internally to figure out
+what changes; the default currently assumes the "patch" program provided
+by most Linux distributions)
 
 # Example Configuration directory <a name="example"></a>
 
@@ -281,4 +288,11 @@ determine that it has been created by a previous run and that files have
 not been modified since; in this case, delete the output directory
 completely, or rename it to something else, and run the program again.
 There is currently no option to override this safety feature.
+
+We plan to add logging to the notforking tool, in which all messages are
+written to a log file (under control of configuration), while the subset
+of messages selected by the verbosity setting will go to standard output;
+this will allow us to increase the amount of information provided and make
+it available if there is a processing error; however in the current version
+this is just planned, and not yet implemented.
 

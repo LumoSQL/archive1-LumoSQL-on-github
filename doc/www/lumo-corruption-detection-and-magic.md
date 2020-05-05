@@ -87,7 +87,7 @@ SQLite needs row-level integrity checking even more than the online databases be
 * it is easy to backup an SQLite database partway through a transaction, meaning that the restore will be corrupted
 * SQLite does not have robust locking mechanisms available for access by multiple processes at once, since it relies on lockfiles and Posix advisory locking 
 * SQLite provides the [VFS API Interface](https://www.sqlite.org/vfs.html) which users can easily misuse to ignore locking via the sql3_*v2 APIs
-* the on-disk file format is seemingly often corrupted regardless of use case. Better evidence on this is needed but authors of SQLite data file recovery software (see listing in [SQLite Relevant Knowledgebase](./lumo-relevant-knowledebase)) indicates high demand for their servies. Informal shows of hands at conferences indicates that SQLite users expect corruption.
+* the on-disk file format is seemingly often corrupted regardless of use case. Better evidence on this is needed but authors of SQLite data file recovery software (see listing in [SQLite Relevant Knowledgebase](./lumo-relevant-knowledebase)) indicates high demand for their services. Informal shows of hands at conferences indicates that SQLite users expect corruption.
 
 sqlite.org has a much more detailed, but still incomplete, summary of [How to Corrupt an SQLite Database](https://www.sqlite.org/howtocorrupt.html).
 
