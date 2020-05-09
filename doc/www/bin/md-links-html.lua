@@ -1,7 +1,12 @@
 -- LumoSQL Pandoc Lua Functions
 --
--- SPDX-License-Identifier: Apache-2.0
--- SPDX-FileCopyrightText: 2019 The LumoSQL Authors
+-- Copyright 2020 The LumoSQL Authors under the terms contained in the file LICENSES/MIT
+--
+-- SPDX-License-Identifier: MIT
+-- SPDX-FileCopyrightText: 2020 The LumoSQL Authors
+-- SPDX-ArtifactOfProjectName: LumoSQL -->
+-- SPDX-FileType: Code -->
+-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
 
 function Link(el)
   el.target = string.gsub(el.target, "%.md", ".html")
