@@ -62,6 +62,11 @@ MVCC-compliant K-V stores, and still using Write-Ahead Logs.
 
 # Oracle BDB and Oracle BDB-SQL Codebases
 
+As of June 2020, Oracle announced that it has dropped support for the BDB port
+to SQLite. DB 18.1.32 is the last version to carry this, which is based on
+SQLite from 2017. This is the reference and basis for the BDB backend in
+LumoSQL.
+
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
 | [Sleepycat/Oracle BDB](https://fossies.org/linux/misc/db-18.1.32.tar.gz) | current | The original ubiquitous Unix K-V store, disused in open source since Oracle's 2013 license change; the API template for most of the k-v btree stores around. Now includes many additional features including full MVCC transactions, networking and replication. This link is a mirror of code from download.oracle.com, which requires a login | 
