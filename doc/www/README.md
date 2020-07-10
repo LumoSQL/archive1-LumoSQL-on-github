@@ -22,6 +22,7 @@ LumoSQL emphasises benchmarking, code reuse and modern database implementation.
 
 * [Quick Start](./lumo-quickstart.md)
 * [LumoSQL Project Aims](./lumo-project-aims.md)
+* [Code of Conduct](./lumo-code-of-conduct.md)
 * Creating a LumoSQL Ecosystem
     + [The LumoSQL Landscape](./lumo-landscape.md)
     + [Codebases relevant to LumoSQL](./lumo-relevant-codebases.md)
