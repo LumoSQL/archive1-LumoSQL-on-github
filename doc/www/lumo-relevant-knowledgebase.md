@@ -78,11 +78,47 @@ Analyser, DB Browser for SQLite, Magnet AXIOM and Oxygen Forensic Detective.)
 
 # List of Relevant Benchmarking and Test Knowledge
 
-Benchmarking is a big part of LumoSQL, to determine if changes are an improvement. The trouble is that SQLite and other top databases are not really benchmarked in realistic and consistent way, despite SQL server benchmarking using tools like TPC being an obsessive industry in itself, and there being myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in practical terms there is no way of comparing the most-used databases with each other, or even of being sure that the tests that do exist are in any way realistic, or even of simply reproducing results that other people have found. LumoSQL covers so many codebases and use cases that better SQL benchmarking is a project requirement. Benchmarking and testing overlap, which is addressed in the code and docs.
+Benchmarking is a big part of LumoSQL, to determine if changes are an
+improvement. The trouble is that SQLite and other top databases are not really
+benchmarked in realistic and consistent way, despite SQL server benchmarking
+using tools like TPC being an obsessive industry in itself, and there being
+myriad of testing tools released with SQLite, Postgresql, MariaDB etc. But in
+practical terms there is no way of comparing the most-used databases with each
+other, or even of being sure that the tests that do exist are in any way
+realistic, or even of simply reproducing results that other people have found.
+LumoSQL covers so many codebases and use cases that better SQL benchmarking is
+a project requirement. Benchmarking and testing overlap, which is addressed in
+the code and docs.
 
-The well-described [testing of SQLite](https://sqlite.org/testing.html) involves some open code, some closed code, and many ad hoc processes. Clearly the SQLite team have an internal culture of testing that has benefitted the world. However that is very different to reproducible testing, which is in turn very different to reproducible benchmarking, and that is even without considering whether the benchmarking is a reasonable approximation of actual use cases.
+The well-described [testing of SQLite](https://sqlite.org/testing.html)
+involves some open code, some closed code, and many ad hoc processes. Clearly
+the SQLite team have an internal culture of testing that has benefitted the
+world. However that is very different to reproducible testing, which is in turn
+very different to reproducible benchmarking, and that is even without
+considering whether the benchmarking is a reasonable approximation of actual
+use cases. As the development of LumoSQL has proceeded, it has become clear
+that the TCL testing harness shipped with SQLite code contains specific
+dependencies on the behaviour of the SQLite btree backend. While LumoSQL with
+the original btree backend aims to always pass these tests, differences such as
+locking behaviour, assumed key lengths, and even the number of database files a
+backend uses all mean that the SQLite TCL test suite is not generally useful.
 
-To highlight how poorly SQL benchmarking is done: there are virtually no test harnesses that cover encrypted databases and/or encrypted database connections, despite encryption being frequently required, and despite crypto implementation decisions making a very big difference in performance.
+To highlight how poorly SQL benchmarking is done: there are virtually no test
+harnesses that cover encrypted databases and/or encrypted database connections,
+despite encryption being frequently required, and despite crypto implementation
+decisions making a very big difference in performance. Encryption and security are
+not the only ways a database impacts privacy, so privacy is a valid dimension for 
+database testing - and a fundamental goal for LumoSQL. Testing all databases in 
+the same way for privacy is challenging.
+
+SQL testing is also very difficult. As the Regression Testing paper below says:
+"A problem with testing SQL in DBMSs lies in the fact that the state of the
+database must be considered when deducing testing outcomes". SQL statements
+frequently change the state of the server during their execution, in different
+ways on different servers. This can change the behaviour or at least the
+performance of the next statement, and so on.
+
+
 
 | Project | Last modified | Description | 
 | ------- | ------------- | ----------- |
@@ -92,6 +128,10 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 | [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
 | [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
 | [Sysbench](https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
+| [Regression Testing of SQL](https://www.diva-portal.org/smash/get/diva2:736996/FULLTEXT01.pdf)|n/a | 2014 paper "a framework for minimizing the required developer effort formanaging and running SQL regression tests" |
+| [Enhancing the Performance of SQLite](https://pdfs.semanticscholar.org/c2da/33304627649b599f80a5428354e116ba6201.pdf)| n/a | 2019 paper that does profiling and develops performance testing metrics for SQLite |
+| [SQLite Profiler and Tracer](https://github.com/microsoft/sqlite-tracer) | 2018 | Microsoft SQLite statement profiler and timer, helpful for comparing LumoSQL backends |
+| [SQLCipher Performance Optimisation](https://discuss.zetetic.net/t/sqlcipher-performance-optimization/14) | n/a | 2014 comments on the additional performance metric problems that come with SQLite encryption |
 
 
 # List of Just a Few SQLite Encryption Projects
