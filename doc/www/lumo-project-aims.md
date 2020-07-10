@@ -45,7 +45,7 @@ Aims
   backends, frontends, encryption, networking and more. 
 
 * Devops contract: LumoSQL will reduce risk by making it possible to omit
-  compliation of many features, and will have stable ABIs ([Application Binary Interfaces](https://en.wikipedia.org/wiki/Application_binary_interface))so as to not break dynamically-linked applications.
+  compliation of unneeded features, and will have stable ABIs ([Application Binary Interfaces](https://en.wikipedia.org/wiki/Application_binary_interface)) so as to not break dynamically-linked applications.
 
 * Ecosystem creation: LumoSQL will offer consolidated contact, code curation, bug tracking,
   licensing, and community communications across all these features from
@@ -57,20 +57,20 @@ Short Term Goals
 ================
 
 * LumoSQL will have three canonical and initial backends: btree (the existing
-SQLite btree, ported to a new backend system); a test backend such as text or
-csv; and the LMDB backend. Control over these interfaces will be through the
+SQLite btree, ported to a new backend system); the LMDB backend; and the BDB
+backend. Control over these interfaces will be through the
 same user interface mechanisms as the rest of LumoSQL, and SQLite.
 
 * LumoSQL will improve SQLite quality and privacy compliance by introducing
 optional on-disk checksums for storage backends including to the original
-SQLite btree format.  This will give real-time row-level corruption detection.
+SQLite btree format.  This will give real-time row-level corruption detection
 
 * LumoSQL will improve SQLite quality and privacy compliance by introducing
-optional storage backends that are more crash-resistent, starting with LMDB
-followed by others.
+optional storage backends that are more crash-resistent than SQLite btree (such as LMDB)
+and more oriented towards complete recovery (such as BDB)
 
 * LumoSQL will improve SQLite integrity in persistent storage by introducing
-optional row-level checksums.
+optional row-level checksums
 
 * LumoSQL will provide the benefits of Open Source and an open project
 by continuing to accept and review contributions in an open way, using
@@ -96,13 +96,13 @@ tools
 
 * LumoSQL will ensure that new code remains optional by means of modularity at
 compiletime and also runtime. By illustration of modularity, at compiletime
-nearly all 30 million lines of the Linux kernel can be exclude giving just 200k
+nearly all 30 million lines of the Linux kernel can be excluded giving just 200k
 lines. Runtime modularity will be controlled through the same user interfaces 
 as the rest of LumoSQL.
 
-* LumoSQL will ensure that new code can all be active at once, eg
+* LumoSQL will ensure that new code may be active at once, eg
 multiple backends or frontends for conversion between/upgrading from one
-format or protocol to another. This is crucial to provide continuity and
+format or protocol to another. This is important to provide continuity and
 supported upgrade paths for users, for example, users who want to become
 privacy-compliant without disrupting their end users
 
@@ -110,8 +110,5 @@ privacy-compliant without disrupting their end users
 some of the most ancient parts of SQLite when merging from upstream, provided
 it does not conflict with any of the other goals in this document. Eliminating 
 SQLite code can be done by a similar non-forking mechanism as used to keep in synch
-with the SQLite upstream.
-
-
-
+with the SQLite upstream. Patches will be offered to sqlite.org
 
