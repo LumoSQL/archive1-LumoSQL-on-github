@@ -94,7 +94,7 @@ WAL-G illustrates a useful side-effect of having a WAL, in that it can be used a
 
 Oracle BDB-SQL discussed in the previous section also has replication. 
 
-Comdb has a large team of active developers, and is the most ambitious of the SQLite-derived databases. Bloomberg LP created Comdb in 2004 and designed it for scale and yet with synchronous replication and full RDBMS functionality, the opposite of NoSQL solutions. SQLite has been ported to an old version of Sleepycat Berkely DB, which has been forked and extensively modified. The BDB interface is still largely used. 
+Comdb has a large team of active developers, and is the most ambitious of the SQLite-derived databases. Bloomberg LP created Comdb in 2004 and designed it for scale and yet with synchronous replication and full RDBMS functionality, the opposite of NoSQL solutions. SQLite has been ported to an old version of Sleepycat Berkely DB, which has been forked and extensively modified. The BDB interface is still largely used. This [2016 paper on Comdb](http://www.vldb.org/pvldb/vol9/p1377-scotti.pdf) by the Bloomberg team is a very thorough introduction to the architecture and the BDB btree modifications. Comdb creates a VDBE layer abstraction such that VDBE operates on tables with rows, not a key-value store.
 
 | [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
 
