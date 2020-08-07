@@ -74,7 +74,7 @@ LumoSQL.
 
 # Distributed or Clustered Codebases
 
-The following four projects are widely-varying examples of how SQLite data can
+The following five projects are widely-varying examples of how SQLite data can
 be distributed, whether across just a few local nodes or across a much higher
 number of internet-connected nodes.
 
@@ -82,6 +82,7 @@ number of internet-connected nodes.
 | ------------- | ------------- | --------|
 | [rqlite](https://github.com/rqlite/rqlite) | current | Distributed database with networking and Raft consensus on top of SQLite nodes |
 | [Bedrock](https://github.com/Expensify/Bedrock) | current | WAN-replicated blockchain multimaster database built on SQLite. Has MySQL emulation |
+| [Comdb](https://github.com/bloomberg/comdb2) | current | Clustered HA RDBMS built on SQLite and a forked old Sleepcat BDB, synchronous replication, stored procedures |
 | [ActorDB](https://github.com/biokoda/actordb) | current | SQLite with a data sharding/distribution system across clustered nodes. Each node stores data in LMDB, which is connected to SQLite at the SQLite WAL layer |
 | [WAL-G](https://github.com/wal-g/wal-g) | current | Backup/replication tool that intercepts the WAL journal log for each of Postgres, Mysql, MonogoDB and Redis |
 
@@ -92,6 +93,8 @@ ActorDB uses LMDB but still has a WAL.
 WAL-G illustrates a useful side-effect of having a WAL, in that it can be used as a list of transactions for archival as well as replay reasons. A non-WAL storage databases such as LMDB can also generate transaction logs for these sorts of purpose, but they aren't for replay reasons. 
 
 Oracle BDB-SQL discussed in the previous section also has replication. 
+
+Comdb has a large team of active developers, and is the most ambitious of the SQLite-derived databases. Bloomberg LP created Comdb in 2004 and designed it for scale and yet with synchronous replication and full RDBMS functionality, the opposite of NoSQL solutions. SQLite has been ported to an old version of Sleepycat Berkely DB, which has been forked and extensively modified. The BDB interface is still largely used. 
 
 | [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
 
