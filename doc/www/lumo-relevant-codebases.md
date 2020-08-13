@@ -13,10 +13,10 @@ Table of Contents
    * [Useful Dead SQLite Forks](#useful-dead-sqlite-forks)
    * [Oracle BDB and Oracle BDB-SQL Codebases](#oracle-bdb-and-oracle-bdb-sql-codebases)
    * [Distributed or Clustered Codebases](#distributed-or-clustered-codebases)
-   * [Code to Potentially Include in LumoSQL](#code-to-potentially-include-in-lumosql)
-   * [List of On-disk File Format-related Knowledge](#list-of-on-disk-file-format-related-knowledge)
+   * [Modular Code to Potentially Incorporate in LumoSQL](#modular-code-to-potentially-incorporate-in-lumosql)
+   * [On-disk File Format-related Knowledge](#on-disk-file-format-related-knowledge)
    * [List of Relevant Benchmarking and Test Knowledge](#list-of-relevant-benchmarking-and-test-knowledge)
-   * [List of Just a Few SQLite Encryption Projects](#list-of-just-a-few-sqlite-encryption-projects)
+   * [SQLite and Encryption Issues](#sqlite-and-encryption-issues)
    * [List of from-scratch MySQL SQL and MySQL Server implementations](#list-of-from-scratch-mysql-sql-and-mysql-server-implementations)
 
 Codebases Relevant to LumoSQL
@@ -167,7 +167,7 @@ To highlight how poorly SQL benchmarking is done: there are virtually no test ha
 | [Sysbench](https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
 
 
-# List of Just a Few SQLite Encryption Projects
+# SQLite and Encryption Issues
 
 Encryption is a major problem for SQLite users looking for open code. There are no official implementations in open source, although the APIs are documented (seemingly by an SCM mistake years ago (?), see sqlite3-dbx below) and most solutions use the SQLite extension interaface. This means that there are many mutually-incompatible implementations, several of them seeming to be very popular. None appear to have received encryption certification (?) and none seem to publish test results to reassure users about compatibility with SQLite upstream or with the file format. Besides the closed source solution from sqlite.org, there are also at least three other closed source options not listed here. This choice between either closed source or fragmented solutions is a poor security approach from the point of view of maintainance as well as peer-reviewed security. This means that SQLite in 2020 does not have a good approach to privacy.
 
@@ -179,10 +179,18 @@ Encryption is a major problem for SQLite users looking for open code. There are 
 | [sqlite3-dbx](https://github.com/newsoft/sqlite3-dbx) | kinda-current | Interesting documentation that perhaps sqlite.org never meant to publish their crypto APIs? |
 | [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
 
-... there are many more crypto projects for SQLite. 
+While there are many more crypto projects, the architecture issues are the same for all of them. SQLCipher makes some very helpful comments in their [design document](https://www.zetetic.net/sqlcipher/design/) under the heading Packaging:
 
-
-
+> SQLCipher is an extension to SQLite, but it does not function as a loadable plugin for many reasons. Instead, SQLCipher modifies SQLite itself, and is maintained as a separate version of the source tree. SQLCipher releases are baselined against a specific source version of SQLite. However, the project minimizes alterations to core SQLite code to reduce the risk of breaking changes during upstream SQLite merges.
+>
+> The reasons that SQLCipher is packaged this way, as opposed to a "plugin" or extension to the SQLite amalgamation, follow:
+>
+>    Enabling an SQLite codec requires the compile-time definition of SQLITE_HAS_CODEC, which is not present on standard, unmodified SQLite builds.
+>    Even when enabled, SQLite isn't setup to load codecs as plugins. While SQLite does have a plugin function for loadable extensions, it does not extend access to any system internals (it mainly used to allow custom user functions).
+>    SQLCipher makes calls to internal functions that are not part of the public SQLite API. Sometimes these APIs change, even in between minor SQLite versions. Thus, each update adn merge requires inspection, testing and verification. Making SQLCipher portable across multiple versions of SQLite would not be feasible, nor could it to use only the public API (for instance, even the first critical step of attaching the codec callback to the pager uses an internal API).
+>    SQLCipher modifies supporting functions to introduce special pragmas, built in functions, etc (e.g. PRAGMA cipher_*). Injecting this functionality in a plugin architecture wouldn't be possible.
+>    SQLCipher's test harness relies on support in testfixture to take advantage of the test API and various internal checks (memory reference counting, etc.)
+>   Even if it were possible to use a loadable plugin, dynamic libraries aren't available on all supported platforms, for example iOS
 
 # List of from-scratch MySQL SQL and MySQL Server implementations
 
