@@ -105,7 +105,7 @@ Comdb has a large team of active developers, and is the most ambitious of the SQ
 
 | [sql.js](https://github.com/kripken/sql.js/) | current | SQLite compiled to JavaScript WebAssembly through Emscripten |
 
-# Code to Potentially Include in LumoSQL
+# Modular Code to Potentially Incorporate in LumoSQL
 
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
@@ -114,16 +114,26 @@ Comdb has a large team of active developers, and is the most ambitious of the SQ
 SQLite3ODBC is a wrapper around the whole of the SQLite library. None of the
 LumoSQL API interception points can be used for this, nevertheless, ODBC is an
 important cross-platform standard heavily used on Windows and IBM's operating
-systems.
+systems. The potential benefit to this is that many Windows users would the be 
+able to use LumoSQL as a drop-in data source like any other ODBC connector. The 
+maintenance costs could well be quite low since it does not modify SQLite in any way.
 
 | [Spatialite](https://www.gaia-gis.it/fossil/libspatialite/index)| current | Geospatial GIS extension to SQLite, similar to PostGIS |
 
-GIS features are a vertical use case, but one that is very popular and
-widely-used. PostGIS would very likely have been merged into PostgreSQL long
-ago, except for a difference in licensing. Spatialite is offered under the MPL
-license (among others) and so does not pose any such problem being included
-with LumoSQL. LumoSQL needs to consider packaging Spatialite in the early
-stages of LumoSQL. 
+*update:* sadly no, Spatialite cannot be incorporated into LumoSQL, but Spatialite
+should be included in the LumoSQL test suite, as follows...
+
+GIS features are a vertical use case, but one that is extreme popular and
+widely-used, and increasingly as part of public information and journalism.
+For example, PostGIS has very large numbers of users and would likely have been
+merged into PostgreSQL long ago, except for incompatible licenses.  Spatialite
+has a similar licensing problem, because it is only offered under copyleft
+licenses including MPL and two GPLs, and so cannot be included as part of
+LumoSQL. However because this is such an important use case, and because
+Spatialite tracks LumoSQL so carefully, the LumoSQL test suite should include
+building with Spatialite and running Spatialite's own test suite. This brings 
+up another class of tests, because Spatialite isn't the only important 
+source-available SQLite addon.
 
 | [Gigimushroom's Database Backend Engine](https://github.com/gigimushroom/DatabaseBackendEngine)|2019| A good example of an alternative BTree storage engine implemented using SQLite's Virtual Table Interface. This approach is not what LumoSQL has chosen for many reasons, but this code demonstrates virtual tables can work, and also that storage engines implemented at virtual tables can be ported to be LumoSQL backends.|
 
