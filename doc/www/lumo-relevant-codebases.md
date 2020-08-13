@@ -185,12 +185,14 @@ While there are many more crypto projects, the architecture issues are the same 
 >
 > The reasons that SQLCipher is packaged this way, as opposed to a "plugin" or extension to the SQLite amalgamation, follow:
 >
->    Enabling an SQLite codec requires the compile-time definition of SQLITE_HAS_CODEC, which is not present on standard, unmodified SQLite builds.
->    Even when enabled, SQLite isn't setup to load codecs as plugins. While SQLite does have a plugin function for loadable extensions, it does not extend access to any system internals (it mainly used to allow custom user functions).
->    SQLCipher makes calls to internal functions that are not part of the public SQLite API. Sometimes these APIs change, even in between minor SQLite versions. Thus, each update adn merge requires inspection, testing and verification. Making SQLCipher portable across multiple versions of SQLite would not be feasible, nor could it to use only the public API (for instance, even the first critical step of attaching the codec callback to the pager uses an internal API).
->    SQLCipher modifies supporting functions to introduce special pragmas, built in functions, etc (e.g. PRAGMA cipher_*). Injecting this functionality in a plugin architecture wouldn't be possible.
->    SQLCipher's test harness relies on support in testfixture to take advantage of the test API and various internal checks (memory reference counting, etc.)
->   Even if it were possible to use a loadable plugin, dynamic libraries aren't available on all supported platforms, for example iOS
+>    * Enabling an SQLite codec requires the compile-time definition of SQLITE_HAS_CODEC, which is not present on standard, unmodified SQLite builds.
+>    * Even when enabled, SQLite isn't setup to load codecs as plugins. While SQLite does have a plugin function for loadable extensions, it does not extend access to any system internals (it mainly used to allow custom user functions).
+>    * SQLCipher makes calls to internal functions that are not part of the public SQLite API. Sometimes these APIs change, even in between minor SQLite versions. Thus, each update adn merge requires inspection, testing and verification. Making SQLCipher portable across multiple versions of SQLite would not be feasible, nor could it to use only the public API (for instance, even the first critical step of attaching the codec callback to the pager uses an internal API).
+>    * SQLCipher modifies supporting functions to introduce special pragmas, built in functions, etc (e.g. PRAGMA cipher_*). Injecting this functionality in a plugin architecture wouldn't be possible.
+>    * SQLCipher's test harness relies on support in testfixture to take advantage of the test API and various internal checks (memory reference counting, etc.)
+>    * Even if it were possible to use a loadable plugin, dynamic libraries aren't available on all supported platforms, for example iOS
+
+This last point is generally relevant to LumoSQL, being one good reason among several why "just write a VFS module" isn't the answer to what LumoSQL is trying to do.
 
 # List of from-scratch MySQL SQL and MySQL Server implementations
 
