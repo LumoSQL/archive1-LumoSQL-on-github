@@ -65,12 +65,19 @@ MVCC-compliant K-V stores, and still using Write-Ahead Logs.
 As of June 2020, Oracle announced that it has dropped support for the BDB port
 to SQLite. DB 18.1.32 is the last version to carry this, which is based on
 SQLite from 2017. This is the reference and basis for the BDB backend in
-LumoSQL.
+LumoSQL. 
 
 | Project | Last modified | Description   |
 | ------------- | ------------- | --------|
 | [Sleepycat/Oracle BDB](https://fossies.org/linux/misc/db-18.1.32.tar.gz) | current | The original ubiquitous Unix K-V store, disused in open source since Oracle's 2013 license change; the API template for most of the k-v btree stores around. Now includes many additional features including full MVCC transactions, networking and replication. This link is a mirror of code from download.oracle.com, which requires a login | 
 | [Sleepycat/Oracle BDB-SQL](https://fossies.org/linux/misc/db-18.1.32.tar.gz) | current | Port of SQLite to the Sleepycat/Oracle transactional bdb K-V store. As of 5th March 2020 this mirror is identical to Oracle's login-protected tarball for db 18.1.32 | 
+
+It turns out though that Oracle is not the developer of KV stores based on BDB
+code. ComDB, listed under "Clustered Codebases", uses a KV store derived from
+BDB before Oracle bought Sleepcat Software, meaning before the license changed
+from BSD to AGPL. ComDB added row-level locks to BDB, and prefaulting/readahead among 
+other features. It is not yet clear whether it is still possible to extract the BDB 
+library from ComDB and use it standalone elsewhere (such as a LumoSQL backend.)
 
 # Distributed or Clustered Codebases
 
@@ -163,6 +170,9 @@ Encryption is a major problem for SQLite users looking for open code. There are 
 | [SQLite3-Encryption](https://github.com/darkman66/SQLite3-Encryption) | current | No crypto libraries (DIY crypto!) and based on the similar-sounding SQLite3-with-Encryption project | 
 
 ... there are many more crypto projects for SQLite. 
+
+
+
 
 # List of from-scratch MySQL SQL and MySQL Server implementations
 
