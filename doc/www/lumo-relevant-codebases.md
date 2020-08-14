@@ -194,6 +194,15 @@ While there are many more crypto projects, the architecture issues are the same 
 
 This last point is generally relevant to LumoSQL, being one good reason among several why "just write a VFS module" isn't the answer to what LumoSQL is trying to do.
 
+Comparing all these projects, it seems important to consider whether page-level
+encryption and page-level locking should be looked at as closely related. The
+only page-level locking key-value store there is to study is the modified
+Berkeley DB underneath Comdb2 (ibid); anything else will need to be done with a
+modified LMDB or possibly Btree. There is no evidence that the official SQLite
+SEE solution does anything to the page level, but that is being followed up.
+Furthermore we need to look at metadata store (because otherwise we can only
+guess whether a given series of bytes is an encrypted database or not. 
+
 # List of from-scratch MySQL SQL and MySQL Server implementations
 
 If we want to make SQLite able to process MySQL queries there is a lot of existing code in this area to consider. There are at least 80 projects on github which implement some or all of the MySQL network-parse-optimise-execute SQL pathway, a few of them implement all of it. None so far reviewed used MySQL or MariaDB code to do so. Perhaps that is because the SQL processing code alone in these databases is many times bigger than the whole of SQLite, and it isn't even clear how to add them to this table if we wanted to. Only a few of these projects put a MySQL frontend on SQLite, but two well-maintained projects do, showing us two ways of implementing this.
