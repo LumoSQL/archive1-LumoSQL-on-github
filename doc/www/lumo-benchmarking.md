@@ -1,6 +1,9 @@
 <!-- SPDX-License-Identifier: CC-BY-SA-4.0 -->
 <!-- SPDX-FileCopyrightText: 2020 The LumoSQL Authors -->
+<!-- SPDX-ArtifactOfProjectName: LumoSQL -->
 <!-- SPDX-FileType: Documentation -->
+<!-- SPDX-FileComment: Original by Dan Shearer, 2020 -->
+
 
 Table of Contents
 =================
@@ -19,13 +22,12 @@ Table of Contents
          * [C speed tests](#c-speed-tests)
          * [Web Framework Test](#web-framework-test)
       * [Computer architectures and operating systems](#computer-architectures-and-operating-systems)
-   * [List of Relevant Benchmarking and Test Prior Art](#list-of-relevant-benchmarking-and-test-prior-art)
-
+   * [List of Relevant Benchmarking and Test Knowledge](#list-of-relevant-benchmarking-and-test-knowledge)
 
 About Benchmarking
 ==================
 
-LumoSQL aims to be:
+The [LumoSQL project aims](./lumo-project-aims.md) include:
 
 > A Privacy-compliant Open Source Database Platform with Modern Design and Benchmarking.
 
@@ -35,14 +37,14 @@ field of SQL databases, and certainly in the SQLite landscape.
 Benchmarking is a big part of LumoSQL, to determine if changes are an
 improvement. The trouble is that SQLite and other top databases are not really
 benchmarked in a realistic and consistent way, despite SQL server benchmarking
-using tools like TPCC from [tpc.org](https://tpc.org) being an obsessive
+using tools like TPC-C from [tpc.org](http://tpc.org) being an obsessive
 industry in itself, and many testing tools released with SQLite, Postgresql,
 MariaDB etc. But in practical terms there is no way of comparing the most-used
 databases with each other, or even of being sure that the tests that do exist
 are in any way realistic, or even of simply reproducing results that other
 people have found.  LumoSQL covers so many codebases and use cases that better
 SQL benchmarking is a project requirement. Benchmarking and testing overlap,
-which is addressed in the code and docs.
+which is addressed in the code and documentation.
 
 The well-described [testing of SQLite](https://sqlite.org/testing.html)
 involves some open code, some closed code, and many ad hoc processes. Clearly
@@ -62,8 +64,8 @@ potential problem is that this paper itself is in error, LumoSQL repeated
 the literature research component. We conclude that the paper is correct in stating:
 
 > When we investigated 16 papers from the 2015-2017
-> whose evaluation included SQLite, we find that none re-
-> port all the parameters required to meaningfully compare
+> whose evaluation included SQLite, we find that none report
+> all the parameters required to meaningfully compare
 > results: ten papers do not report any parameters [17–26],
 > five do not report the sync mode [27–31], while only
 > one paper reports all parameters except write-ahead log
@@ -221,7 +223,7 @@ groups, those using:
    deployments, who are likely to a wider range of the supported SQL features
 
 The embedded style of statement is typically used within the application process
-space,the code written by these developers is often tightly coupled with the
+space, the code written by these developers is often tightly coupled with the
 SQLite library. The online style of SQL statement is typically more loosely
 coupled with the database implementation and these developers may switch to
 execute similar SQL statements on different databases. Further this second style
@@ -316,15 +318,28 @@ immediately for January to March 2020:
 - Android
 - other processor architectures
 
-# List of Relevant Benchmarking and Test Prior Art
+# List of Relevant Benchmarking and Test Knowledge
 
-| Project | Last modified | Description | 
-| ------- | ------------- | ----------- |
-| [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf)| n/a | Helpful 2017 paper: "...changing just one parameter in SQLite can change the performance by 11.8X... up to 28X difference in performance" |
-| [sqllogictest](https://www.sqlite.org/sqllogictest/doc/trunk/about.wiki)|2017 | [sqlite.org code](https://www.sqlite.org/sqllogictest/artifact/2c354f3d44da6356) to [compare the results](https://gerardnico.com/data/type/relation/sql/test) of many SQL statements between multiple SQL servers, either SQLite or an ODBC-supporting server |
-| [TCL SQLite tests](https://github.com/sqlite/sqlite/tree/master/test)|current| These are a mixture of code covereage tests, unit tests and test coverage. Actively maintained. |
-| [Yahoo Cloud Serving Benchmark](https://github.com/brianfrankcooper/YCSB/)| current | Benchmarking tool for K-V stores and cloud-accessible databases |
-| [Example Android Storage Benchmark](https://github.com/greenrobot/android-database-performance) | 2018 | This code is an example of the very many Android benchmarking/testing tools. This needs further investigation |
-| [Sysbench](https://github.com/akopytov/sysbench) | current | A multithreaded generic benchmarking tool, with one well-supported use case being networked SQL servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/) |
+There is a section in the [Full Knowledgebase Relevant to LumoSQL](./lumo-relevant-knowledgebase.md) on benchmarking. Everything in this
+section appears at least as a line item in the Full Knowledgebase.
 
+The 2017 paper [Dangers and complexity of sqlite3 benchmarking](https://www.cs.utexas.edu/~vijay/papers/apsys17-sqlite.pdf) talks at length about why benchmarking in general is so difficult, and using SQLite as a worked example. The abstract says:
+
+> Benchmarking systems in a repeatable fashion is complex and  error-prone.
+> The systems  community has repeatedly  discussed  the  complexities  of
+> benchmarking and how to properly report benchmarking results.   Using the
+> example of SQLite, we examine the current state of  benchmarking  in  industry
+> and  academia.   We  show that changing just one parameter in SQLite can
+> change the  performance  by  11.8X,  and  that  changing  multiple parameters
+> can  lead  up  to  a  28X  difference  in  performance.  We find that these
+> configuration parameters are often not set or reported in academic research,
+> leading to incomplete and misleading evaluations
+
+[Sysbench](https://github.com/akopytov/sysbench) is a multithreaded generic
+benchmarking tool, with one well-supported use case being networked SQL
+servers, and [MySQL in particular](https://www.percona.com/blog/2019/04/25/creating-custom-sysbench-scripts/)
+. There is no reason why SQLite cannot work with Sysbench, and there is some
+evidence ([for example](https://github.com/bloomberg/comdb2/pull/1377)) that
+this has already been done. However as of March 2020 this has not been done for
+LumoSQL. 
 
