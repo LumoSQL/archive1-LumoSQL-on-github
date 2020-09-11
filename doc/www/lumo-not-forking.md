@@ -91,7 +91,7 @@ METAFONT which are "Pi" and "e" respectively. The definition can be extended to
 deal with version numbering schemes used by normal software, however it will
 never work correctly with the version numbers used by some software such as the
 [CLC-INTERCAL](https://en.wikipedia.org/wiki/INTERCAL#Version_Numbers)
-compiler.
+compilers (where for example 0.26 < 1.26 < 0.27).
 
 The `subtree` key indicates a directory inside the sources to use instead
 of the top level.
@@ -155,23 +155,33 @@ modification which works for every possible version. Specifying this
 keyword is essentially equivalent to put the whole `.mod` file in
 a conditional.
 - `method`; the method used to specify the modification; currently, the
-value can be either `patch`, indicating that the final part of the file is
+value can be one of: `patch`, indicating that the final part of the file is
 in a format suitable for passing as standard input to the "patch" program;
-or `replace` indicating that one or more files in the upstream must be
+`replace` indicating that one or more files in the upstream must be
 completely replaced; the final part of the file contains one or more
 lines with format "old-file = new-file", where both are relative paths,
 the first relative to the root of the extracted upstream sources; the
-second path is relative to the configuration directory.
+second path is relative to the configuration directory; `sed` indicating
+a sed-like set of replacements, with the final part of the file
+containing likes with format "file-glob: regular-expression = replacement"
+(the regular expression can contain spaces and equal signs if they are
+quoted with a backslash); the replacement is always done on the whole
+file at once.
 
 Other keys are interpreted depending on the value of `method`; there are
-currently no other keys for the `replace` method, and the following for
-the `patch` method:
+currently no other keys for the `replace` and `sed` methods, and the
+following for the `patch` method:
 
 - `options`: options to pass to the "patch" program (default: "-Nsp1")
 - `list`: extra options to the "patch" program to list what it would do
 instead of actually doing it (this is used internally to figure out
 what changes; the default currently assumes the "patch" program provided
 by most Linux distributions)
+
+If a file is modified by more than one method, these are executed in
+the sequence determined by the ordering of the modification definition
+files, so for example a `replace` method only makes sense if it appears
+first (otherwise it undoes all previous changes).
 
 # Example Configuration directory <a name="example"></a>
 
