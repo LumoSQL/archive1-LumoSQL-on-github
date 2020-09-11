@@ -3,6 +3,8 @@ package NotFork::Method::Patch;
 use strict;
 use Carp;
 use Fcntl ':seek';
+use File::Copy qw(cp);
+use File::Path qw(make_path);
 use Text::ParseWords qw(shellwords);
 
 sub new {
@@ -40,8 +42,8 @@ sub load_data {
 # this is called to apply a patch; we copy the file from the original
 # (VCS dir) into a cache directory then apply the patch there
 sub apply {
-    @_ == 4 or croak "Usage: REPLACE->apply(VCS_DIR, REPLACE_CALLBACK, EDIT_CALLBACK)";
-    my ($obj, $vcs, $r_call, $e_call) = @_;
+    @_ == 4 or croak "Usage: REPLACE->apply(VCS_DIR, CACHE_DIR, CALLBACK)";
+    my ($obj, $vcs, $cache, $call) = @_;
     my $src = $obj->{srcdir};
     for my $mods (@{$obj->{mods}}) {
 	my ($fn, $pos) = @$mods;
@@ -55,13 +57,20 @@ sub apply {
 	    $files{$po} = undef;
 	}
 	close $th;
-	# ask to make a copy so we can patch
-	my $copy = $e_call->(keys %files);
+	# copy them...
+	for my $f (keys %files) {
+	    if ($f =~ m!(.*)/[^/]+$!) {
+		my $p = $1;
+		make_path("$cache/$p", { verbose => 0, mode => 0700 });
+		cp("$vcs/$f", "$cache/$f")
+		    or die "copy($vcs/$f, $cache/$f): $!\n";
+	    }
+	}
 	# patch them...
-	_run_patch($obj, $copy, $fn, $fh, $pos, 0, 'patch');
+	_run_patch($obj, $cache, $fn, $fh, $pos, 0, 'patch');
 	# and tell callback what we've changed
 	for my $f (sort keys %files) {
-	    $r_call->($f, "$copy/$f");
+	    $call->($f, "$cache/$f");
 	}
     }
 }

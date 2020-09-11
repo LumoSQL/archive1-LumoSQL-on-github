@@ -547,23 +547,10 @@ sub install {
 	my $cd = "$obj->{cache}/mods";
 	-d $cd and remove_tree($cd);
 	make_path($cd);
-	my %cached = ();
-	my $vcs = $obj->{vcsbase};
 	for my $mobj (@{$obj->{mod}}) {
-	    $mobj->apply($vcs, sub { # replace callback
+	    $mobj->apply($obj->{vcsbase}, $cd, sub {
 		my ($path, $newdata) = @_;
 		_store_file(\%filelist, $path, $newdata);
-	    }, sub { # edit callback
-		for my $path (@_) {
-		    if (! exists $cached{$path}) {
-			# make a copy of this file before editing
-			$path =~ m!(.*)/[^/]+$!
-			    and make_path("$cd/$1", { verbose => 0, mode => 0700 });
-			cp("$vcs/$path", "$cd/$path");
-			$cached{$path} = 1;
-		    }
-		}
-		return $cd;
 	    });
 	}
     }
