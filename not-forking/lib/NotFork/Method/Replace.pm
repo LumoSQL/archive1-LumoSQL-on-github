@@ -33,12 +33,12 @@ sub load_data {
 }
 
 sub apply {
-    @_ == 4 or croak "Usage: REPLACE->apply(VCS_DIR, CACHE_DIR, CALLBACK)";
-    my ($obj, $vcs, $cache, $call) = @_;
+    @_ == 4 or croak "Usage: REPLACE->apply(VCS_DIR, REPLACE_CALLBACK, EDIT_CALLBACK)";
+    my ($obj, $vcs, $r_call, $e_call) = @_;
     my $src = $obj->{srcdir};
     for my $mods (@{$obj->{mods}}) {
 	my ($from, $to) = @$mods;
-	$call->($from, "$src/$to");
+	$r_call->($from, "$src/$to");
     }
 }
 
