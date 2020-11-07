@@ -50,7 +50,7 @@ SQLite without forking it, although there are other goals as well.
 
 LumoSQL is supported by the [NLNet Foundation](https://nlnet.nl).
 
-If you are interesting in contributing to LumoSQL please see [CONTRIBUTING](/CONTRIBUTING.md).
+If you are interesting in contributing to LumoSQL please see [CONTRIBUTING](https://github.com/LumoSQL/LumoSQL/blob/master/CONTRIBUTING.md).
 
 
 
